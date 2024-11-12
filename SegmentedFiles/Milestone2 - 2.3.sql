@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE Account_Plan AS
+CREATE PROCEDURE Account_Plan AS
 BEGIN
 	SELECT C.*, SP.*
 	FROM Customer_Account C, Service_Plan SP, Subscription S
@@ -129,10 +129,16 @@ BEGIN
 
     SELECT @TotalPointsReceived = SUM(PG.pointsAmount)
     FROM Customer_Account C, Payment P, Points_Group PG
-    WHERE C.mobileNo = P.mobileNo and P.payment_method = PG.PaymentID
+    WHERE C.mobileNo = P.mobileNo and P.paymentID = PG.PaymentID and C.mobileNo = @MobileNo
 
     SELECT @TotalPointsSpent = SUM(V.points)
     FROM Customer_Account C, Voucher V
-    WHERE C.mobileNo = V.mobileNo and V.redeem_date IS NOT NULL
+    WHERE C.mobileNo = V.mobileNo and V.redeem_date IS NOT NULL and C.mobileNo = @MobileNo
+
+    UPDATE Customer_Account 
+    SET point = @TotalPointsReceived - @TotalPointsSpent
+    WHERE mobileNo = @MobileNo
 
 END
+
+
