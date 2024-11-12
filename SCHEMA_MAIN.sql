@@ -1,7 +1,7 @@
-﻿CREATE DATABASE Telecom_Team_1;
-
+﻿CREATE PROCEDURE createAllTables
+AS
+CREATE DATABASE Telecom_Team_1;
 GO 
-
 use Telecom_Team_1
 CREATE TABLE Customer_profile(
 	nationalID int,
@@ -84,6 +84,8 @@ use Telecom_Team_1
 CREATE TABLE Process_Payment (
 	paymentID int,
 	planID int,
+	remaining_balance decimal (10,1),
+	extra_amount decimal (10,1),
 	CONSTRAINT PK_Process_Payment PRIMARY KEY (paymentID),
 	CONSTRAINT FK_Process_Payment_paymentID FOREIGN KEY(paymentID) REFERENCES Payment(paymentID)
 		ON UPDATE CASCADE,
@@ -228,47 +230,99 @@ CREATE TABLE Technical_Support_Ticket (
 
 );
 
-GO 
 
--- Trigger to calculate remaining_balance and extra_amount
---CREATE TRIGGER trg_Process_Payment_Update ON Process_Payment
---AFTER INSERT, UPDATE
---AS
---BEGIN
-    --UPDATE pp
-    --SET 
-        --pp.remaining_balance = CASE 
-            --WHEN p.amount < sp.price THEN sp.price - p.amount 
---        END,
-        --pp.extra_amount = CASE 
-          --  WHEN p.amount > sp.price THEN p.amount - sp.price 
-        --END
-    --FROM 
-        --Process_Payment pp
-    --JOIN 
-        --Payment p ON pp.paymentID = p.paymentID
-    --JOIN 
-      --  Service_Plan sp ON pp.planID = sp.planID
-    --WHERE 
-      --  pp.paymentID IN (SELECT paymentID FROM inserted);
---END;
-CREATE VIEW Process_Payment_View AS
-SELECT 
-    pp.paymentID,
-    pp.planID,
-    CASE 
-        WHEN p.amount < sp.price THEN sp.price - p.amount 
-        ELSE 0 
-    END AS remaining_balance,
-    CASE 
-        WHEN p.amount > sp.price THEN p.amount - sp.price 
-        ELSE 0 
-    END AS extra_amount
-FROM 
-    Process_Payment pp
-JOIN 
-    Payment p ON pp.paymentID = p.paymentID
-JOIN 
-    Service_Plan sp ON pp.planID = sp.planID;
+GO
 
+CREATE PROCEDURE DropAllTables
+AS
+BEGIN
+    DROP TABLE IF EXISTS Technical_Support_Ticket;
+    DROP TABLE IF EXISTS Voucher;
+    DROP TABLE IF EXISTS E_shop;
+    DROP TABLE IF EXISTS Physical_Shop;
+    DROP TABLE IF EXISTS Shop;
+    DROP TABLE IF EXISTS Plan_Provides_Benefits;
+    DROP TABLE IF EXISTS Cashback;
+    DROP TABLE IF EXISTS Exclusive_Offer;
+    DROP TABLE IF EXISTS Points_Group;
+    DROP TABLE IF EXISTS Benefits;
+    DROP TABLE IF EXISTS Transfer_money;
+    DROP TABLE IF EXISTS Wallet;
+    DROP TABLE IF EXISTS Process_Payment;
+    DROP TABLE IF EXISTS Payment;
+    DROP TABLE IF EXISTS Plan_Usage;
+    DROP TABLE IF EXISTS Subscription;
+    DROP TABLE IF EXISTS Service_Plan;
+    DROP TABLE IF EXISTS Customer_Account;
+    DROP TABLE IF EXISTS Customer_profile;
+END;
+
+GO
+
+
+CREATE PROCEDURE clearAllTables
+AS
+BEGIN
+    -- Dropping tables with no dependencies on other tables first
+    DELETE FROM Technical_Support_Ticket;
+    DELETE FROM Voucher;
+    DELETE FROM E_shop;
+    DELETE FROM Physical_Shop;
+    DELETE FROM Shop;
+    DELETE FROM Plan_Provides_Benefits;
+    DELETE FROM Cashback;
+    DELETE FROM Exclusive_Offer;
+    DELETE FROM Points_Group;
+    DELETE FROM Benefits;
+    DELETE FROM Transfer_money;
+    DELETE FROM Wallet;
+    DELETE FROM Process_Payment;
+    DELETE FROM Payment;
+    DELETE FROM Plan_Usage;
+    DELETE FROM Subscription;
+    DELETE FROM Service_Plan;
+    DELETE FROM Customer_Account;
+    DELETE FROM Customer_profile;
+END;
+GO
+
+CREATE PROCEDURE dropAllProceduresFunctionsViews
+AS
+BEGIN
+    DROP VIEW allCustomerAccounts;
+	DROP VIEW allServicePlans;
+	DROP VIEW allBenefits;
+	DROP VIEW AccountPayments;
+	DROP VIEW allShops;
+	DROP VIEW allResolvedTickets;
+	DROP VIEW CustomerWallet;
+	DROP VIEW E_shopVouchers;
+	DROP VIEW PhysicalStoreVouchers;
+	DROP VIEW Num_of_cashback;
+	DROP PROC Account_Plan;
+	DROP FUNCTION Account_Plan_date;
+	DROP FUNCTION Account_Usage_Plan;
+	DROP PROCEDURE Benefits_Account;
+	DROP FUNCTION Account_SMS_Offers;
+	DROP PROCEDURE Account_Payment_Points;
+	DROP FUNCTION Wallet_Cashback_Amount;
+	DROP FUNCTION Wallet_Transfer_Amount;
+	DROP FUNCTION Wallet_MobileNo;
+	DROP PROCEDURE Total_Points_Account;
+	DROP FUNCTION AccountLoginValidation;
+	DROP FUNCTION Consumption;
+	DROP PROCEDURE Unsubscribed_Plans;
+	DROP FUNCTION Usage_Plan_CurrentMonth;
+	DROP FUNCTION Cashback_Wallet_Customer;
+	DROP PROCEDURE Ticket_Account_Customer;
+	DROP PROCEDURE Account_Highest_Vouche;
+	DROP FUNCTION Remaining_plan_amount;
+	DROP FUNCTION Extra_plan_amount;
+	DROP PROCEDURE Top_Successful_Payments;
+	DROP FUNCTION Subscribed_plans_5_Months;
+	DROP PROCEDURE Initiate_plan_payment;
+	DROP PROCEDURE Payment_wallet_cashback;
+	DROP PROCEDURE Initiate_balance_payment;
+	DROP PROCEDURE Redeem_voucher_points;
+END;
 GO
