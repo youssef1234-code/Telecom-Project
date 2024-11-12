@@ -54,6 +54,6 @@ RETURN
 (
 SELECT s.*
 FROM Service_Plan s, Subscription sub
-WHERE s.planID = sub.planID AND sub.mobileNo = @MobileNo AND DATEDIFF(MONTH,sub.subscription_date,GETDATE()) < 5
+WHERE s.planID = sub.planID AND sub.mobileNo = '01012345678' AND DATEDIFF(MONTH,sub.subscription_date,GETDATE()) < 5
 )
 GO
