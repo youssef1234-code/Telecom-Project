@@ -37,7 +37,7 @@ BEGIN
     WHERE Benefits.mobileNo IN (
                                 SELECT C.mobileNo
                                 FROM Customer_Account C, Benefits B, Plan_Provides_Benefits P
-                                WHERE C.mobileNo = B.mobileNo and B.benefitID = P.benefitID and P.planID = @PlanID
+                                WHERE C.mobileNo = @MobileNo AND C.mobileNo = B.mobileNo and B.benefitID = P.benefitID and P.planID = @PlanID
                                 )
     
 END
