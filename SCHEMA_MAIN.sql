@@ -1,6 +1,7 @@
-﻿CREATE PROCEDURE createAllTables
+﻿CREATE DATABASE Telecom_Team_1;
+GO
+CREATE PROCEDURE createAllTables
 AS
-CREATE DATABASE Telecom_Team_1;
 GO 
 use Telecom_Team_1
 CREATE TABLE Customer_profile(
