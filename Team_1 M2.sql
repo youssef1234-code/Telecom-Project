@@ -1,7 +1,6 @@
 ﻿--Exercise 2-1
 CREATE DATABASE Telecom_Team_1;
 GO
-
 CREATE PROCEDURE createAllTables
 AS
 GO 
@@ -220,7 +219,7 @@ CREATE TABLE Voucher (
 		ON UPDATE CASCADE
 );
 
-use Telecom_Team_1
+
 CREATE TABLE Technical_Support_Ticket (
 	ticketID int identity(1,1),
 	mobileNo char(11),
@@ -330,7 +329,7 @@ BEGIN
 END;
 GO
 
-
+drop VIEW allCustomerAccounts
 --Exercise 2-2
 use Telecom_Team_1
 GO
@@ -455,7 +454,7 @@ RETURN
 (
     SELECT E.*
     FROM  Exclusive_Offer E, Benefits B, Customer_Account C
-    WHERE C.mobileNo = B.mobileNo and E.benefitID = B.benefitID and C.mobileNo = @MobileNo AND E.SMS_offered>0
+    WHERE C.mobileNo = B.mobileNo and E.benefitID = B.benefitID and C.mobileNo = @MobileNo AND E.sms>0
 );
 
 GO
@@ -564,12 +563,12 @@ CREATE FUNCTION Consumption
 RETURNS TABLE
 AS
 	RETURN(
-		SELECT sp.name,sum(pu.data_consumption) as DataConsumption ,sum(pu.minutes_used) as MinutesUsed,sum(pu.SMS_sent) as SMS_Sent
+		SELECT pu.name,sum(pu.data_consumption),sum(pu.minutes_used),sum(pu.SMS_sent )
 		FROM Plan_Usage pu JOIN Service_Plan sp ON pu.planID = sp.planID
 		WHERE UPPER(sp.name) = UPPER(@Plan_name) 
 			AND @start_date <= pu.start_date
 			AND @end_date >= pu.end_date
-		GROUP BY sp.name
+		GROUP BY pu.name
 	);
 GO
 
@@ -629,21 +628,17 @@ END;
 
 GO
 CREATE FUNCTION Account_Highest_Voucher
-(@MobileNo varchar(11))
+(@MobileNo car(11))
 RETURNS INT
 AS 
 BEGIN
 	DECLARE @Voucher_id INT;
-	DECLARE @maximumPoint INT;
 
-	SELECT @maximumPoint = MAX(v.points)
+	SELECT MAX(v.points) as maximum
 	FROM Voucher v
 	WHERE v.mobileNo = @MobileNo
 
-	SELECT @Voucher_id = v.voucherID
-	FROM Voucher v
-	WHERE v.points = @maximumPoint AND V.mobileNo = @MobileNo
-
+	set @Voucher_id = maximum
 	RETURN @Voucher_id
 END
 
