@@ -1,11 +1,11 @@
 ﻿--Exercise 2-1
 CREATE DATABASE Telecom_Team_1;
 GO
-
+USE Telecom_Team_1;
+GO
 CREATE PROCEDURE createAllTables
 AS
-GO 
-use Telecom_Team_1
+BEGIN
 CREATE TABLE Customer_profile(
 	nationalID int,
 	first_name varchar(50),
@@ -15,8 +15,6 @@ CREATE TABLE Customer_profile(
 	date_of_birth DATE,
 	CONSTRAINT PK_Customer_profile PRIMARY KEY (nationalID)
 );
-
-use Telecom_Team_1
 CREATE TABLE Customer_Account(
 	 mobileNo char(11),
 	 pass varchar(50),
@@ -30,8 +28,6 @@ CREATE TABLE Customer_Account(
 	 CONSTRAINT FK_Customer_Account_Customer_profile FOREIGN KEY (nationalID) REFERENCES Customer_profile(nationalID)
 		ON UPDATE CASCADE
 );
-
-use Telecom_Team_1
 CREATE TABLE Service_Plan (
 	planID int primary key identity(1,1),
 	SMS_offered int,
@@ -41,8 +37,6 @@ CREATE TABLE Service_Plan (
 	price int,
 	description varchar(50)
 );
-
-use Telecom_Team_1
 CREATE TABLE Subscription (
 	mobileNo char(11),
 	planID int,
@@ -54,8 +48,6 @@ CREATE TABLE Subscription (
 	CONSTRAINT FK_Subscription_planID FOREIGN KEY(planID) REFERENCES Service_Plan(planID) 
 		ON UPDATE CASCADE
 );
-
-use Telecom_Team_1
 CREATE TABLE Plan_Usage(
 	usageID int primary key identity(1,1),
 	start_date date,
@@ -70,8 +62,6 @@ CREATE TABLE Plan_Usage(
 	CONSTRAINT FK_Plan_Usage_planID FOREIGN KEY(planID) REFERENCES Service_Plan(planID) 
 		ON UPDATE CASCADE,
 );
-
-use Telecom_Team_1
 CREATE TABLE Payment(
 	paymentID int primary key identity(1,1),
 	amount decimal (10,1),
@@ -83,7 +73,6 @@ CREATE TABLE Payment(
 		ON UPDATE CASCADE
 );
 
-use Telecom_Team_1
 CREATE TABLE Process_Payment (
 	paymentID int,
 	planID int,
@@ -96,7 +85,6 @@ CREATE TABLE Process_Payment (
 		ON UPDATE CASCADE
 );
 
-use Telecom_Team_1
 CREATE TABLE Wallet (
 	walletID int primary key identity(1,1),
 	current_balance decimal(10,2),
@@ -108,7 +96,6 @@ CREATE TABLE Wallet (
 		ON UPDATE CASCADE 
 );
 
-use Telecom_Team_1
 CREATE TABLE Transfer_money (
 	walletID1  int,
 	walletID2 int,
@@ -121,7 +108,6 @@ CREATE TABLE Transfer_money (
 	CONSTRAINT FK_Transfer_money_walledID2 FOREIGN KEY(walletID2) REFERENCES Wallet(walletID)
 );
 
-use Telecom_Team_1
 CREATE TABLE Benefits (
 	benefitID int primary key identity(1,1),
 	description Varchar(50),
@@ -132,7 +118,6 @@ CREATE TABLE Benefits (
 		ON UPDATE CASCADE
 );
 
-use Telecom_Team_1
 CREATE TABLE Points_Group (
 	pointID int identity(1,1),
 	benefitID int,
@@ -144,7 +129,6 @@ CREATE TABLE Points_Group (
 	CONSTRAINT FK_Points_Group_PaymentID FOREIGN KEY(PaymentID) REFERENCES Payment(PaymentID)
 );
 
-use Telecom_Team_1
 CREATE TABLE Exclusive_Offer  (
 	offerID int identity(1,1),
 	benefitID int,
@@ -154,8 +138,6 @@ CREATE TABLE Exclusive_Offer  (
 	CONSTRAINT FK_Exclusive_Offer_benefitID FOREIGN KEY(benefitID) REFERENCES Benefits(benefitID)
 		ON UPDATE CASCADE
 );
-
-use Telecom_Team_1
 CREATE TABLE Cashback  (
 	CashbackID int identity(1,1),
 	benefitID int,
@@ -166,8 +148,6 @@ CREATE TABLE Cashback  (
 		ON UPDATE CASCADE,
 	CONSTRAINT FK_Cashback_walletID FOREIGN KEY(walletID) REFERENCES Wallet(walletID)
 );
-
-use Telecom_Team_1
 CREATE TABLE Plan_Provides_Benefits  (
 	benefitID int,
 	planID int,
@@ -177,15 +157,11 @@ CREATE TABLE Plan_Provides_Benefits  (
 	CONSTRAINT FK_Plan_Provides_Benefits_planID FOREIGN KEY(planID) REFERENCES Service_Plan(planID)
 		ON UPDATE CASCADE
 );
-
-use Telecom_Team_1
 CREATE TABLE Shop (
 	shopID int PRIMARY KEY IDENTITY(1,1),
 	name varchar(50),
 	category varchar(50)
 );
-
-use Telecom_Team_1
 CREATE TABLE Physical_Shop (
 	shopID int,
 	address varchar(50),
@@ -194,8 +170,6 @@ CREATE TABLE Physical_Shop (
 	CONSTRAINT FK_Physical_Shop_shopID FOREIGN KEY(shopID) REFERENCES Shop(shopID)
 		ON UPDATE CASCADE
 );
-
-use Telecom_Team_1
 CREATE TABLE E_shop (
 	shopID int,
 	URL varchar(50),
@@ -204,8 +178,6 @@ CREATE TABLE E_shop (
 	CONSTRAINT FK_E_shop_shopID FOREIGN KEY(shopID) REFERENCES Shop(shopID)
 		ON UPDATE CASCADE
 );
-
-use Telecom_Team_1
 CREATE TABLE Voucher (
 	voucherID  int PRIMARY KEY IDENTITY(1,1),
 	value int,
@@ -219,8 +191,6 @@ CREATE TABLE Voucher (
 	CONSTRAINT FK_Voucher_mobileNo FOREIGN KEY(mobileNo) REFERENCES Customer_Account(mobileNo)
 		ON UPDATE CASCADE
 );
-
-use Telecom_Team_1
 CREATE TABLE Technical_Support_Ticket (
 	ticketID int identity(1,1),
 	mobileNo char(11),
@@ -232,7 +202,7 @@ CREATE TABLE Technical_Support_Ticket (
 		ON UPDATE CASCADE
 
 );
-
+END;
 
 GO
 
@@ -329,8 +299,8 @@ BEGIN
 	DROP PROCEDURE Redeem_voucher_points;
 END;
 GO
-
-
+EXEC createAllTables;
+GO
 --Exercise 2-2
 use Telecom_Team_1
 GO
@@ -799,7 +769,4 @@ SET point = point - @price
 WHERE mobileNo = @MobileNo AND @price < point;
 
 END
-
-
-
 
