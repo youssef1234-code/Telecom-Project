@@ -706,6 +706,7 @@ BEGIN
 	DECLARE @servicePlanPrice decimal(10,2);
 	DECLARE @remainingBalance decimal(10,1)=0;
 	DECLARE @extra_amount decimal(10,1)=0;
+	DECLARE @status varchar(50)='onhold';
 
 	SELECT @servicePlanPrice = sp.price 
 	FROM Service_Plan sp
@@ -716,9 +717,10 @@ BEGIN
 		set @remainingBalance = @servicePlanPrice - @amount
 	END
 
-	IF @amount > @servicePlanPrice
+	IF @amount >= @servicePlanPrice
 	BEGIN 
 		set @extra_amount =  @amount - @servicePlanPrice
+		set @status = 'active'
 	END;
 
 
@@ -729,7 +731,7 @@ BEGIN
 	VALUES(@plan_id,@remainingBalance,@extra_amount)
 
 	INSERT INTO Subscription (mobileNo,planID,subscription_date,status)
-	VALUES(@MobileNo,@plan_id,CURRENT_TIMESTAMP,'active')
+	VALUES(@MobileNo,@plan_id,CURRENT_TIMESTAMP,@status)
 END;
 
 
@@ -766,7 +768,11 @@ CREATE PROCEDURE Initiate_balance_payment
 AS
 BEGIN
 INSERT INTO Payment(amount, date_of_payment, payment_method, status, mobileNo)
-VALUES(@amount, getdate(), @payment_method, 'accepted', @MobileNo)
+VALUES(@amount, getdate(), @payment_method, 'successful', @MobileNo)
+
+UPDATE Customer_Account
+SET balance = balance + @amount
+WHERE mobileNo = @MobileNo
 
 END
 
