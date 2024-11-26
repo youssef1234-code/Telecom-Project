@@ -769,4 +769,3 @@ SET point = point - @price
 WHERE mobileNo = @MobileNo AND @price < point;
 
 END
-
