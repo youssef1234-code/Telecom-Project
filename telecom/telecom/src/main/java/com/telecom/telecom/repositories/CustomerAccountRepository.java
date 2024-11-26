@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface CustomerAccountRepository extends JpaRepository<CustomerAccount, Integer> {
 
-    @Query(value = "SELECT * FROM customer_account ca WHERE ca.mobileNo = :customerMobileNo ",nativeQuery = true)
-    Optional<CustomerAccount> findByMobileNo(@Param("customerMobileNo") String customerMobileNo);
+        @Query("SELECT c FROM CustomerAccount c WHERE TRIM(c.mobileNo) = TRIM(:mobileNo)")
+        Optional<CustomerAccount> findCustomerAccountsByMobileNo(@Param("mobileNo") String mobileNo);
 }

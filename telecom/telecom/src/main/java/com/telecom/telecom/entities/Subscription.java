@@ -14,15 +14,10 @@ public class Subscription {
     @EmbeddedId
     private SubscriptionId id;
 
-    @MapsId("mobileNo")
+    @MapsId
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "mobileNo", nullable = false)
     private CustomerAccount mobileNo;
-
-    @MapsId("planID")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "planID", nullable = false)
-    private ServicePlan planID;
 
     @Column(name = "subscription_date")
     private LocalDate subscriptionDate;

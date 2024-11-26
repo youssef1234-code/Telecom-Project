@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Table(name = "Plan_Usage", schema = "dbo")
 public class PlanUsage {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "usageID", nullable = false)
     private Integer id;
 
@@ -34,9 +33,5 @@ public class PlanUsage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mobileNo")
     private CustomerAccount mobileNo;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "planID")
-    private com.telecom.telecom.entities.ServicePlan planID;
 
 }

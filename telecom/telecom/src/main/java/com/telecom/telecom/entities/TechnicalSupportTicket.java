@@ -12,7 +12,7 @@ public class TechnicalSupportTicket {
     @EmbeddedId
     private TechnicalSupportTicketId id;
 
-    @MapsId("mobileNo")
+    @MapsId
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "mobileNo", nullable = false)
     private CustomerAccount mobileNo;

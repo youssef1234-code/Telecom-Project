@@ -40,7 +40,7 @@ public class CustomerAccount {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nationalID")
-    private com.telecom.telecom.entities.CustomerProfile nationalID;
+    private CustomerProfile nationalID;
 
     @OneToMany(mappedBy = "mobileNo")
     private Set<Benefit> benefits = new LinkedHashSet<>();

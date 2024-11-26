@@ -12,9 +12,8 @@ import java.time.LocalDate;
 @Table(name = "Benefits", schema = "dbo")
 public class Benefit {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "benefitID", nullable = false,insertable=false, updatable=false)
-    private Integer benefitID;
+    @Column(name = "benefitID", nullable = false)
+    private Integer id;
 
     @Column(name = "description", length = 50)
     private String description;

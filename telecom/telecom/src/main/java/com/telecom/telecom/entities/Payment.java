@@ -6,8 +6,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -15,9 +13,8 @@ import java.util.Set;
 @Table(name = "Payment", schema = "dbo")
 public class Payment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "paymentID", nullable = false)
-    private Integer paymentID;
+    private Integer id;
 
     @Column(name = "amount", precision = 10, scale = 1)
     private BigDecimal amount;
@@ -35,9 +32,4 @@ public class Payment {
     @JoinColumn(name = "mobileNo")
     private CustomerAccount mobileNo;
 
-    @OneToMany(mappedBy = "paymentID")
-    private Set<PointsGroup> pointsGroups = new LinkedHashSet<>();
-
-    @OneToOne(mappedBy = "payment")
-    private ProcessPayment processPayment;
 }

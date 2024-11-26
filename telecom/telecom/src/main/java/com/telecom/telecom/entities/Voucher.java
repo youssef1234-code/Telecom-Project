@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Table(name = "Voucher", schema = "dbo")
 public class Voucher {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "voucherID", nullable = false)
     private Integer id;
 
@@ -28,10 +27,6 @@ public class Voucher {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mobileNo")
     private CustomerAccount mobileNo;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shopID")
-    private Shop shopID;
 
     @Column(name = "redeem_date")
     private LocalDate redeemDate;

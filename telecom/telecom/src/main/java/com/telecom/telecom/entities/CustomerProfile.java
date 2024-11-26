@@ -4,38 +4,20 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.Date;
 
-@Getter
-@Setter
 @Entity
+@Getter@Setter
 @Table(name = "Customer_profile", schema = "dbo")
 public class CustomerProfile {
     @Id
-    @Column(name = "nationalID", nullable = false)
-    private Integer id;
+    private int nationalID;
 
-    @Column(name = "first_name", length = 50)
-    private String firstName;
-
-    @Column(name = "last_name", length = 50)
-    private String lastName;
-
-    @Column(name = "email", length = 50)
+    private String first_name;
+    private String last_name;
     private String email;
-
-    @Column(name = "address", length = 50)
     private String address;
 
-    @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
-
-    @OneToMany(mappedBy = "nationalID")
-    private Set<CustomerAccount> customerAccounts = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "nationalID")
-    private Set<com.telecom.telecom.entities.Wallet> wallets = new LinkedHashSet<>();
-
+    @Temporal(TemporalType.DATE)
+    private Date date_of_birth;
 }
