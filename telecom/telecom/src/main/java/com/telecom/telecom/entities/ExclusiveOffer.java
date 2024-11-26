@@ -7,11 +7,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "Exclusive_Offer")
+@Table(name = "Exclusive_offer", schema = "dbo")
 public class ExclusiveOffer {
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "benefitID")
-    private com.telecom.telecom.entities.Benefit benefitID;
+    @EmbeddedId
+    private ExclusiveOfferId id;
+
+    @MapsId("benefitID")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "benefitID", nullable = false)
+    private Benefit benefitID;
 
     @Column(name = "internet_offered")
     private Integer internetOffered;

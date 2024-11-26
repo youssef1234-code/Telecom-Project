@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "Points_Group")
+@Table(name = "Points_group", schema = "dbo")
 public class PointsGroup {
     @EmbeddedId
     private PointsGroupId id;
@@ -15,13 +15,13 @@ public class PointsGroup {
     @MapsId("benefitID")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "benefitID", nullable = false)
-    private com.telecom.telecom.entities.Benefit benefitID;
+    private Benefit benefitID;
 
     @Column(name = "pointsAmount")
     private Integer pointsAmount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PaymentID")
-    private com.telecom.telecom.entities.Payment paymentID;
+    @JoinColumn(name = "paymentId")
+    private Payment payment;
 
 }

@@ -3,13 +3,12 @@ package com.telecom.telecom.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.math.BigDecimal;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "Process_Payment")
+@Table(name = "process_payment", schema = "dbo")
 public class ProcessPayment {
     @Id
     @Column(name = "paymentID", nullable = false)
@@ -18,16 +17,18 @@ public class ProcessPayment {
     @MapsId
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "paymentID", nullable = false)
-    private com.telecom.telecom.entities.Payment payment;
+    private Payment payment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "planID")
-    private com.telecom.telecom.entities.ServicePlan planID;
+    private ServicePlan planID;
 
-    @Column(name = "remaining_balance", precision = 10, scale = 1)
-    private BigDecimal remainingBalance;
+    @ColumnDefault("[dbo].[function_remaining_amount]([paymentID], [planID])")
+    @Column(name = "remaining_amount")
+    private Integer remainingAmount;
 
-    @Column(name = "extra_amount", precision = 10, scale = 1)
-    private BigDecimal extraAmount;
+    @ColumnDefault("[dbo].[function_extra_amount]([paymentID], [planID])")
+    @Column(name = "extra_amount")
+    private Integer extraAmount;
 
 }

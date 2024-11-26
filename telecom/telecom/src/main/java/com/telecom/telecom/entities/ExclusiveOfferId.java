@@ -11,10 +11,10 @@ import java.util.Objects;
 @Getter
 @Setter
 @Embeddable
-public class PointsGroupId implements java.io.Serializable {
-    private static final long serialVersionUID = -5605334265138247027L;
-    @Column(name = "pointId", nullable = false)
-    private Integer pointId;
+public class ExclusiveOfferId implements java.io.Serializable {
+    private static final long serialVersionUID = -253829049826915032L;
+    @Column(name = "offerID", nullable = false)
+    private Integer offerID;
 
     @Column(name = "benefitID", nullable = false)
     private Integer benefitID;
@@ -23,14 +23,14 @@ public class PointsGroupId implements java.io.Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        PointsGroupId entity = (PointsGroupId) o;
-        return Objects.equals(this.pointId, entity.pointId) &&
+        ExclusiveOfferId entity = (ExclusiveOfferId) o;
+        return Objects.equals(this.offerID, entity.offerID) &&
                 Objects.equals(this.benefitID, entity.benefitID);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pointId, benefitID);
+        return Objects.hash(offerID, benefitID);
     }
 
 }

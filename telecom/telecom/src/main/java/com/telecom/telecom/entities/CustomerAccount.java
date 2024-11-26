@@ -3,6 +3,7 @@ package com.telecom.telecom.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "Customer_Account")
+@Table(name = "customer_account", schema = "dbo")
 public class CustomerAccount {
     @Id
     @Column(name = "mobileNo", nullable = false, length = 11)
@@ -27,35 +28,36 @@ public class CustomerAccount {
     @Column(name = "account_type", length = 50)
     private String accountType;
 
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
     @Column(name = "status", length = 50)
     private String status;
 
-    @Column(name = "point")
-    private Integer point;
+    @ColumnDefault("0")
+    @Column(name = "points")
+    private Integer points;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nationalID")
     private com.telecom.telecom.entities.CustomerProfile nationalID;
 
     @OneToMany(mappedBy = "mobileNo")
-    private Set<com.telecom.telecom.entities.Benefit> benefits = new LinkedHashSet<>();
+    private Set<Benefit> benefits = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "mobileNo")
-    private Set<com.telecom.telecom.entities.Payment> payments = new LinkedHashSet<>();
+    private Set<Payment> payments = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "mobileNo")
-    private Set<com.telecom.telecom.entities.PlanUsage> planUsages = new LinkedHashSet<>();
+    private Set<PlanUsage> planUsages = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "mobileNo")
-    private Set<com.telecom.telecom.entities.Subscription> subscriptions = new LinkedHashSet<>();
+    private Set<Subscription> subscriptions = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "mobileNo")
-    private Set<com.telecom.telecom.entities.TechnicalSupportTicket> technicalSupportTickets = new LinkedHashSet<>();
+    private Set<TechnicalSupportTicket> technicalSupportTickets = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "mobileNo")
-    private Set<com.telecom.telecom.entities.Voucher> vouchers = new LinkedHashSet<>();
+    private Set<Voucher> vouchers = new LinkedHashSet<>();
 
 }

@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
+@Table(name = "Voucher", schema = "dbo")
 public class Voucher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,11 +29,11 @@ public class Voucher {
     @JoinColumn(name = "mobileNo")
     private com.telecom.telecom.entities.CustomerAccount mobileNo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shopID")
-    private com.telecom.telecom.entities.Shop shopID;
-
     @Column(name = "redeem_date")
     private LocalDate redeemDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shopid")
+    private com.telecom.telecom.entities.Shop shopid;
 
 }

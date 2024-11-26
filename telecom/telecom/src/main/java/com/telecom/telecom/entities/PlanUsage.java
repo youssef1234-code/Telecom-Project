@@ -9,17 +9,17 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "Plan_Usage")
+@Table(name = "Plan_Usage", schema = "dbo")
 public class PlanUsage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "usageID", nullable = false)
     private Integer id;
 
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(name = "end_date")
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
     @Column(name = "data_consumption")

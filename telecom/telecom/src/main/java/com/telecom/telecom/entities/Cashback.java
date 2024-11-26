@@ -9,10 +9,15 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
+@Table(name = "Cashback", schema = "dbo")
 public class Cashback {
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "benefitID")
-    private com.telecom.telecom.entities.Benefit benefitID;
+    @EmbeddedId
+    private CashbackId id;
+
+    @MapsId("benefitID")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "benefitID", nullable = false)
+    private Benefit benefitID;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "walletID")

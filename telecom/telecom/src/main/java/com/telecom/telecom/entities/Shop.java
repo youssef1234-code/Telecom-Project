@@ -10,6 +10,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@Table(name = "shop", schema = "dbo")
 public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,16 +20,16 @@ public class Shop {
     @Column(name = "name", length = 50)
     private String name;
 
-    @Column(name = "category", length = 50)
+    @Column(name = "Category", length = 50)
     private String category;
 
     @OneToOne(mappedBy = "shopID")
-    private com.telecom.telecom.entities.EShop eShop;
+    private EShop eShop;
 
     @OneToOne(mappedBy = "shopID")
-    private com.telecom.telecom.entities.PhysicalShop physicalShop;
+    private PhysicalShop physicalShop;
 
-    @OneToMany(mappedBy = "shopID")
-    private Set<com.telecom.telecom.entities.Voucher> vouchers = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "shopid")
+    private Set<Voucher> vouchers = new LinkedHashSet<>();
 
 }

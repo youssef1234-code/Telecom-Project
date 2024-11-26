@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "E_shop")
+@Table(name = "E_shop", schema = "dbo")
 public class EShop {
     @Id
     @Column(name = "shopID", nullable = false)
@@ -18,7 +18,7 @@ public class EShop {
     @JoinColumn(name = "shopID", nullable = false)
     private com.telecom.telecom.entities.Shop shop;
 
-    @Column(name = "URL", length = 50)
+    @Column(name = "URL", nullable = false, length = 50)
     private String url;
 
     @Column(name = "rating")

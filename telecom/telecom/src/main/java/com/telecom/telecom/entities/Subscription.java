@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
+@Table(name = "Subscription", schema = "dbo")
 public class Subscription {
     @EmbeddedId
     private SubscriptionId id;
@@ -21,7 +22,7 @@ public class Subscription {
     @MapsId("planID")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "planID", nullable = false)
-    private com.telecom.telecom.entities.ServicePlan planID;
+    private ServicePlan planID;
 
     @Column(name = "subscription_date")
     private LocalDate subscriptionDate;

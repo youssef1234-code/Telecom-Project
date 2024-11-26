@@ -11,7 +11,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "Benefits")
+@Table(name = "Benefits", schema = "dbo")
 public class Benefit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,19 +31,19 @@ public class Benefit {
     @JoinColumn(name = "mobileNo")
     private com.telecom.telecom.entities.CustomerAccount mobileNo;
 
-    @OneToMany(mappedBy = "benefitID",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "benefitID")
     private Set<com.telecom.telecom.entities.Cashback> cashbacks = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "benefitID",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "benefitID")
     private Set<com.telecom.telecom.entities.ExclusiveOffer> exclusiveOffers = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "benefitID")
+    private Set<com.telecom.telecom.entities.PointsGroup> pointsGroups = new LinkedHashSet<>();
+
     @ManyToMany
-    @JoinTable(name = "Plan_Provides_Benefits",
-            joinColumns = @JoinColumn(name = "benefitID"),
+    @JoinTable(name = "plan_provides_benefits",
+            joinColumns = @JoinColumn(name = "benefitid"),
             inverseJoinColumns = @JoinColumn(name = "planID"))
     private Set<com.telecom.telecom.entities.ServicePlan> servicePlans = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "benefitID",fetch = FetchType.LAZY)
-    private Set<com.telecom.telecom.entities.PointsGroup> pointsGroups = new LinkedHashSet<>();
 
 }

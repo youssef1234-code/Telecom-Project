@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "Technical_Support_Ticket")
+@Table(name = "Technical_support_ticket", schema = "dbo")
 public class TechnicalSupportTicket {
     @EmbeddedId
     private TechnicalSupportTicketId id;
@@ -17,7 +17,7 @@ public class TechnicalSupportTicket {
     @JoinColumn(name = "mobileNo", nullable = false)
     private com.telecom.telecom.entities.CustomerAccount mobileNo;
 
-    @Column(name = "Issue_description", length = 50)
+    @Column(name = "issue_description", length = 50)
     private String issueDescription;
 
     @Column(name = "priority_level")
