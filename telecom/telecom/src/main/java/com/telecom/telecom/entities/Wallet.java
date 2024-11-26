@@ -3,7 +3,6 @@ package com.telecom.telecom.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,11 +19,9 @@ public class Wallet {
     @Column(name = "walletID", nullable = false)
     private Integer id;
 
-    @ColumnDefault("0")
     @Column(name = "current_balance", precision = 10, scale = 2)
     private BigDecimal currentBalance;
 
-    @ColumnDefault("'egp'")
     @Column(name = "currency", length = 50)
     private String currency;
 
@@ -33,7 +30,7 @@ public class Wallet {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nationalID")
-    private com.telecom.telecom.entities.CustomerProfile nationalID;
+    private CustomerProfile nationalID;
 
     @Column(name = "mobileNo", length = 11)
     private String mobileNo;
@@ -42,9 +39,9 @@ public class Wallet {
     private Set<Cashback> cashbacks = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "walletID1")
-    private Set<com.telecom.telecom.entities.TransferMoney> transferFrom = new LinkedHashSet<>();
+    private Set<TransferMoney> transferedFrom = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "walletID2")
-    private Set<com.telecom.telecom.entities.TransferMoney> transferTo = new LinkedHashSet<>();
+    private Set<TransferMoney> transferedTo = new LinkedHashSet<>();
 
 }

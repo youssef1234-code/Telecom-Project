@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "Physical_shop", schema = "dbo")
+@Table(name = "Physical_Shop", schema = "dbo")
 public class PhysicalShop {
     @Id
     @Column(name = "shopID", nullable = false)

@@ -25,5 +25,4 @@ public class ExclusiveOffer {
 
     @Column(name = "minutes_offered")
     private Integer minutesOffered;
-
 }

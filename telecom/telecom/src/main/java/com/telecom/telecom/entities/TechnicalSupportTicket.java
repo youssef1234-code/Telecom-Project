@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "Technical_support_ticket", schema = "dbo")
+@Table(name = "Technical_Support_Ticket", schema = "dbo")
 public class TechnicalSupportTicket {
     @EmbeddedId
     private TechnicalSupportTicketId id;
@@ -15,9 +15,9 @@ public class TechnicalSupportTicket {
     @MapsId("mobileNo")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "mobileNo", nullable = false)
-    private com.telecom.telecom.entities.CustomerAccount mobileNo;
+    private CustomerAccount mobileNo;
 
-    @Column(name = "issue_description", length = 50)
+    @Column(name = "Issue_description", length = 50)
     private String issueDescription;
 
     @Column(name = "priority_level")

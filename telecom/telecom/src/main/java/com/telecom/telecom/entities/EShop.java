@@ -11,17 +11,15 @@ import lombok.Setter;
 public class EShop {
     @Id
     @Column(name = "shopID", nullable = false)
-    private Integer id;
+    private Integer shopID;  // Changed to 'shopID' to match the database column
 
-    @MapsId
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "shopID", nullable = false)
-    private com.telecom.telecom.entities.Shop shop;
+    private Shop shop;  // Correct mapping to 'Shop' entity
 
-    @Column(name = "URL", nullable = false, length = 50)
+    @Column(name = "URL", length = 50)
     private String url;
 
     @Column(name = "rating")
     private Integer rating;
-
 }

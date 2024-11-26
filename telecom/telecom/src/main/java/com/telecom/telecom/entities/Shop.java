@@ -10,26 +10,25 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "shop", schema = "dbo")
+@Table(name = "Shop", schema = "dbo")
 public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shopID", nullable = false)
-    private Integer id;
+    private Integer id;  // The primary key in Shop entity
 
     @Column(name = "name", length = 50)
     private String name;
 
-    @Column(name = "Category", length = 50)
+    @Column(name = "category", length = 50)
     private String category;
 
-    @OneToOne(mappedBy = "shopID")
+    @OneToOne(mappedBy = "shop")  // Correct 'mappedBy' to reference 'shop' in EShop
     private EShop eShop;
 
-    @OneToOne(mappedBy = "shopID")
+    @OneToOne(mappedBy = "shop")  // Correct 'mappedBy' to reference 'shop' in PhysicalShop
     private PhysicalShop physicalShop;
 
-    @OneToMany(mappedBy = "shopid")
+    @OneToMany(mappedBy = "shopID")
     private Set<Voucher> vouchers = new LinkedHashSet<>();
-
 }

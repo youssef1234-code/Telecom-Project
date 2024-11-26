@@ -17,7 +17,7 @@ public class Subscription {
     @MapsId("mobileNo")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "mobileNo", nullable = false)
-    private com.telecom.telecom.entities.CustomerAccount mobileNo;
+    private CustomerAccount mobileNo;
 
     @MapsId("planID")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

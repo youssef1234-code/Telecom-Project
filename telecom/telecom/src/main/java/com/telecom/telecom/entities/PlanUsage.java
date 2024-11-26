@@ -16,10 +16,10 @@ public class PlanUsage {
     @Column(name = "usageID", nullable = false)
     private Integer id;
 
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "start_date")
     private LocalDate startDate;
 
-    @Column(name = "end_date", nullable = false)
+    @Column(name = "end_date")
     private LocalDate endDate;
 
     @Column(name = "data_consumption")
@@ -33,7 +33,7 @@ public class PlanUsage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mobileNo")
-    private com.telecom.telecom.entities.CustomerAccount mobileNo;
+    private CustomerAccount mobileNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "planID")

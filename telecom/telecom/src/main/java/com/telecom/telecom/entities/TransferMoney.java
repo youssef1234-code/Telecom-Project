@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "transfer_money", schema = "dbo")
+@Table(name = "Transfer_money", schema = "dbo")
 public class TransferMoney {
     @EmbeddedId
     private TransferMoneyId id;
@@ -18,12 +18,12 @@ public class TransferMoney {
     @MapsId("walletID1")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "walletID1", nullable = false)
-    private Wallet walletID1;
+    private com.telecom.telecom.entities.Wallet walletID1;
 
     @MapsId("walletID2")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "walletID2", nullable = false)
-    private Wallet walletID2;
+    private com.telecom.telecom.entities.Wallet walletID2;
 
     @Column(name = "amount", precision = 10, scale = 2)
     private BigDecimal amount;

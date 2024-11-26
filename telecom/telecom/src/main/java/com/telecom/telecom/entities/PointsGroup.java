@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "Points_group", schema = "dbo")
+@Table(name = "Points_Group", schema = "dbo")
 public class PointsGroup {
     @EmbeddedId
     private PointsGroupId id;
@@ -21,7 +21,6 @@ public class PointsGroup {
     private Integer pointsAmount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "paymentId")
-    private Payment payment;
-
+    @JoinColumn(name = "PaymentID")  // Ensure column name matches field name
+    private Payment paymentID;  // Ensure "paymentID" is consistent with the Payment entity
 }

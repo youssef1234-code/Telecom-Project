@@ -12,12 +12,12 @@ import java.util.Objects;
 @Setter
 @Embeddable
 public class PlanProvidesBenefitId implements java.io.Serializable {
-    private static final long serialVersionUID = -3657535747200595972L;
+    private static final long serialVersionUID = 67175802630019585L;
+    @Column(name = "benefitID", nullable = false)
+    private Integer benefitID;
+
     @Column(name = "planID", nullable = false)
     private Integer planID;
-
-    @Column(name = "benefitid", nullable = false)
-    private Integer benefitid;
 
     @Override
     public boolean equals(Object o) {
@@ -25,12 +25,12 @@ public class PlanProvidesBenefitId implements java.io.Serializable {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         PlanProvidesBenefitId entity = (PlanProvidesBenefitId) o;
         return Objects.equals(this.planID, entity.planID) &&
-                Objects.equals(this.benefitid, entity.benefitid);
+                Objects.equals(this.benefitID, entity.benefitID);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(planID, benefitid);
+        return Objects.hash(planID, benefitID);
     }
 
 }

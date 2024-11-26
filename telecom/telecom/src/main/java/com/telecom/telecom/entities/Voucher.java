@@ -27,13 +27,13 @@ public class Voucher {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mobileNo")
-    private com.telecom.telecom.entities.CustomerAccount mobileNo;
+    private CustomerAccount mobileNo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shopID")
+    private Shop shopID;
 
     @Column(name = "redeem_date")
     private LocalDate redeemDate;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shopid")
-    private com.telecom.telecom.entities.Shop shopid;
 
 }

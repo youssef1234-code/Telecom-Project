@@ -28,5 +28,4 @@ public class Cashback {
 
     @Column(name = "credit_date")
     private LocalDate creditDate;
-
 }

@@ -17,12 +17,12 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "paymentID", nullable = false)
-    private Integer id;
+    private Integer paymentID;
 
-    @Column(name = "amount", nullable = false, precision = 10, scale = 1)
+    @Column(name = "amount", precision = 10, scale = 1)
     private BigDecimal amount;
 
-    @Column(name = "date_of_payment", nullable = false)
+    @Column(name = "date_of_payment")
     private LocalDate dateOfPayment;
 
     @Column(name = "payment_method", length = 50)
@@ -33,12 +33,11 @@ public class Payment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mobileNo")
-    private com.telecom.telecom.entities.CustomerAccount mobileNo;
+    private CustomerAccount mobileNo;
 
-    @OneToMany(mappedBy = "payment")
-    private Set<com.telecom.telecom.entities.PointsGroup> pointsGroups = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "paymentID")
+    private Set<PointsGroup> pointsGroups = new LinkedHashSet<>();
 
-    @OneToOne(mappedBy = "paymentID")
-    private com.telecom.telecom.entities.ProcessPayment processPayment;
-
+    @OneToOne(mappedBy = "payment")
+    private ProcessPayment processPayment;
 }
