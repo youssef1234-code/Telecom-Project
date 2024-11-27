@@ -3,13 +3,15 @@ package com.telecom.telecom.repositories;
 import com.telecom.telecom.dtos.AccountPlanDto;
 import com.telecom.telecom.dtos.ExclusiveOfferDto;
 import com.telecom.telecom.dtos.PlanUsageSum;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
 import java.time.LocalDate;
 import java.util.List;
 
-public interface FunctionsRepository extends JpaRepository<Object, Integer> {
+@Repository
+public interface FunctionsRepository{
 
     @Query(value = "SELECT * FROM dbo.Account_Plan_date(:sub_date, :plan_id)", nativeQuery = true)
     List<AccountPlanDto> getAccountPlanDate(@Param("sub_date") LocalDate subscriptionDate, @Param("plan_id") Integer planId);
