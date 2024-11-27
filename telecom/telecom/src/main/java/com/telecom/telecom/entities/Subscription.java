@@ -25,4 +25,9 @@ public class Subscription {
     @Column(name = "status", length = 50)
     private String status;
 
+    @MapsId
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "planID", nullable = false)
+    private ServicePlan planID;
+
 }

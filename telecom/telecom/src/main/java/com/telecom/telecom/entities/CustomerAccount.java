@@ -35,8 +35,8 @@ public class CustomerAccount {
     private String status;
 
     @ColumnDefault("0")
-    @Column(name = "point")
-    private Integer point;
+    @Column(name = "points")
+    private Integer points;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nationalID")

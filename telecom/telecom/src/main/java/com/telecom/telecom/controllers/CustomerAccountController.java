@@ -8,6 +8,8 @@ import com.telecom.telecom.repositories.CustomerAccountRepository;
 import com.telecom.telecom.repositories.CustomerProfileRepository;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,9 +35,16 @@ public class CustomerAccountController {
     DtoEntityMapper dtoEntityMapper;
 
     @GetMapping("/{mobile}")
-    public CustomerAccountDto getCustomerByMobile(@PathVariable String mobile) {
+    public ResponseEntity<Object> getCustomerByMobile(@PathVariable String mobile) {
         Optional<CustomerAccount> customerAccount = customerAccountRepository.findCustomerAccountsByMobileNo(mobile);
-        return customerAccount.map(account -> dtoEntityMapper.toCustomerAccountDto(account)).orElse(null);
+
+        if (customerAccount.isPresent()) {
+            CustomerAccountDto dto = dtoEntityMapper.toCustomerAccountDto(customerAccount.get());
+            return ResponseEntity.ok(dto);
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Customer account not found for mobile: " + mobile);
     }
 
     @GetMapping("/nId/{nationalId}")

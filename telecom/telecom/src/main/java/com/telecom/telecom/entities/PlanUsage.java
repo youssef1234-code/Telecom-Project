@@ -34,4 +34,8 @@ public class PlanUsage {
     @JoinColumn(name = "mobileNo")
     private CustomerAccount mobileNo;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "planID")
+    private ServicePlan planID;
+
 }
