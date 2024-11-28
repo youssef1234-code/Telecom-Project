@@ -23,10 +23,10 @@ public class LoginController {
     FunctionsRepository functionsRepository;
 
     @PostMapping("/admin")
-    public ResponseEntity<Object> validateAdminLogin(@RequestBody AdminLoginRequest loginRequest) {
+    public ResponseEntity<?> validateAdminLogin(@RequestBody AdminLoginRequest loginRequest) {
         // Validate input
         if (Strings.isBlank(loginRequest.getAdminId()) || Strings.isBlank(loginRequest.getPassword())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid credentials");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", "Invalid  credentials"));
         }
 
         // Simulate admin login (enhance with DB query or external service if needed)
@@ -44,7 +44,7 @@ public class LoginController {
     }
 
     @PostMapping("/customer")
-    public ResponseEntity<Object> validateCustomerLogin(@RequestBody CustomerLoginRequest loginRequest) {
+    public ResponseEntity<?> validateCustomerLogin(@RequestBody CustomerLoginRequest loginRequest) {
         // Validate input
         if (Strings.isBlank(loginRequest.getMobileNo()) || Strings.isBlank(loginRequest.getPassword())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message","Invalid credentials"));

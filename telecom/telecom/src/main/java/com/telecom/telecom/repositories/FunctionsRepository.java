@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -26,4 +27,13 @@ public interface FunctionsRepository extends JpaRepository<CustomerAccount, Long
 
     @Query(value = "SELECT dbo.AccountLoginValidation(:mobile_num, :pass)", nativeQuery = true)
     Boolean validateLogin(@Param("mobile_num")String mobileNum, @Param("pass")String password);
+
+    @Query(value = "SELECT dbo.Wallet_Cashback_Amount(:walletID, :planID)", nativeQuery = true)
+    Integer getWalletCashbackAmount(@Param("walletID") Integer walletID, @Param("planID") Integer planID);
+
+    @Query(value = "SELECT dbo.Wallet_Transfer_Amount(:walletID, :startDate, :endDate)", nativeQuery = true)
+    BigDecimal getWalletTransferAmount(@Param("walletID") Integer walletID, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+
+
 }
