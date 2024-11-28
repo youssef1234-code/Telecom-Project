@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 import {
   Box,
   TextField,
@@ -6,13 +9,16 @@ import {
   Typography,
   CircularProgress,
   Grid,
+  IconButton,
 } from "@mui/material";
+
 
 const AdminSignIn = () => {
   const [adminId, setAdminId] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
   const handleLogin = async () => {
     setLoading(true);
@@ -72,11 +78,21 @@ const AdminSignIn = () => {
         <TextField
           label="Password"
           variant="outlined"
-          type="password"
+          type={showPassword ? "text" : "password"} // Toggle between text and password type
           fullWidth
           margin="normal"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <IconButton
+                onClick={() => setShowPassword((prev) => !prev)} // Toggle password visibility
+                edge="end"
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />} {/* Toggle icons */}
+              </IconButton>
+            ),
+          }}
         />
         {error && (
           <Typography color="error" variant="body2" sx={{ mt: 2 }}>
