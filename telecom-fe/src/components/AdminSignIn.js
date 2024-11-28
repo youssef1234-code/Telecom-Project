@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../App";
 
 import {
   Box,
@@ -18,14 +20,16 @@ const AdminSignIn = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const { setAuth } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     setLoading(true);
-    setError(""); // Clear any previous error
+    setError("");
 
     try {
-      const response = await fetch("http://localhost:8082/api/login/admin", {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/login/admin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,6 +41,14 @@ const AdminSignIn = () => {
         const data = await response.json();
         console.log("Login successful:", data);
         // Redirect or update state here
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role);
+
+        // Update app state
+        setAuth({ token: data.token, role: data.role });
+
+        navigate("/admin/dashboard");
+
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Invalid login credentials");
