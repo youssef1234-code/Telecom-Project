@@ -28,9 +28,9 @@ const NotFoundPage = () => {
       </Typography>
       <Box
         component="img"
-        src="https://via.placeholder.com/400x300" // Replace with your 404 illustration URL
+        src="https://img.freepik.com/free-vector/404-error-web-template-flat-style_23-2147781022.jpg" // Replace with your 404 illustration URL
         alt="404 Illustration"
-        sx={{ maxWidth: "100%", height: "auto", mb: 4 }}
+        sx={{ maxWidth: "300px", height: "auto", mb: 4 }}
       />
       <Button
         variant="contained"

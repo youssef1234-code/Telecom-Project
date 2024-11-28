@@ -8,7 +8,6 @@ import NotFoundPage from "./components/NotFoundPage";
 export const AuthContext = createContext();
 
 function App() {
-  // Check localStorage for auth token and role on initial load
   const storedToken = localStorage.getItem("token");
   const storedRole = localStorage.getItem("role");
 
@@ -17,7 +16,6 @@ function App() {
     role: storedRole || null,
   });
 
-  // Update localStorage whenever auth state changes
   useEffect(() => {
     if (auth.token && auth.role) {
       localStorage.setItem("token", auth.token);
@@ -31,20 +29,18 @@ function App() {
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
       <Router>
-        <div>
-          <Routes>
-            <Route path="/" element={<AdminSignIn />} />
-            <Route
-              path="/admin/dashboard"
-              element={
-                <ProtectedRoute role="admin">
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </div>
+        <Routes>
+          <Route path="/" element={<AdminSignIn />} />
+          <Route
+            path="/admin/*"
+            element={
+              <ProtectedRoute role="admin">
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
       </Router>
     </AuthContext.Provider>
   );
