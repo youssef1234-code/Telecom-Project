@@ -1,20 +1,10 @@
-import React, { useState } from "react";
-import { Route, Routes, Link } from "react-router-dom";
+import React, { useState,useContext } from "react";
+import { Sidebar } from "flowbite-react";
+import { Route, Routes, useLocation } from "react-router-dom";
+import { AuthContext } from "../App";
+import { Box, Typography, Button } from "@mui/material";
 import {
-  AppBar,
-  Toolbar,
-  Drawer,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  IconButton,
-  CssBaseline,
-  Typography,
-  Box,
-} from "@mui/material";
-import {
-  Menu as MenuIcon,
+  ExitToApp,
   AccountCircle,
   Store,
   Receipt,
@@ -22,80 +12,130 @@ import {
   Sms,
   Payment,
   Wallet,
+  PeopleAlt,
+  Subscriptions,
+  DataUsage,
+  LocalGroceryStore,
+  Paid
 } from "@mui/icons-material";
-
-// Define menu items and their corresponding paths
+// Menu Items
 const menuItems = [
-  { title: 'Customer Profiles', icon: <AccountCircle />, path: '/customers' },
-  { title: 'Physical Stores', icon: <Store />, path: '/stores' },
-  { title: 'Resolved Tickets', icon: <Receipt />, path: '/tickets' },
-  { title: 'Customer Accounts', icon: <Loyalty />, path: '/accounts' },
-  { title: 'Subscribed Plan Search', icon: <Loyalty />, path: '/subscribed-plan' },
-  { title: 'Account Usage', icon: <Loyalty />, path: '/account-usage' },
-  { title: 'Remove Benefits', icon: <Loyalty />, path: '/remove-benefits' },
-  { title: 'SMS Offers', icon: <Sms />, path: '/sms-offers' },
-  { title: 'Wallets Details', icon: <Wallet />, path: '/wallets' },
-  { title: 'E-Shops', icon: <Store />, path: '/eshops' },
-  { title: 'Payments', icon: <Payment />, path: '/payments' },
-  { title: 'Cashback Transactions', icon: <Wallet />, path: '/cashback-transactions' },
-  { title: 'Accepted Transactions', icon: <Payment />, path: '/accepted-transactions' },
-  { title: 'Cashback Amount', icon: <Wallet />, path: '/cashback-amount' },
-  { title: 'Transaction Average', icon: <Payment />, path: '/transaction-average' },
-  { title: 'Wallet Linking', icon: <Wallet />, path: '/wallet-linking' },
-  { title: 'Update Points', icon: <Loyalty />, path: '/update-points' },
+  { title: "Customer Profiles", icon: AccountCircle, path: "/admin/customers" },
+  { title: "Resolved Tickets", icon: Receipt, path: "/admin/tickets" },
+  { title: "Customer Accounts", icon: PeopleAlt, path: "/admin/accounts" },
+  { title: "Subscribed Plan Search", icon: Subscriptions, path: "/admin/subscribed-plan" },
+  { title: "Account Usage", icon: DataUsage, path: "/admin/account-usage" },
+  { title: "Remove Benefits", icon: Loyalty, path: "/admin/remove-benefits" },
+  { title: "SMS Offers", icon: Sms, path: "/admin/sms-offers" },
+  { title: "Wallets Details", icon: Wallet, path: "/admin/wallets" },
+  { title: "Payments", icon: Payment, path: "/admin/payments" },
+  { title: "Cashback Amount", icon: Wallet, path: "/admin/cashback-amount" },
+  { title: "Wallet Linking", icon: Wallet, path: "/admin/wallet-linking" },
+  { title: "Update Points", icon: Loyalty, path: "/admin/update-points" },
 ];
 
-const AdminDashboard = () => {
-  const [isDrawerOpen, setDrawerOpen] = useState(true);
+const SidebarLayout = () => {
+  const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const location = useLocation(); // Hook to get the current path
+
+  const isActive = (path) => location.pathname === path; // Helper function to check active path
+  const { signOut } = useContext(AuthContext);
+
+  const handleSignOut = () => {
+    signOut();
+    window.location.href = "/";  // Redirect to the root
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            edge="start"
-            onClick={() => setDrawerOpen(!isDrawerOpen)}
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            Admin Dashboard
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      {/* Sidebar */}
+      {isSidebarOpen && (
+        <Sidebar aria-label="Custom Themed Sidebar" style={{ height: "100vh" }}>
+          <Sidebar.Logo sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '20px', fontWeight: 'bold' }}>
+            Telecom 1
+          </Sidebar.Logo>
 
-      <Drawer
-        variant="persistent"
-        open={isDrawerOpen}
-        sx={{
-          width: 240,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: 240, boxSizing: "border-box" },
-        }}
-      >
-        <Toolbar />
-        <List>
-          {menuItems.map((item, index) => (
-            <ListItem button key={index} component={Link} to={item.path}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.title} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+          <Sidebar.Items>
+            {/* Grouping items */}
+            <Sidebar.ItemGroup>
+              {/* Group 1: Stores */}
+              <Sidebar.Collapse icon={LocalGroceryStore} label="Stores">
+                <Sidebar.Item href="/admin/stores" icon={Store} className={isActive("/stores") ? "bg-gray-100 dark:bg-gray-500" : ""}>
+                  Physical Stores
+                </Sidebar.Item>
+                <Sidebar.Item href="/admin/eshops" icon={Store} className={isActive("/eshops") ? "bg-gray-100 dark:bg-gray-500" : ""}>
+                  E-Shops
+                </Sidebar.Item>
+              </Sidebar.Collapse>
 
+              {/* Group 2: Transactions */}
+              <Sidebar.Collapse icon={Paid} label="Transactions">
+                <Sidebar.Item href="/admin/cashback-transactions" icon={Wallet} className={isActive("/cashback-transactions") ? "bg-gray-100 dark:bg-gray-500" : ""}>
+                  Cashback Transactions
+                </Sidebar.Item>
+                <Sidebar.Item href="/admin/accepted-transactions" icon={Payment} className={isActive("/accepted-transactions") ? "bg-gray-100 dark:bg-gray-500" : ""}>
+                  Accepted Transactions
+                </Sidebar.Item>
+                <Sidebar.Item href="/admin/transaction-average" icon={Payment} className={isActive("/transaction-average") ? "bg-gray-100 dark:bg-gray-500" : ""}>
+                  Transaction Average
+                </Sidebar.Item>
+              </Sidebar.Collapse>
+            </Sidebar.ItemGroup>
+
+            {/* Other Items */}
+            <Sidebar.ItemGroup>
+              {menuItems.map((item, index) => (
+                <Sidebar.Item
+                  key={index}
+                  as="a"
+                  href={item.path}
+                  icon={item.icon}
+                  className={isActive(item.path) ? "bg-gray-100 dark:bg-gray-500" : ""}
+                >
+                  {item.title}
+                </Sidebar.Item>
+              ))}
+            </Sidebar.ItemGroup>
+
+            {/* Sign Out */}
+            <Sidebar.ItemGroup>
+              <Sidebar.Item
+                as="button"
+                onClick={handleSignOut}
+                icon={ExitToApp}
+                className="text-red-600 hover:bg-red-100"
+                iconClassName="!text-red-600"
+              >
+                Sign Out
+              </Sidebar.Item>
+            </Sidebar.ItemGroup>
+          </Sidebar.Items>
+        </Sidebar>
+      )}
+
+      {/* Main Content */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
-          marginLeft: isDrawerOpen ? "240px" : "0px",
+          marginLeft: isSidebarOpen ? "240px" : "0px",
+          transition: "margin-left 0.3s ease",
         }}
       >
-        <Toolbar />
+      
+        {/* Open/Close Sidebar Button
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={() => setSidebarOpen(!isSidebarOpen)}
+          sx={{ textTransform: "none" }}
+        >
+          {isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}
+        </Button> */}
+
+        {/* Routes */}
         <Routes>
           {menuItems.map((item, index) => (
             <Route
@@ -110,4 +150,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default SidebarLayout;

@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import AdminSignIn from "./components/AdminSignIn";
-import AdminDashboard from "./components/AdminDashboard"; // Assume you have an AdminDashboard component
+import AdminDashboard from "./components/AdminDashboard"; 
 import NotFoundPage from "./components/NotFoundPage";
 
 // Create a Context for Authentication
@@ -26,8 +26,12 @@ function App() {
     }
   }, [auth]);
 
+  const signOut = () => {
+    setAuth({ token: null, role: null });
+  };
+
   return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
+    <AuthContext.Provider value={{ auth, setAuth, signOut }}>
       <Router>
         <Routes>
           <Route path="/" element={<AdminSignIn />} />

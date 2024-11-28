@@ -36,7 +36,16 @@ const NotFoundPage = () => {
         variant="contained"
         color="primary"
         size="large"
-        onClick={() => navigate("/")} // Redirect to home page
+        onClick={() => {
+          const userType = localStorage.getItem("role");
+          if (userType === "admin") {
+            navigate("/admin/dashboard");
+          } else if (userType === "customer") {
+            navigate("/customer/dashboard");
+          } else {
+            navigate("/");
+          }
+        }}
         sx={{ textTransform: "none" }}
       >
         Go to Homepage
