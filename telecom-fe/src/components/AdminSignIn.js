@@ -36,22 +36,27 @@ const AdminSignIn = () => {
         },
         body: JSON.stringify({ adminId, password }),
       });
-
+    
       if (response.ok) {
         const data = await response.json();
         console.log("Login successful:", data);
         // Redirect or update state here
         localStorage.setItem("token", data.token);
         localStorage.setItem("role", data.role);
-
+    
         // Update app state
         setAuth({ token: data.token, role: data.role });
-
+    
         navigate("/admin/dashboard");
-
       } else {
-        const errorData = await response.json();
-        setError(errorData.message || "Invalid login credentials");
+        // Check content type and handle appropriately
+        const contentType = response.headers.get("Content-Type");
+        if (contentType && contentType.includes("application/json")) {
+          const errorData = await response.json();
+          setError(errorData.message || "Invalid login credentials");
+        } else {
+          setError("Unexpected error occurred. Please try again.");
+        }
       }
     } catch (err) {
       setError("Failed to connect to the server. Please try again.");

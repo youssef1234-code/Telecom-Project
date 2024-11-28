@@ -1,5 +1,7 @@
 package com.telecom.telecom.controllers;
 
+import com.telecom.telecom.dtos.requests.AdminLoginRequest;
+import com.telecom.telecom.dtos.requests.CustomerLoginRequest;
 import com.telecom.telecom.repositories.FunctionsRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,43 +25,43 @@ public class LoginController {
     @PostMapping("/admin")
     public ResponseEntity<Object> validateAdminLogin(@RequestBody AdminLoginRequest loginRequest) {
         // Validate input
-        if (Strings.isBlank(loginRequest.adminId()) || Strings.isBlank(loginRequest.password())) {
+        if (Strings.isBlank(loginRequest.getAdminId()) || Strings.isBlank(loginRequest.getPassword())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid credentials");
         }
 
         // Simulate admin login (enhance with DB query or external service if needed)
-        if (loginRequest.adminId().equals("admin") && loginRequest.password().equals("admin")) {
+        if (loginRequest.getAdminId().equals("admin") && loginRequest.getPassword().equals("admin")) {
             String token = "admin-token-123";
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
             response.put("role", "admin");
             return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid admin credentials");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("message", "Invalid admin credentials"));
+
         }
     }
 
     @PostMapping("/customer")
     public ResponseEntity<Object> validateCustomerLogin(@RequestBody CustomerLoginRequest loginRequest) {
         // Validate input
-        if (Strings.isBlank(loginRequest.mobileNo()) || Strings.isBlank(loginRequest.password())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid credentials");
+        if (Strings.isBlank(loginRequest.getMobileNo()) || Strings.isBlank(loginRequest.getPassword())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message","Invalid credentials"));
         }
 
-        Boolean allowed = functionsRepository.validateLogin(loginRequest.mobileNo(), loginRequest.password());
+        Boolean allowed = functionsRepository.validateLogin(loginRequest.getMobileNo(), loginRequest.getMobileNo());
         if (Boolean.TRUE.equals(allowed)) {
-            String token = "customer-token-"+loginRequest.mobileNo();
+            String token = "customer-token-"+loginRequest.getMobileNo();
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
             response.put("role", "customer");
             return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid customer credentials");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("message", "Invalid Customer credentials"));
+
         }
     }
-
-    // Record for login requests -> records are objects with immutable parameters
-    public record AdminLoginRequest(String adminId, String password) {}
-    public record CustomerLoginRequest(String mobileNo, String password) {}
 
 }

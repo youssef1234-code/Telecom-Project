@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface ProceduresRepository extends JpaRepository<CustomerAccount, Long> {
 
-    // A list is used for the case that there is a  tie between vouchers
+    // A list is used for the case that there is a tie between vouchers
     @Procedure(name = "Account_Highest_Voucher")
     List<Integer> getAccountHighestVoucher(@Param("mobile_num") String mobileNum);
 
@@ -21,7 +21,7 @@ public interface ProceduresRepository extends JpaRepository<CustomerAccount, Lon
     PaymentPoints getAccountPaymentPoints(@Param("mobile_num") String mobileNum);
 
     @Procedure(name = "Account_Plan")
-    AccountPlan getAllAccountsPlans();
+    List<AccountPlan> getAllAccountsPlans();
 
 
 
