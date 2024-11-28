@@ -1,8 +1,6 @@
 package com.telecom.telecom.repositories;
 
-import com.telecom.telecom.dtos.AccountPlanDto;
-import com.telecom.telecom.dtos.ExclusiveOfferDto;
-import com.telecom.telecom.dtos.PlanUsageSum;
+import com.telecom.telecom.dtos.*;
 import com.telecom.telecom.entities.CustomerAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -33,6 +31,27 @@ public interface FunctionsRepository extends JpaRepository<CustomerAccount, Long
 
     @Query(value = "SELECT dbo.Wallet_Transfer_Amount(:walletID, :startDate, :endDate)", nativeQuery = true)
     BigDecimal getWalletTransferAmount(@Param("walletID") Integer walletID, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+    @Query(value = "SELECT dbo.Wallet_MobileNo(:mobile_num)", nativeQuery = true)
+    Boolean getMobileNo(@Param("mobile_num") String mobileNum);
+
+    @Query(value = "SELECT * FROM dbo.Consumption(:Plan_name, :start_date, :end_date)", nativeQuery = true)
+    List<ConsumptionDto> getConsumption(@Param("Plan_name") String planName, @Param("start_date") LocalDate startDate, @Param("end_date") LocalDate endDate);
+
+    @Query(value = "SELECT * FROM dbo.Usage_Plan_CurrentMonth(:mobile_no)", nativeQuery = true)
+    List<UsagePlanCurrentMonthDto> getUsagePlaneCurrentMonth(@Param("mobile_no") String mobileNo);
+
+    @Query(value = "SELECT * FROM dbo.Cashback_Wallet_Customer(:NID)", nativeQuery = true)
+    List<CashbackWalletCustomerDto> getCashbackWalletCustomer(@Param("NID") Integer nID);
+
+    @Query(value = "SELECT dbo.Remaining_plan_amount(:mobile_no, :plan_name)", nativeQuery = true)
+    Integer getRemainingPlanAmount(@Param("mobile_no") String mobileNo, @Param("plan_name") String planName);
+
+    @Query(value = " SELECT dbo.Extra_plan_amount(:mobile_no, :plan_name)", nativeQuery = true)
+    Integer getExtraPlanAmount(@Param("mobile_no") String mobileNo, @Param("plan_name") String planName);
+
+    @Query(value = "SELECT * FROM dbo.Subscribed_plans_5_Months(:mobile_no)", nativeQuery = true)
+    List<SubscribedPlans5MonthsDto> getSubscribedPlans5Months(@Param("mobile_no") String mobileNo);
 
 
 
