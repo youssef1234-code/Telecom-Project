@@ -19,7 +19,7 @@ public class HelperUtils {
     public static Integer toInteger(String number) {
         try {
             return Integer.parseInt(number);
-        } catch (DateTimeParseException e) {
+        } catch (NumberFormatException e) {
             return null;
         }
     }

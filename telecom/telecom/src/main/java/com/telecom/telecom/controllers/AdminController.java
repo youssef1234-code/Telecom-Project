@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.Map;
 import java.util.Objects;
 
@@ -60,7 +59,7 @@ public class AdminController {
     @Transactional
     @PostMapping("/subscribed-plan")
     public ResponseEntity<?> getSubiscribedPlanFromDate(@RequestBody Map<String, String> requestParams) {
-        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum") || !requestParams.containsKey("planId")) {
+        if(requestParams.isEmpty() || !requestParams.containsKey("startDate") || !requestParams.containsKey("planId")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Make sure to enter the required info!"));
         }
@@ -72,7 +71,7 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Mobile Number and Start Date cannot be empty!"));
         }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-YYYY");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate formattedstartDate = HelperUtils.toDateFormat(startDate, formatter);
         if(Objects.isNull(formattedstartDate)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

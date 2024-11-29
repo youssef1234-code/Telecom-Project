@@ -4,8 +4,8 @@ import AdminSignIn from "./components/AdminSignIn";
 import AdminCustomersPage from "./components/pages/AdminCustomerPage"; 
 import AdminProfilePage from "./components/pages/AdminprofilePage"; 
 import StoreVouchersPage from "./components/pages/StoreVouchersPage"; 
+import PlanSubiscriptionPageWithDate from "./components/pages/PlanSubiscriptionPageWithDate"; 
 import ResolvedTicketsPage from "./components/pages/ResolvedTicketsPage"; 
-
 import NotFoundPage from "./components/NotFoundPage";
 
 // Create a Context for Authentication
@@ -71,7 +71,14 @@ function App() {
             </ProtectedRoute>
           }
           />
-
+          <Route
+          path="/admin/subscribed-plan"
+          element={
+            <ProtectedRoute role="admin">
+              <PlanSubiscriptionPageWithDate />
+            </ProtectedRoute>
+          }
+          />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
