@@ -69,7 +69,7 @@ public class AdminController {
 
         if(Strings.isBlank(planId) || Strings.isBlank(startDate)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number and Start Date cannot be empty!"));
+                    .body(Map.of("message", "Plan Id and Start Date cannot be empty!"));
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate formattedstartDate = HelperUtils.toDateFormat(startDate, formatter);
@@ -85,5 +85,51 @@ public class AdminController {
         return ResponseEntity.ok(functionsRepository.getAccountPlanDate(formattedstartDate,planIdInt));
     }
 
+    @Transactional
+    @PostMapping("/planUsage-sum")
+    public ResponseEntity<?> getPlanSum(@RequestBody Map<String, String> requestParams) {
+        if(requestParams.isEmpty() || !requestParams.containsKey("startDate") || !requestParams.containsKey("mobileNum")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+
+        String mobileNum = requestParams.get("mobileNum");
+        String startDate = requestParams.get("startDate");
+
+        if(Strings.isBlank(mobileNum) || Strings.isBlank(startDate)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number and Start Date cannot be empty!"));
+        }
+        if(mobileNum.length()!=11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate formattedstartDate = HelperUtils.toDateFormat(startDate, formatter);
+        if(Objects.isNull(formattedstartDate)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Invalid Date Format!"));
+        }
+        return ResponseEntity.ok(functionsRepository.getPlanConsumptionsFromDate(mobileNum,formattedstartDate));
+    }
+
+    @Transactional
+    @PostMapping("/sms-offers")
+    public ResponseEntity<?> getSMSOffers(@RequestBody Map<String, String> requestParams) {
+        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+        String mobileNum = requestParams.get("mobileNum");
+        if(Strings.isBlank(mobileNum)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        }
+        if(mobileNum.length()!=11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+        return ResponseEntity.ok(functionsRepository.getAccountOfferedSMS(mobileNum));
+    }
 
 }

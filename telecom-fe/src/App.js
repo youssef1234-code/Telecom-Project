@@ -10,6 +10,9 @@ import NotFoundPage from "./components/NotFoundPage";
 import WalletDetailsPage from "./components/pages/WalletDetailsPage";
 import EShopTablePage from "./components/pages/EShopTablePage";
 import AccountPaymentsPage from "./components/pages/AccountPaymentsPage";
+import UsageSumPage from "./components/pages/UsageSumPage";
+import SmsOffersPage from "./components/pages/SmsOffersPage";
+
 
 // Create a Context for Authentication
 export const AuthContext = createContext();
@@ -85,6 +88,24 @@ function App() {
           />
 
           <Route
+          path="/admin/account-usage"
+          element={
+            <ProtectedRoute role="admin">
+              <UsageSumPage />
+            </ProtectedRoute>
+          }
+          />
+
+          <Route
+          path="/admin/sms-offers"
+          element={
+            <ProtectedRoute role="admin">
+              <SmsOffersPage />
+            </ProtectedRoute>
+          }
+          />
+
+          <Route
           path="/admin/wallets"
           element={
             <ProtectedRoute role="admin">
@@ -130,3 +151,14 @@ function ProtectedRoute({ children, role }) {
 }
 
 export default App;
+
+// Sample data for Account Plans Usage 
+// 01012345678
+// 01/01/2024
+
+//Sample Data for Plan Subiscriptions On Date
+// 01/01/2024
+// 1
+
+// SMS offers
+// 01012345678
