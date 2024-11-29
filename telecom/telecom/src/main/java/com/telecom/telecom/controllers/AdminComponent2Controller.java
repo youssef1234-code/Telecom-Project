@@ -32,7 +32,13 @@ public class AdminComponent2Controller {
     @Transactional
     @GetMapping("/e-shops")
     public ResponseEntity<?> getEShops() {
-        return ResponseEntity.ok(viewsRepository.getE_shopVouchers());  
+        return ResponseEntity.ok(viewsRepository.getE_shopVouchers());
+    }
+
+    @Transactional
+    @GetMapping("/payments")
+    public ResponseEntity<?> getPayments() {
+        return ResponseEntity.ok(viewsRepository.getAccountPayments());
     }
 
 }

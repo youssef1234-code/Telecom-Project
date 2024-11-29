@@ -9,6 +9,7 @@ import ResolvedTicketsPage from "./components/pages/ResolvedTicketsPage";
 import NotFoundPage from "./components/NotFoundPage";
 import WalletDetailsPage from "./components/pages/WalletDetailsPage";
 import EShopTablePage from "./components/pages/EShopTablePage";
+import AccountPaymentsPage from "./components/pages/AccountPaymentsPage";
 
 // Create a Context for Authentication
 export const AuthContext = createContext();
@@ -97,6 +98,15 @@ function App() {
           element={
             <ProtectedRoute role="admin">
               <EShopTablePage />
+            </ProtectedRoute>
+          }
+          />
+
+          <Route
+          path="/admin/payments"
+          element={
+            <ProtectedRoute role="admin">
+              <AccountPaymentsPage />
             </ProtectedRoute>
           }
           />
