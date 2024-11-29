@@ -27,4 +27,7 @@ public interface ViewsRepository extends JpaRepository<CustomerAccount, Long> {
     @Query(value = "SELECT * FROM dbo.AccountPayments", nativeQuery = true)
     List<AccountPaymentsProjection> getAccountPayments();
 
+    @Query(value = "SELECT * FROM dbo.Service_plan", nativeQuery = true)
+    List<ServicePlanProjection> getServicePlans();
+
 }

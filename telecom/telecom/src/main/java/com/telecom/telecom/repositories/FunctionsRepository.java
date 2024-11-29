@@ -41,10 +41,10 @@ public interface FunctionsRepository extends JpaRepository<CustomerAccount, Long
     List<ConsumptionDto> getConsumption(@Param("Plan_name") String planName, @Param("start_date") LocalDate startDate, @Param("end_date") LocalDate endDate);
 
     @Query(value = "SELECT * FROM dbo.Usage_Plan_CurrentMonth(:mobile_no)", nativeQuery = true)
-    List<UsagePlanCurrentMonthDto> getUsagePlaneCurrentMonth(@Param("mobile_no") String mobileNo);
+    List<UsagePlanCurrentMonthDto> getUsagePlanCurrentMonth(@Param("mobile_no") String mobileNo);
 
-    @Query(value = "SELECT * FROM dbo.Cashback_Wallet_Customer(:NID)", nativeQuery = true)
-    List<CashbackWalletCustomerDto> getCashbackWalletCustomer(@Param("NID") Integer nID);
+    @Query(value = "SELECT amount FROM dbo.Cashback_Wallet_Customer(:nID)", nativeQuery = true)
+    Integer getCashbackWalletCustomer(@Param("nID") Integer nID);
 
     @Query(value = "SELECT dbo.Remaining_plan_amount(:mobile_no, :plan_name)", nativeQuery = true)
     Integer getRemainingPlanAmount(@Param("mobile_no") String mobileNo, @Param("plan_name") String planName);
