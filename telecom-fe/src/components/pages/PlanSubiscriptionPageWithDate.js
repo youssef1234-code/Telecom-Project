@@ -25,7 +25,7 @@ const PlanSubiscriptionPageWithDate = () => {
             color: "#333",
           }}
         >
-          Plan Subiscriptions On Date
+          Plan Subscriptions On Date
         </Typography>
 
         {/* Main Content Area */}
