@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import AdminSignIn from "./components/AdminSignIn";
-import AdminDashboard from "./components/AdminDashboard"; 
+import AdminCustomersPage from "./components/AdminCustomerPage"; 
 import NotFoundPage from "./components/NotFoundPage";
 
 // Create a Context for Authentication
@@ -36,12 +36,12 @@ function App() {
         <Routes>
           <Route path="/" element={<AdminSignIn />} />
           <Route
-            path="/admin/*"
-            element={
-              <ProtectedRoute role="admin">
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
+          path="/admin/customers"
+          element={
+            <ProtectedRoute role="admin">
+              <AdminCustomersPage />
+            </ProtectedRoute>
+          }
           />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

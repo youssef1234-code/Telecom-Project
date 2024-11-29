@@ -34,7 +34,7 @@ const menuItems = [
   { title: "Update Points", icon: Loyalty, path: "/admin/update-points" },
 ];
 
-const SidebarLayout = () => {
+const SidebarLayout = ({ children }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation(); // Hook to get the current path
 
@@ -114,28 +114,17 @@ const SidebarLayout = () => {
       )}
 
       {/* Main Content */}
-      <Box
+            <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
-          marginLeft: isSidebarOpen ? "240px" : "0px",
-          transition: "margin-left 0.3s ease",
+          p: 3, // Padding inside the content
+          marginLeft: isSidebarOpen ? "0px" : "0px", // Adjusts when the sidebar is open
+          transition: "margin-left 0.3s ease", // Smooth transition for sidebar toggling
+          minHeight: "100vh", // Ensure it stretches to the full viewport height
+          backgroundColor: "#fafafa", // Optional: Matches the rest of the layout background
         }}
       >
-      
-        {/* Open/Close Sidebar Button
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={() => setSidebarOpen(!isSidebarOpen)}
-          sx={{ textTransform: "none" }}
-        >
-          {isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}
-        </Button> */}
-
-        {/* Routes */}
         <Routes>
           {menuItems.map((item, index) => (
             <Route
@@ -145,7 +134,8 @@ const SidebarLayout = () => {
             />
           ))}
         </Routes>
-      </Box>
+        {children}
+</Box>
     </Box>
   );
 };

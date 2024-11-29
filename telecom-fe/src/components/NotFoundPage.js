@@ -39,7 +39,7 @@ const NotFoundPage = () => {
         onClick={() => {
           const userType = localStorage.getItem("role");
           if (userType === "admin") {
-            navigate("/admin/dashboard");
+            navigate("/admin/customers");
           } else if (userType === "customer") {
             navigate("/customer/dashboard");
           } else {

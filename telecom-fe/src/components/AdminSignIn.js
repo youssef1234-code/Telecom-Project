@@ -47,7 +47,7 @@ const AdminSignIn = () => {
         // Update app state
         setAuth({ token: data.token, role: data.role });
     
-        navigate("/admin/dashboard");
+        navigate("/admin/customers");
       } else {
         // Check content type and handle appropriately
         const contentType = response.headers.get("Content-Type");
