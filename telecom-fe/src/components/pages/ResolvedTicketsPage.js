@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import SidebarLayout from "./SidebarLayout";
-import CustomerAccountsTable from "./CustomerAccountsTable";
+import SidebarLayout from "../SidebarLayout";
+import TicketsTable from "../TicketsTable";
 
-const AdminCustomersPage = () => {
+const ResolvedTicketsPage = () => {
   return (
     <SidebarLayout>
       <Box
@@ -25,7 +25,7 @@ const AdminCustomersPage = () => {
             color: "#333",
           }}
         >
-          Customer Profiles
+          Resolved Tickets
         </Typography>
 
         {/* Main Content Area */}
@@ -51,7 +51,7 @@ const AdminCustomersPage = () => {
             }}
           >
             <div style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-  <CustomerAccountsTable />
+  <TicketsTable />
 </div>
           </Box>
         </Box>
@@ -60,4 +60,4 @@ const AdminCustomersPage = () => {
   );
 };
 
-export default AdminCustomersPage;
+export default ResolvedTicketsPage;

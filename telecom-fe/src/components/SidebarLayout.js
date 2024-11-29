@@ -20,9 +20,9 @@ import {
 } from "@mui/icons-material";
 // Menu Items
 const menuItems = [
-  { title: "Customer Profiles", icon: AccountCircle, path: "/admin/customers" },
+  { title: "Customer Accounts", icon: AccountCircle, path: "/admin/customers" },
+  { title: "Customer Profiles", icon: PeopleAlt, path: "/admin/profiles" },
   { title: "Resolved Tickets", icon: Receipt, path: "/admin/tickets" },
-  { title: "Customer Accounts", icon: PeopleAlt, path: "/admin/accounts" },
   { title: "Subscribed Plan Search", icon: Subscriptions, path: "/admin/subscribed-plan" },
   { title: "Account Usage", icon: DataUsage, path: "/admin/account-usage" },
   { title: "Remove Benefits", icon: Loyalty, path: "/admin/remove-benefits" },
