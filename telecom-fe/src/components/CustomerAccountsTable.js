@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Paper, TextField, MenuItem, Select, InputLabel, FormControl } from "@mui/material";
 import GenericTable from "./GenericTable";
+import StatusCell from "./StatusCell";
 
 const CustomerAccountsTable = () => {
   const [data, setData] = useState([]);
@@ -34,8 +35,13 @@ const CustomerAccountsTable = () => {
     { field: "balance", headerName: "Balance", type: "number", flex: 1 },
     { field: "accountType", headerName: "Account Type", flex: 1 },
     { field: "startDate", headerName: "Start Date", flex: 1 },
-    { field: "status", headerName: "Status", flex: 1 },
-    { field: "points", headerName: "Points", type: "number", flex: 1 },
+    {
+      field: "status",
+      headerName: "Status",
+      flex: 1,
+      renderCell: (params) => <StatusCell value={params.value} />,
+    },
+      { field: "points", headerName: "Points", type: "number", flex: 1 },
     { field: "nationalId", headerName: "National ID", type: "number", flex: 1 },
     { field: "planId", headerName: "Plan ID", type: "number", flex: 1 },
     { field: "planName", headerName: "Plan Name", flex: 1 },
@@ -71,7 +77,7 @@ const CustomerAccountsTable = () => {
           >
             <MenuItem value="">All</MenuItem>
             <MenuItem value="active">Active</MenuItem>
-            <MenuItem value="inactive">Inactive</MenuItem>
+            <MenuItem value="onhold">Onhold</MenuItem>
           </Select>
         </FormControl>
         <FormControl variant="outlined" fullWidth>

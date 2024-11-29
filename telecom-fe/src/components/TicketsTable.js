@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Paper, TextField, MenuItem, Select, InputLabel, FormControl } from "@mui/material";
 import GenericTable from "./GenericTable";
+import StatusCell from "./StatusCell";
 
 const TicketsTable = () => {
   const [data, setData] = useState([]);
@@ -31,7 +32,12 @@ const TicketsTable = () => {
     { field: "ticketId", headerName: "Ticket ID", flex: 1 },
     { field: "mobileNo", headerName: "Mobile No", flex: 1 },
     { field: "issueDescription", headerName: "Issue Description", flex: 2 },
-    { field: "status", headerName: "Status", flex: 1 },
+    {
+      field: "status",
+      headerName: "Status",
+      flex: 1,
+      renderCell: (params) => <StatusCell value={params.value} />,
+    },
     { field: "priorityLevel", headerName: "Priority Level", type: "number", flex: 1 },
   ];
 

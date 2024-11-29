@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Paper, TextField, MenuItem, Select, InputLabel, FormControl } from "@mui/material";
 import GenericTable from "./GenericTable";
+import StatusCell from "./StatusCell";
 
 const CustomerProfilesTable = () => {
   const [data, setData] = useState([]);
@@ -39,7 +40,12 @@ const CustomerProfilesTable = () => {
     // Customer Account Fields
     { field: "mobileNo", headerName: "Mobile No", flex: 1 },
     { field: "accountType", headerName: "Account Type", flex: 1 },
-    { field: "status", headerName: "Status", flex: 1 },
+    {
+      field: "status",
+      headerName: "Status",
+      flex: 1,
+      renderCell: (params) => <StatusCell value={params.value} />,
+    },
     { field: "startDate", headerName: "Start Date", flex: 1 },
     { field: "balance", headerName: "Balance", type: "number", flex: 1 },
     { field: "points", headerName: "Points", type: "number", flex: 1 },

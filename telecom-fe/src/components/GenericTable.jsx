@@ -8,10 +8,14 @@ const GenericTable = ({ data, columns, rowIdField }) => {
       <DataGrid
         rows={data}
         columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5, 10, 20]}
-        disableSelectionOnClick
-        autoHeight
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 5,
+            },
+          },
+        }}
+        pageSizeOptions={[5,10,25,50,100]}
         getRowId={(row) => row[rowIdField]} // Use the specified id field
         sx={{ backgroundColor: "#fff" }}
       />
