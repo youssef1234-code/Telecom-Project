@@ -7,6 +7,8 @@ import StoreVouchersPage from "./components/pages/StoreVouchersPage";
 import PlanSubiscriptionPageWithDate from "./components/pages/PlanSubiscriptionPageWithDate"; 
 import ResolvedTicketsPage from "./components/pages/ResolvedTicketsPage"; 
 import NotFoundPage from "./components/NotFoundPage";
+import WalletDetailsPage from "./components/pages/WalletDetailsPage";
+import EShopTablePage from "./components/pages/EShopTablePage";
 
 // Create a Context for Authentication
 export const AuthContext = createContext();
@@ -71,6 +73,7 @@ function App() {
             </ProtectedRoute>
           }
           />
+
           <Route
           path="/admin/subscribed-plan"
           element={
@@ -79,6 +82,25 @@ function App() {
             </ProtectedRoute>
           }
           />
+
+          <Route
+          path="/admin/wallets"
+          element={
+            <ProtectedRoute role="admin">
+              <WalletDetailsPage />
+            </ProtectedRoute>
+          }
+          />
+
+          <Route
+          path="/admin/eshops"
+          element={
+            <ProtectedRoute role="admin">
+              <EShopTablePage />
+            </ProtectedRoute>
+          }
+          />
+
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
