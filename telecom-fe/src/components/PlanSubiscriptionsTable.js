@@ -27,7 +27,7 @@ const PlanSubscriptionsTable = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.log("Error Data: "+errorData)
+        setData("");
         setError(errorData.message || "An error occurred. Please try again.");  // Handle the error message from the backend
         return;
       }
@@ -38,6 +38,7 @@ const PlanSubscriptionsTable = () => {
       const json = await response.json();
       setData(json);  // Set the data to be displayed in the table
     } catch (error) {
+      setData("");
       setError("An error occurred while fetching data. Please try again.");
     }
   };
