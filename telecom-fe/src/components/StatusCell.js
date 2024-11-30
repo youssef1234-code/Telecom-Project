@@ -17,7 +17,11 @@ const StatusCell = ({ value }) => {
             color: "#00BA34", // Text color
             backgroundColor: "rgba(0, 186, 52, 0.2)", // 20% opacity of #00BA34
             border: "2px solid #00BA34", // Border for the active status
-        },
+        },expired:{
+            color:"#E92C2C",
+            backgroundColor: "rgba(233, 44, 44, 0.2)",
+            border: "2px solid #E92C2C", // Border for the active status
+        }
   
     };
 

@@ -2,6 +2,7 @@ package com.telecom.telecom.repositories;
 
 import com.telecom.telecom.dtos.*;
 import com.telecom.telecom.dtos.projection.AccountPlanOnDateProjection;
+import com.telecom.telecom.dtos.projection.BenefitProjection;
 import com.telecom.telecom.dtos.projection.ExclusiveOfferProjection;
 import com.telecom.telecom.dtos.projection.PlanUsageSumProjection;
 import com.telecom.telecom.entities.CustomerAccount;
@@ -56,6 +57,8 @@ public interface FunctionsRepository extends JpaRepository<CustomerAccount, Long
     @Query(value = "SELECT * FROM dbo.Subscribed_plans_5_Months(:mobile_no)", nativeQuery = true)
     List<SubscribedPlans5MonthsDto> getSubscribedPlans5Months(@Param("mobile_no") String mobileNo);
 
+    @Query(value = "SELECT * FROM dbo.getBenefitByMobileNumAndPlanId(:mobile_num,:plan_id)",nativeQuery = true)
+    List<BenefitProjection> getBenefitsByMobileAndPlanId(@Param("mobile_num") String mobileNum, @Param("plan_id") Integer planId);
 
 
 }

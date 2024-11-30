@@ -12,7 +12,7 @@ import EShopTablePage from "./components/pages/EShopTablePage";
 import AccountPaymentsPage from "./components/pages/AccountPaymentsPage";
 import UsageSumPage from "./components/pages/UsageSumPage";
 import SmsOffersPage from "./components/pages/SmsOffersPage";
-
+import DeleteBenefitsPage from "./components/pages/DeleteBenefitsPage";
 
 // Create a Context for Authentication
 export const AuthContext = createContext();
@@ -104,6 +104,24 @@ function App() {
             </ProtectedRoute>
           }
           />
+          
+          <Route
+          path="/admin/payments"
+          element={
+            <ProtectedRoute role="admin">
+              <AccountPaymentsPage />
+            </ProtectedRoute>
+          }
+          />
+
+          <Route
+          path="/admin/remove-benefits"
+          element={
+            <ProtectedRoute role="admin">
+              <DeleteBenefitsPage />
+            </ProtectedRoute>
+          }
+          />
 
           <Route
           path="/admin/wallets"
@@ -131,7 +149,6 @@ function App() {
             </ProtectedRoute>
           }
           />
-
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>

@@ -32,6 +32,7 @@ public class AdminController {
     @Autowired
     FunctionsRepository functionsRepository;
 
+
     @Transactional
     @GetMapping("/customer-accounts")
     public ResponseEntity<?> getCustomerAccounts() {
@@ -131,5 +132,66 @@ public class AdminController {
         }
         return ResponseEntity.ok(functionsRepository.getAccountOfferedSMS(mobileNum));
     }
+
+    @Transactional
+    @PostMapping("/delete-benefits")
+    public ResponseEntity<?> deleteBenefitsForMobile(@RequestBody Map<String, String> requestParams) {
+        if(requestParams.isEmpty() || !requestParams.containsKey("planId") || !requestParams.containsKey("mobileNum")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+
+        String mobileNum = requestParams.get("mobileNum");
+        String planIdS = requestParams.get("planId");
+
+        if(Strings.isBlank(mobileNum) || Strings.isBlank(planIdS)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number and Plan ID cannot be empty!"));
+        }
+        if(mobileNum.length()!=11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+        Integer planId = HelperUtils.toInteger(planIdS);
+        if(Objects.isNull(planId)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Invalid Plan Id Format!"));
+        }
+        try{
+            procedureRepository.deletePlanBenefitsFromAccount(mobileNum,planId);
+            return ResponseEntity.ok(Map.of("successMessage", "Deleted successfully!"));
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Deletion failed for Mobile Number: " + mobileNum + " And Plan ID: " + planId + "!"));
+        }
+    }
+
+    @Transactional
+    @PostMapping("/get-benefits")
+    public ResponseEntity<?> getBenefitsForMobile(@RequestBody Map<String, String> requestParams) {
+        if(requestParams.isEmpty() || !requestParams.containsKey("planId") || !requestParams.containsKey("mobileNum")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+
+        String mobileNum = requestParams.get("mobileNum");
+        String planIdS = requestParams.get("planId");
+
+        if(Strings.isBlank(mobileNum) || Strings.isBlank(planIdS)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number and Plan ID cannot be empty!"));
+        }
+        if(mobileNum.length()!=11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+        Integer planId = HelperUtils.toInteger(planIdS);
+        if(Objects.isNull(planId)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Invalid Plan Id Format!"));
+        }
+        return ResponseEntity.ok(functionsRepository.getBenefitsByMobileAndPlanId(mobileNum,planId));
+    }
+
 
 }
