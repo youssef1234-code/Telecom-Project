@@ -1,11 +1,17 @@
 import React, { createContext, useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import CustomerSignIn from "./components/CustomerSignIn";
 import AdminSignIn from "./components/AdminSignIn";
-import AdminCustomersPage from "./components/pages/AdminCustomerPage"; 
-import AdminProfilePage from "./components/pages/AdminprofilePage"; 
-import StoreVouchersPage from "./components/pages/StoreVouchersPage"; 
-import PlanSubiscriptionPageWithDate from "./components/pages/PlanSubiscriptionPageWithDate"; 
-import ResolvedTicketsPage from "./components/pages/ResolvedTicketsPage"; 
+import AdminCustomersPage from "./components/pages/AdminCustomerPage";
+import AdminProfilePage from "./components/pages/AdminprofilePage";
+import StoreVouchersPage from "./components/pages/StoreVouchersPage";
+import PlanSubiscriptionPageWithDate from "./components/pages/PlanSubiscriptionPageWithDate";
+import ResolvedTicketsPage from "./components/pages/ResolvedTicketsPage";
 import NotFoundPage from "./components/NotFoundPage";
 import WalletDetailsPage from "./components/pages/WalletDetailsPage";
 import EShopTablePage from "./components/pages/EShopTablePage";
@@ -45,109 +51,110 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<AdminSignIn />} />
+          <Route path="/customer" element={<CustomerSignIn />} />
           <Route
-          path="/admin/customers"
-          element={
-            <ProtectedRoute role="admin">
-              <AdminCustomersPage />
-            </ProtectedRoute>
-          }
+            path="/admin/customers"
+            element={
+              <ProtectedRoute role="admin">
+                <AdminCustomersPage />
+              </ProtectedRoute>
+            }
           />
           <Route
-          path="/admin/profiles"
-          element={
-            <ProtectedRoute role="admin">
-              <AdminProfilePage />
-            </ProtectedRoute>
-          }
+            path="/admin/profiles"
+            element={
+              <ProtectedRoute role="admin">
+                <AdminProfilePage />
+              </ProtectedRoute>
+            }
           />
           <Route
-          path="/admin/stores"
-          element={
-            <ProtectedRoute role="admin">
-              <StoreVouchersPage />
-            </ProtectedRoute>
-          }
+            path="/admin/stores"
+            element={
+              <ProtectedRoute role="admin">
+                <StoreVouchersPage />
+              </ProtectedRoute>
+            }
           />
           <Route
-          path="/admin/tickets"
-          element={
-            <ProtectedRoute role="admin">
-              <ResolvedTicketsPage />
-            </ProtectedRoute>
-          }
-          />
-
-          <Route
-          path="/admin/subscribed-plan"
-          element={
-            <ProtectedRoute role="admin">
-              <PlanSubiscriptionPageWithDate />
-            </ProtectedRoute>
-          }
+            path="/admin/tickets"
+            element={
+              <ProtectedRoute role="admin">
+                <ResolvedTicketsPage />
+              </ProtectedRoute>
+            }
           />
 
           <Route
-          path="/admin/account-usage"
-          element={
-            <ProtectedRoute role="admin">
-              <UsageSumPage />
-            </ProtectedRoute>
-          }
+            path="/admin/subscribed-plan"
+            element={
+              <ProtectedRoute role="admin">
+                <PlanSubiscriptionPageWithDate />
+              </ProtectedRoute>
+            }
           />
 
           <Route
-          path="/admin/sms-offers"
-          element={
-            <ProtectedRoute role="admin">
-              <SmsOffersPage />
-            </ProtectedRoute>
-          }
-          />
-          
-          <Route
-          path="/admin/payments"
-          element={
-            <ProtectedRoute role="admin">
-              <AccountPaymentsPage />
-            </ProtectedRoute>
-          }
+            path="/admin/account-usage"
+            element={
+              <ProtectedRoute role="admin">
+                <UsageSumPage />
+              </ProtectedRoute>
+            }
           />
 
           <Route
-          path="/admin/remove-benefits"
-          element={
-            <ProtectedRoute role="admin">
-              <DeleteBenefitsPage />
-            </ProtectedRoute>
-          }
+            path="/admin/sms-offers"
+            element={
+              <ProtectedRoute role="admin">
+                <SmsOffersPage />
+              </ProtectedRoute>
+            }
           />
 
           <Route
-          path="/admin/wallets"
-          element={
-            <ProtectedRoute role="admin">
-              <WalletDetailsPage />
-            </ProtectedRoute>
-          }
+            path="/admin/payments"
+            element={
+              <ProtectedRoute role="admin">
+                <AccountPaymentsPage />
+              </ProtectedRoute>
+            }
           />
 
           <Route
-          path="/admin/eshops"
-          element={
-            <ProtectedRoute role="admin">
-              <EShopTablePage />
-            </ProtectedRoute>
-          }
+            path="/admin/remove-benefits"
+            element={
+              <ProtectedRoute role="admin">
+                <DeleteBenefitsPage />
+              </ProtectedRoute>
+            }
           />
 
           <Route
-          path="/admin/payments"
-          element={
-            <ProtectedRoute role="admin">
-              <AccountPaymentsPage />
-            </ProtectedRoute>
-          }
+            path="/admin/wallets"
+            element={
+              <ProtectedRoute role="admin">
+                <WalletDetailsPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/eshops"
+            element={
+              <ProtectedRoute role="admin">
+                <EShopTablePage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/payments"
+            element={
+              <ProtectedRoute role="admin">
+                <AccountPaymentsPage />
+              </ProtectedRoute>
+            }
           />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
@@ -169,7 +176,7 @@ function ProtectedRoute({ children, role }) {
 
 export default App;
 
-// Sample data for Account Plans Usage 
+// Sample data for Account Plans Usage
 // 01012345678
 // 01/01/2024
 

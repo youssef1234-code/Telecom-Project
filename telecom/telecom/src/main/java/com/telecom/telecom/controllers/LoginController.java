@@ -50,8 +50,8 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message","Invalid credentials"));
         }
 
-        Boolean allowed = functionsRepository.validateLogin(loginRequest.getMobileNo(), loginRequest.getMobileNo());
-        if (Boolean.TRUE.equals(allowed)) {
+        Integer allowed = functionsRepository.validateLogin(loginRequest.getMobileNo(), loginRequest.getPassword());
+        if (allowed!=null && allowed.equals(1)) {
             String token = "customer-token-"+loginRequest.getMobileNo();
             Map<String, String> response = new HashMap<>();
             response.put("token", token);

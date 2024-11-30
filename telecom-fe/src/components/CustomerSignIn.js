@@ -3,7 +3,6 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../App";
-
 import {
   Box,
   TextField,
@@ -14,8 +13,8 @@ import {
   IconButton,
 } from "@mui/material";
 
-const AdminSignIn = () => {
-  const [adminId, setAdminId] = useState("");
+const CustomerSignIn = () => {
+  const [mobileNo, setMobileNo] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -29,29 +28,27 @@ const AdminSignIn = () => {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/login/admin`,
+        `${process.env.REACT_APP_SERVER_URL}/api/login/customer`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ adminId, password }),
+          body: JSON.stringify({ mobileNo, password }),
         }
       );
 
       if (response.ok) {
         const data = await response.json();
         console.log("Login successful:", data);
-        // Redirect or update state here
         localStorage.setItem("token", data.token);
         localStorage.setItem("role", data.role);
 
-        // Update app state
         setAuth({ token: data.token, role: data.role });
 
-        navigate("/admin/customers");
+        //TODO remember to change the navigation
+        //navigate("/admin/customers");
       } else {
-        // Check content type and handle appropriately
         const contentType = response.headers.get("Content-Type");
         if (contentType && contentType.includes("application/json")) {
           const errorData = await response.json();
@@ -84,20 +81,20 @@ const AdminSignIn = () => {
         }}
       >
         <Typography variant="h5" gutterBottom align="center">
-          Admin Sign In
+          Customer Sign In
         </Typography>
         <TextField
-          label="UserName"
+          label="Mobile Number"
           variant="outlined"
           fullWidth
           margin="normal"
-          value={adminId}
-          onChange={(e) => setAdminId(e.target.value)}
+          value={mobileNo}
+          onChange={(e) => setMobileNo(e.target.value)}
         />
         <TextField
           label="Password"
           variant="outlined"
-          type={showPassword ? "text" : "password"} // Toggle between text and password type
+          type={showPassword ? "text" : "password"}
           fullWidth
           margin="normal"
           value={password}
@@ -105,11 +102,10 @@ const AdminSignIn = () => {
           InputProps={{
             endAdornment: (
               <IconButton
-                onClick={() => setShowPassword((prev) => !prev)} // Toggle password visibility
+                onClick={() => setShowPassword((prev) => !prev)}
                 edge="end"
               >
-                {showPassword ? <VisibilityOff /> : <Visibility />}{" "}
-                {/* Toggle icons */}
+                {showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             ),
           }}
@@ -133,13 +129,13 @@ const AdminSignIn = () => {
           variant="text"
           fullWidth
           sx={{ mt: 2 }}
-          onClick={() => navigate("/customer")} // Navigate to admin sign-in
+          onClick={() => navigate("/")} // Navigate to admin sign-in
         >
-          Go to Customer Sign In
+          Go to Admin Sign In
         </Button>
       </Box>
     </Grid>
   );
 };
 
-export default AdminSignIn;
+export default CustomerSignIn;

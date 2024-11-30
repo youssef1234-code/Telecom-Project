@@ -30,4 +30,7 @@ public interface ViewsRepository extends JpaRepository<CustomerAccount, Long> {
     @Query(value = "SELECT * FROM dbo.Service_plan", nativeQuery = true)
     List<ServicePlanProjection> getServicePlans();
 
+    @Query(value = "Select * FROM dbo.allBenefits", nativeQuery = true)
+    List<AllBenefitProjection> getAllBenefits();
+
 }

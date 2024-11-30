@@ -28,7 +28,7 @@ public interface FunctionsRepository extends JpaRepository<CustomerAccount, Long
     List<PlanUsageSumProjection> getPlanConsumptionsFromDate(@Param("mobile_num") String mobileNum, @Param("start_date") LocalDate startDate);
 
     @Query(value = "SELECT dbo.AccountLoginValidation(:mobile_num, :pass)", nativeQuery = true)
-    Boolean validateLogin(@Param("mobile_num")String mobileNum, @Param("pass")String password);
+    Integer validateLogin(@Param("mobile_num")String mobileNum, @Param("pass")String password);
 
     @Query(value = "SELECT dbo.Wallet_Cashback_Amount(:walletID, :planID)", nativeQuery = true)
     Integer getWalletCashbackAmount(@Param("walletID") Integer walletID, @Param("planID") Integer planID);

@@ -65,4 +65,13 @@ public class CustomerAccountController {
         return ResponseEntity.ok(returnMap);
 
     }
+
+    //Seebak men el omar katabo dah w enzl ta7t
+
+    //Seebak men el omar 3amalo tala3o foo2
+    @Transactional
+    @GetMapping("/all-benefits")
+    public ResponseEntity<?> getAllBenefits() {
+        return ResponseEntity.ok(viewsRepository.getAllBenefits());
+    }
 }
