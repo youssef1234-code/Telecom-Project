@@ -6,14 +6,17 @@ const StatusCell = ({ value }) => {
         active: {
           color: "#00BA34", // Text color
           backgroundColor: "rgba(0, 186, 52, 0.2)", // 20% opacity of #00BA34
+          border: "2px solid #00BA34", // Border for the active status
         },
         onhold: {
           color: "#FF9F2D", // Text color
           backgroundColor: "rgba(255, 159, 45, 0.2)", // 20% opacity of #FF9F2D
+          border: "2px solid #FF9F2D", // Border for the active status
         },
         Resolved: {
             color: "#00BA34", // Text color
             backgroundColor: "rgba(0, 186, 52, 0.2)", // 20% opacity of #00BA34
+            border: "2px solid #00BA34", // Border for the active status
         },
   
     };
