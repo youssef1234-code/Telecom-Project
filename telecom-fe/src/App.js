@@ -19,7 +19,7 @@ import AccountPaymentsPage from "./components/pages/AccountPaymentsPage";
 import UsageSumPage from "./components/pages/UsageSumPage";
 import SmsOffersPage from "./components/pages/SmsOffersPage";
 import DeleteBenefitsPage from "./components/pages/DeleteBenefitsPage";
-
+import ActiveBenefitsPage from "./components/pages/ActiveBenefitsPage";
 // Create a Context for Authentication
 export const AuthContext = createContext();
 
@@ -39,11 +39,12 @@ function App() {
     } else {
       localStorage.removeItem("token");
       localStorage.removeItem("role");
+      localStorage.removeItem("mobileNumber");
     }
   }, [auth]);
 
   const signOut = () => {
-    setAuth({ token: null, role: null });
+    setAuth({ token: null, role: null,mobileNumber:null });
   };
 
   return (
@@ -153,6 +154,15 @@ function App() {
             element={
               <ProtectedRoute role="admin">
                 <AccountPaymentsPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/customer/active-benefits"
+            element={
+              <ProtectedRoute role="customer">
+                <ActiveBenefitsPage />
               </ProtectedRoute>
             }
           />

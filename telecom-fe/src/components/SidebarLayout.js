@@ -52,7 +52,7 @@ const SidebarLayout = ({ children }) => {
       {isSidebarOpen && (
         <Sidebar aria-label="Custom Themed Sidebar" style={{ height: "100vh" }}>
           <Sidebar.Logo sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '20px', fontWeight: 'bold' }}>
-            Telecom 1
+            Admin Portal
           </Sidebar.Logo>
 
           <Sidebar.Items>

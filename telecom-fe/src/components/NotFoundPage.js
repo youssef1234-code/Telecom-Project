@@ -41,7 +41,7 @@ const NotFoundPage = () => {
           if (userType === "admin") {
             navigate("/admin/customers");
           } else if (userType === "customer") {
-            navigate("/customer/dashboard");
+            navigate("/customer/active-benefits");
           } else {
             navigate("/");
           }

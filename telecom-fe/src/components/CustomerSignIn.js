@@ -43,11 +43,9 @@ const CustomerSignIn = () => {
         console.log("Login successful:", data);
         localStorage.setItem("token", data.token);
         localStorage.setItem("role", data.role);
-
+        localStorage.setItem("mobileNumber",mobileNo);
         setAuth({ token: data.token, role: data.role });
-
-        //TODO remember to change the navigation
-        //navigate("/admin/customers");
+        navigate("/customer/active-benefits");
       } else {
         const contentType = response.headers.get("Content-Type");
         if (contentType && contentType.includes("application/json")) {
