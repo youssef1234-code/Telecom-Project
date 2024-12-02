@@ -20,6 +20,10 @@ import UsageSumPage from "./components/pages/UsageSumPage";
 import SmsOffersPage from "./components/pages/SmsOffersPage";
 import DeleteBenefitsPage from "./components/pages/DeleteBenefitsPage";
 import ActiveBenefitsPage from "./components/pages/ActiveBenefitsPage";
+import CashbackTransactionsTablePage from "./components/pages/CashbackTransactionsTablePage"
+import AcceptedTransactionsPage from "./components/pages/AcceptedTranscationsPage";
+
+
 // Create a Context for Authentication
 export const AuthContext = createContext();
 
@@ -166,6 +170,25 @@ function App() {
               </ProtectedRoute>
             }
           />
+          
+          <Route
+            path="/admin/cashback-transactions"
+            element={
+              <ProtectedRoute role="admin">
+                <CashbackTransactionsTablePage />
+              </ProtectedRoute>
+          }
+          />
+
+          <Route
+            path="/admin/accepted-transactions"
+            element={
+              <ProtectedRoute role="admin">
+                <AcceptedTransactionsPage />
+              </ProtectedRoute>
+          }
+          />
+
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
