@@ -141,7 +141,7 @@ public class CustomerAccountController {
     public ResponseEntity<?> getCashbacks(@RequestBody Map<String, String> requestParams)
     {
 
-        if(requestParams.isEmpty() || !requestParams.containsKey("nId"))
+        if(requestParams.isEmpty() || !requestParams.containsKey("nId") || !requestParams.containsKey("mobileNum"))
         {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(Map.of("message", "Make sure to enter the required info!"));
@@ -164,4 +164,147 @@ public class CustomerAccountController {
     public ResponseEntity<?> getAllBenefits() {
         return ResponseEntity.ok(viewsRepository.getAllBenefits());
     }
+
+
+    @Transactional
+    @PostMapping("/unresolved")
+    public ResponseEntity<?> getUnresolvedTickets(@RequestBody Map<String, String> requestParams)
+    {
+        if(requestParams.isEmpty() || !requestParams.containsKey("nId") || !requestParams.containsKey("planName") )
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+
+        String nId = requestParams.get("nId");
+
+        Integer nIdInteger = HelperUtils.toInteger(nId);
+        if(Objects.isNull(nIdInteger)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Invalid National Id Format!"));
+        }
+
+        return ResponseEntity.ok(proceduresRepository.getTicketAccountCustomers(nIdInteger));
+
+    }
+
+    @Transactional
+    @PostMapping("/highest-voucher-value")
+    public ResponseEntity<?> getHighestVoucherValue(@RequestBody Map<String, String> requestParams)
+    {
+        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum"))
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+
+        String mobileNum = requestParams.get("mobileNum");
+
+        if(Strings.isBlank(mobileNum)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        }
+
+        if(mobileNum.length()!=11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+
+        return ResponseEntity.ok(proceduresRepository.getAccountHighestVoucher(mobileNum));
+    }
+
+
+    @Transactional
+    @PostMapping("/remaining-plan-amount")
+    public ResponseEntity<?> getRemainingPlanAmount(@RequestBody Map<String, String> requestParams)
+    {
+        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum") || !requestParams.containsKey("planName") )
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+
+        String mobileNum = requestParams.get("mobileNum");
+
+        if(Strings.isBlank(mobileNum)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        }
+
+        if(mobileNum.length()!=11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+
+        String planName = requestParams.get("planName");
+
+        return ResponseEntity.ok(functionsRepository.getRemainingPlanAmount(mobileNum, planName));
+
+    }
+
+    @Transactional
+    @PostMapping("/extra-plan-amount")
+    public ResponseEntity<?> getExtraPlanAmount(@RequestBody Map<String, String> requestParams)
+    {
+        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum") || !requestParams.containsKey("planName") )
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+
+        String mobileNum = requestParams.get("mobileNum");
+
+        if(Strings.isBlank(mobileNum)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        }
+
+        if(mobileNum.length()!=11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+
+        String planName = requestParams.get("planName");
+
+        return ResponseEntity.ok(functionsRepository.getExtraPlanAmount(mobileNum, planName));
+
+    }
+
+    @Transactional
+    @PostMapping("/top-successful-payments")
+    public ResponseEntity<?> getTopSuccessfulPayments(@RequestBody Map<String, String> requestParams)
+    {
+        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum"))
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+
+        String mobileNum = requestParams.get("mobileNum");
+
+        if(Strings.isBlank(mobileNum)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        }
+
+        if(mobileNum.length()!=11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+
+
+        return ResponseEntity.ok(proceduresRepository.topSuccessfulPayments(mobileNum));
+
+    }
+
+
+
 }
+
+
+/* //TODO: 
+- crosscheck mobile num with nId 
+
+
+
+*/
