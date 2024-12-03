@@ -20,11 +20,12 @@ import UsageSumPage from "./components/pages/UsageSumPage";
 import SmsOffersPage from "./components/pages/SmsOffersPage";
 import DeleteBenefitsPage from "./components/pages/DeleteBenefitsPage";
 import ActiveBenefitsPage from "./components/pages/ActiveBenefitsPage";
-import CashbackTransactionsTablePage from "./components/pages/CashbackTransactionsTablePage"
+import CashbackTransactionsTablePage from "./components/pages/CashbackTransactionsTablePage";
 import AcceptedTransactionsPage from "./components/pages/AcceptedTranscationsPage";
 import WalletCashbackPage from "./components/pages/WalletCashbackPage";
 import AverageTransactionsPage from "./components/pages/AverageTransactionsPage";
 import ConsumptionPage from "./components/pages/ConsumptionPage";
+import UnsubscribedPage from "./components/pages/UnsubscribedPage";
 
 // Create a Context for Authentication
 export const AuthContext = createContext();
@@ -52,7 +53,7 @@ function App() {
   }, [auth]);
 
   const signOut = () => {
-    setAuth({ token: null, role: null,mobileNumber:null });
+    setAuth({ token: null, role: null, mobileNumber: null });
   };
 
   return (
@@ -174,14 +175,14 @@ function App() {
               </ProtectedRoute>
             }
           />
-          
+
           <Route
             path="/admin/cashback-transactions"
             element={
               <ProtectedRoute role="admin">
                 <CashbackTransactionsTablePage />
               </ProtectedRoute>
-          }
+            }
           />
 
           <Route
@@ -190,7 +191,7 @@ function App() {
               <ProtectedRoute role="admin">
                 <AcceptedTransactionsPage />
               </ProtectedRoute>
-          }
+            }
           />
 
           <Route
@@ -199,7 +200,7 @@ function App() {
               <ProtectedRoute role="admin">
                 <WalletCashbackPage />
               </ProtectedRoute>
-          }
+            }
           />
 
           <Route
@@ -208,19 +209,26 @@ function App() {
               <ProtectedRoute role="admin">
                 <AverageTransactionsPage />
               </ProtectedRoute>
-          }
+            }
           />
 
-          
           <Route
             path="/customer/usage-consumption"
             element={
               <ProtectedRoute role="customer">
                 <ConsumptionPage />
               </ProtectedRoute>
-          }
+            }
           />
 
+          <Route
+            path="/customer/unsubscribed-plans"
+            element={
+              <ProtectedRoute role="customer">
+                <UnsubscribedPage />
+              </ProtectedRoute>
+            }
+          />
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
