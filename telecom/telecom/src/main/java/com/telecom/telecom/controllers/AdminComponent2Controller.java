@@ -73,5 +73,29 @@ public class AdminComponent2Controller {
         return ResponseEntity.ok(proceduresRepository.topSuccessfulPayments(mobileNum));
     }
 
+    @Transactional
+    @PostMapping("/wallet-cashback")
+    public ResponseEntity<?> walletCashback(@RequestBody Map<String, String> reqParam) {
+        if(reqParam.isEmpty() || !reqParam.containsKey("walletID")|| !reqParam.containsKey("planID")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+        String walletID = reqParam.get("walletID");
+        String planID = reqParam.get("planID");
+
+        if(Strings.isBlank(walletID)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Wallet ID cannot be empty!"));
+        }
+
+        if(Strings.isBlank(planID)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Plan ID cannot be empty!"));
+        }
+
+        return ResponseEntity.ok(functionsRepository.getWalletCashbackAmount(Integer.parseInt(walletID), Integer.parseInt(planID)));
+
+    }
+
 
 }

@@ -22,6 +22,7 @@ import DeleteBenefitsPage from "./components/pages/DeleteBenefitsPage";
 import ActiveBenefitsPage from "./components/pages/ActiveBenefitsPage";
 import CashbackTransactionsTablePage from "./components/pages/CashbackTransactionsTablePage"
 import AcceptedTransactionsPage from "./components/pages/AcceptedTranscationsPage";
+import WalletCashbackPage from "./components/pages/WalletCashbackPage";
 
 
 // Create a Context for Authentication
@@ -185,6 +186,15 @@ function App() {
             element={
               <ProtectedRoute role="admin">
                 <AcceptedTransactionsPage />
+              </ProtectedRoute>
+          }
+          />
+
+          <Route
+            path="/admin/cashback-amount"
+            element={
+              <ProtectedRoute role="admin">
+                <WalletCashbackPage />
               </ProtectedRoute>
           }
           />
