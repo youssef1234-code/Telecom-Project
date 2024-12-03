@@ -38,12 +38,18 @@ public class CustomerAccountController {
 
     @Autowired
     DtoEntityMapper dtoEntityMapper;
+
     @Autowired
     private ViewsRepository viewsRepository;
+    
     @Autowired
     private FunctionsRepository functionsRepository;
+    
     @Autowired
     private ProceduresRepository proceduresRepository;
+
+    @Autowired
+    private HelperUtils helperUtils;
 
     @GetMapping("/servicePlans")
     public ResponseEntity<?> getAllServicePlans(){return ResponseEntity.ok(viewsRepository.getServicePlans());}
@@ -170,7 +176,7 @@ public class CustomerAccountController {
     @PostMapping("/unresolved")
     public ResponseEntity<?> getUnresolvedTickets(@RequestBody Map<String, String> requestParams)
     {
-        if(requestParams.isEmpty() || !requestParams.containsKey("nId") || !requestParams.containsKey("planName") )
+        if(requestParams.isEmpty() || !requestParams.containsKey("nId") || !requestParams.containsKey("planName") || !requestParams.containsKey("mobileNum"))
         {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(Map.of("message", "Make sure to enter the required info!"));
@@ -182,6 +188,24 @@ public class CustomerAccountController {
         if(Objects.isNull(nIdInteger)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Invalid National Id Format!"));
+        }
+
+        String mobileNum = requestParams.get("mobileNum");
+
+        if(Strings.isBlank(mobileNum)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        }
+
+        if(mobileNum.length()!=11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+
+        if(!helperUtils.validateMobileNumberAndNId(mobileNum, nIdInteger))
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number does not match National ID!"));
         }
 
         return ResponseEntity.ok(proceduresRepository.getTicketAccountCustomers(nIdInteger));
