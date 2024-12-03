@@ -5,8 +5,12 @@ import com.telecom.telecom.entities.CustomerAccount;
 import com.telecom.telecom.entities.CustomerProfile;
 import com.telecom.telecom.mappers.DtoEntityMapper;
 import com.telecom.telecom.repositories.*;
+import com.telecom.telecom.utils.HelperUtils;
+
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +18,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Controller
@@ -41,28 +48,114 @@ public class CustomerAccountController {
     @GetMapping("/servicePlans")
     public ResponseEntity<?> getAllServicePlans(){return ResponseEntity.ok(viewsRepository.getServicePlans());}
 
-    @GetMapping("/consumption/{planId}/{startDate}/{endDate}")
-    public ResponseEntity<?> getPlanConsumption(@PathVariable String planId, @PathVariable LocalDate startDate, @PathVariable LocalDate endDate)
-    {return ResponseEntity.ok(functionsRepository.getConsumption(planId, startDate, endDate));}
-
     @Transactional
-    @GetMapping("/unsubscribed/{mobileNo}")
-    public ResponseEntity<?> getUnsubscribedPlans(@PathVariable String mobileNo)
-    {return ResponseEntity.ok(proceduresRepository.unsubscribedPlans(mobileNo));}
-
-    @Transactional
-    @GetMapping("/monthUsage/{mobileNo}")
-    public ResponseEntity<?> getMonthUsage(@PathVariable String mobileNo)
-    {return ResponseEntity.ok(functionsRepository.getUsagePlanCurrentMonth(mobileNo));}
-
-    @Transactional
-    @GetMapping("/cashbacks/{nId}")
-    public ResponseEntity<?> getCashbacks(@PathVariable Integer nId)
+    @PostMapping("/consumption")
+    public ResponseEntity<?> getPlanConsumption(@RequestBody Map<String, String> requestParams)
     {
-        Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("National ID", nId);
-        returnMap.put("Cashback Amount", functionsRepository.getCashbackWalletCustomer(nId));
-        return ResponseEntity.ok(returnMap);
+
+        if(requestParams.isEmpty() || !requestParams.containsKey("startDate") || !requestParams.containsKey("planName") || !requestParams.containsKey("endDate")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+        
+        String planName = requestParams.get("planName");
+        String startDate = requestParams.get("startDate");
+        String endDate = requestParams.get("endDate");
+
+        
+        if(Strings.isBlank(planName) || Strings.isBlank(startDate) || Strings.isBlank(endDate)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Plan Id, Start Date and End Date cannot be empty!"));
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate formattedstartDate = HelperUtils.toDateFormat(startDate, formatter);
+        LocalDate formattedendDate = HelperUtils.toDateFormat(endDate, formatter);
+
+        if(Objects.isNull(formattedstartDate)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Invalid Start Date Format!"));
+        }
+
+        if(Objects.isNull(formattedendDate)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Invalid End Date Format!"));
+        }
+
+        return ResponseEntity.ok(functionsRepository.getConsumption(planName, formattedstartDate, formattedendDate));
+        
+    }
+    
+    @Transactional
+    @PostMapping("/unsubscribed")
+    public ResponseEntity<?> getUnsubscribedPlans(@RequestBody Map<String, String> requestParams)
+    {
+        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum"))
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+
+        String mobileNum = requestParams.get("mobileNum");
+
+        if(Strings.isBlank(mobileNum)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        }
+
+        if(mobileNum.length()!=11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+
+        return ResponseEntity.ok(proceduresRepository.unsubscribedPlans(mobileNum));
+    }
+
+    @Transactional
+    @PostMapping("/monthUsage")
+    public ResponseEntity<?> getMonthUsage(@RequestBody Map<String, String> requestParams)
+    {
+        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum"))
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+
+        String mobileNum = requestParams.get("mobileNum");
+
+        if(Strings.isBlank(mobileNum)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        }
+
+        if(mobileNum.length()!=11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+
+        return ResponseEntity.ok(functionsRepository.getUsagePlanCurrentMonth(mobileNum));
+    }
+
+    @Transactional
+    @PostMapping("/cashbacks")
+    public ResponseEntity<?> getCashbacks(@RequestBody Map<String, String> requestParams)
+    {
+
+        if(requestParams.isEmpty() || !requestParams.containsKey("nId"))
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+
+        String nId = requestParams.get("nId");
+
+        Integer nIdInteger = HelperUtils.toInteger(nId);
+        if(Objects.isNull(nIdInteger)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Invalid National Id Format!"));
+        }
+
+        return ResponseEntity.ok(functionsRepository.getCashbackWalletCustomer(nIdInteger));
 
     }
 
