@@ -163,5 +163,51 @@ public class AdminComponent2Controller {
         return ResponseEntity.ok(functionsRepository.getWalletTransferAmount(walletID, formattedStartDate, formattedEndDate));
     }
 
+    @Transactional
+    @PostMapping("/wallet-linking")
+    public ResponseEntity<?> walletLinking(@RequestBody Map<String, String> reqParam) {
+        if(reqParam.isEmpty() || !reqParam.containsKey("mobileNum")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+        String mobileNum = reqParam.get("mobileNum");
+        if(Strings.isBlank(mobileNum)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        }
+        if(mobileNum.length()!=11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+
+        return ResponseEntity.ok(Map.of("isLinked",functionsRepository.getMobileNo(mobileNum)));
+    }
+
+    @Transactional
+    @PostMapping("/update-points")
+    public ResponseEntity<?> updatePoints(@RequestBody Map<String, String> reqParam) {
+        if (reqParam.isEmpty() || !reqParam.containsKey("mobileNum")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+        String mobileNum = reqParam.get("mobileNum");
+        if (Strings.isBlank(mobileNum)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        }
+        if (mobileNum.length() != 11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+
+        try{
+            proceduresRepository.totalPointsAccount(mobileNum);
+            return ResponseEntity.ok(Map.of("success", true));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("success", false));
+        }
+    }
+
 
 }

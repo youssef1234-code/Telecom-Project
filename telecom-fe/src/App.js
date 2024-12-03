@@ -26,6 +26,8 @@ import WalletCashbackPage from "./components/pages/WalletCashbackPage";
 import AverageTransactionsPage from "./components/pages/AverageTransactionsPage";
 import ConsumptionPage from "./components/pages/ConsumptionPage";
 import UnsubscribedPage from "./components/pages/UnsubscribedPage";
+import WalletLinkingPage from "./components/pages/WalletLinkingPage";
+import UpdatePointsPage from "./components/pages/UpdatePointsPage";
 
 // Create a Context for Authentication
 export const AuthContext = createContext();
@@ -226,6 +228,23 @@ function App() {
             element={
               <ProtectedRoute role="customer">
                 <UnsubscribedPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/wallet-linking"
+            element={
+              <ProtectedRoute role="admin">
+                <WalletLinkingPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/update-points"
+            element={
+              <ProtectedRoute role="admin">
+                <UpdatePointsPage />
               </ProtectedRoute>
             }
           />
