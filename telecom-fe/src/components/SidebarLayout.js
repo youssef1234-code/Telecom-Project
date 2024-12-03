@@ -1,8 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Menu } from "antd";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AuthContext } from "../App";
-import { Box, Typography, IconButton } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import {
   ExitToApp,
   AccountCircle,
@@ -37,11 +37,18 @@ const menuItems = [
   { title: "Update Points", icon: <Loyalty style={{ fontSize: "24px" }} />, path: "/admin/update-points" },
 ];
 
-
 const SidebarLayout = ({ children }) => {
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const location = useLocation(); // Hook to get the current path
+  // Retrieve the sidebar state from localStorage or default to true
+  const savedSidebarState = localStorage.getItem("sidebarState");
+  const [isSidebarOpen, setSidebarOpen] = useState(savedSidebarState === "true");
+
+  const location = useLocation();
   const { signOut } = useContext(AuthContext);
+
+  // Save the sidebar state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("sidebarState", isSidebarOpen.toString());
+  }, [isSidebarOpen]);
 
   const handleSignOut = () => {
     signOut();
@@ -66,111 +73,109 @@ const SidebarLayout = ({ children }) => {
           height: "100vh",
         }}
       >
-<Menu
-  mode="inline"
-  defaultSelectedKeys={[location.pathname]}
-  style={{ 
-    height: "100%",
-    paddingTop: "20px", // Add spacing at the top
-  }}
-  inlineCollapsed={!isSidebarOpen}
->
-  <Menu.ItemGroup
-    title={
-      isSidebarOpen && (
-        <span
+        <Menu
+          mode="inline"
+          defaultSelectedKeys={[location.pathname]}
           style={{
-            fontSize: "20px",
-            fontWeight: "bold",
-            textAlign: "center",
+            height: "100%",
+            paddingTop: "20px",
           }}
+          inlineCollapsed={!isSidebarOpen}
         >
-          Admin Portal
-        </span>
-      )
-    }
-  >
-    {/* Collapse Button */}
-    <Item
-      key="collapse"
-      icon={isSidebarOpen ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
-      onClick={toggleSidebar}
-      style={{ 
-        height: "50px", // Adjust height of the collapse button
-        display: "flex",
-        alignItems: "center", 
-        justifyContent: "center" 
-      }}
-    >
-      {isSidebarOpen ? "Collapse Sidebar" : null}
-    </Item>
+          <Menu.ItemGroup
+            title={
+              isSidebarOpen && (
+                <span
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                  }}
+                >
+                  Admin Portal
+                </span>
+              )
+            }
+          >
+            {/* Collapse Button */}
+            <Item
+              key="collapse"
+              icon={isSidebarOpen ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
+              onClick={toggleSidebar}
+              style={{
+                height: "50px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {isSidebarOpen ? "Collapse Sidebar" : null}
+            </Item>
 
-    {/* Submenus */}
-    <SubMenu
-      key="stores"
-      icon={<LocalGroceryStore />}
-      title={isSidebarOpen ? "Stores" : null}
-      style={{ marginBottom: "10px" }} // Add spacing between submenus
-    >
-      <Item key="/admin/stores" style={{ height: "50px" }}>
-        <a href="/admin/stores">Physical Stores</a>
-      </Item>
-      <Item key="/admin/eshops" style={{ height: "50px" }}>
-        <a href="/admin/eshops">E-Shops</a>
-      </Item>
-    </SubMenu>
+            {/* Submenus */}
+            <SubMenu
+              key="stores"
+              icon={<LocalGroceryStore />}
+              title={isSidebarOpen ? "Stores" : null}
+              style={{ marginBottom: "10px" }}
+            >
+              <Item key="/admin/stores" style={{ height: "50px" }}>
+                <a href="/admin/stores">Physical Stores</a>
+              </Item>
+              <Item key="/admin/eshops" style={{ height: "50px" }}>
+                <a href="/admin/eshops">E-Shops</a>
+              </Item>
+            </SubMenu>
 
-    <SubMenu
-      key="transactions"
-      icon={<Paid />}
-      title={isSidebarOpen ? "Transactions" : null}
-      style={{ marginBottom: "10px" }}
-    >
-      <Item key="/admin/cashback-transactions" style={{ height: "50px" }}>
-        <a href="/admin/cashback-transactions">Cashback Transactions</a>
-      </Item>
-      <Item key="/admin/accepted-transactions" style={{ height: "50px" }}>
-        <a href="/admin/accepted-transactions">Accepted Transactions</a>
-      </Item>
-      <Item key="/admin/transaction-average" style={{ height: "50px" }}>
-        <a href="/admin/transaction-average">Transaction Average</a>
-      </Item>
-    </SubMenu>
-  </Menu.ItemGroup>
+            <SubMenu
+              key="transactions"
+              icon={<Paid />}
+              title={isSidebarOpen ? "Transactions" : null}
+              style={{ marginBottom: "10px" }}
+            >
+              <Item key="/admin/cashback-transactions" style={{ height: "50px" }}>
+                <a href="/admin/cashback-transactions">Cashback Transactions</a>
+              </Item>
+              <Item key="/admin/accepted-transactions" style={{ height: "50px" }}>
+                <a href="/admin/accepted-transactions">Accepted Transactions</a>
+              </Item>
+              <Item key="/admin/transaction-average" style={{ height: "50px" }}>
+                <a href="/admin/transaction-average">Transaction Average</a>
+              </Item>
+            </SubMenu>
+          </Menu.ItemGroup>
 
-  {/* Main Menu Items */}
-  {menuItems.map((item) => (
-    <Item 
-      key={item.path} 
-      icon={item.icon} 
-      style={{ 
-        height: "50px", // Increase height
-        display: "flex", 
-        alignItems: "center" 
-      }}
-    >
-      <a href={item.path}>{isSidebarOpen ? item.title : null}</a>
-    </Item>
-  ))}
+          {/* Main Menu Items */}
+          {menuItems.map((item) => (
+            <Item
+              key={item.path}
+              icon={item.icon}
+              style={{
+                height: "50px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <a href={item.path}>{isSidebarOpen ? item.title : null}</a>
+            </Item>
+          ))}
 
-  {/* Sign Out */}
-  <Menu.Item
-    key="signout"
-    icon={<ExitToApp />}
-    style={{ 
-      color: "red", 
-      height: "50px", // Adjust height for consistency
-      display: "flex", 
-      alignItems: "center" 
-    }}
-    onClick={handleSignOut}
-  >
-    {isSidebarOpen ? "Sign Out" : null}
-  </Menu.Item>
-</Menu>
-
+          {/* Sign Out */}
+          <Menu.Item
+            key="signout"
+            icon={<ExitToApp />}
+            style={{
+              color: "red",
+              height: "50px",
+              display: "flex",
+              alignItems: "center",
+            }}
+            onClick={handleSignOut}
+          >
+            {isSidebarOpen ? "Sign Out" : null}
+          </Menu.Item>
+        </Menu>
       </Box>
-
 
       {/* Main Content */}
       <Box
@@ -181,7 +186,7 @@ const SidebarLayout = ({ children }) => {
           transition: "margin-left 0.3s ease",
           minHeight: "100vh",
           backgroundColor: "#fafafa",
-          color: "#000"
+          color: "#000",
         }}
       >
         <Routes>
