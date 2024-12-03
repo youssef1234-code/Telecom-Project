@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Paper, TextField, MenuItem, Select, InputLabel, FormControl } from "@mui/material";
 import GenericTable from "./GenericTable";
 import StatusCell from "./StatusCell";
+import { format } from 'date-fns';
 
 const CustomerAccountsTable = () => {
   const [data, setData] = useState([]);
@@ -34,7 +35,16 @@ const CustomerAccountsTable = () => {
     { field: "pass", headerName: "Password", flex: 1 },
     { field: "balance", headerName: "Balance", type: "number", flex: 1 },
     { field: "accountType", headerName: "Account Type", flex: 1 },
-    { field: "startDate", headerName: "Start Date", flex: 1 },
+    {
+      field: 'startDate',
+      headerName: 'Start Date',
+      type: 'date',
+      flex: 1,
+      valueFormatter: (params) => {
+        const date = new Date(params); // Ensure it's a Date object
+        return format(date, 'yyyy-MM-dd'); // Format the date using date-fns
+      },
+    },
     {
       field: "status",
       headerName: "Status",

@@ -32,6 +32,9 @@ function App() {
   const storedToken = localStorage.getItem("token");
   const storedRole = localStorage.getItem("role");
 
+  //const storedNumber = localStorage.getItem("mobileNumber");
+
+
   const [auth, setAuth] = useState({
     token: storedToken || null,
     role: storedRole || null,
