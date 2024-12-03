@@ -23,6 +23,7 @@ import ActiveBenefitsPage from "./components/pages/ActiveBenefitsPage";
 import CashbackTransactionsTablePage from "./components/pages/CashbackTransactionsTablePage"
 import AcceptedTransactionsPage from "./components/pages/AcceptedTranscationsPage";
 import WalletCashbackPage from "./components/pages/WalletCashbackPage";
+import AverageTransactionsPage from "./components/pages/AverageTransactionsPage";
 
 
 // Create a Context for Authentication
@@ -198,6 +199,15 @@ function App() {
             element={
               <ProtectedRoute role="admin">
                 <WalletCashbackPage />
+              </ProtectedRoute>
+          }
+          />
+
+          <Route
+            path="/admin/transaction-average"
+            element={
+              <ProtectedRoute role="admin">
+                <AverageTransactionsPage />
               </ProtectedRoute>
           }
           />
