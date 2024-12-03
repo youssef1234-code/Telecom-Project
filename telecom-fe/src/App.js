@@ -24,7 +24,7 @@ import CashbackTransactionsTablePage from "./components/pages/CashbackTransactio
 import AcceptedTransactionsPage from "./components/pages/AcceptedTranscationsPage";
 import WalletCashbackPage from "./components/pages/WalletCashbackPage";
 import AverageTransactionsPage from "./components/pages/AverageTransactionsPage";
-
+import ConsumptionPage from "./components/pages/ConsumptionPage";
 
 // Create a Context for Authentication
 export const AuthContext = createContext();
@@ -34,7 +34,6 @@ function App() {
   const storedRole = localStorage.getItem("role");
 
   //const storedNumber = localStorage.getItem("mobileNumber");
-
 
   const [auth, setAuth] = useState({
     token: storedToken || null,
@@ -211,6 +210,17 @@ function App() {
               </ProtectedRoute>
           }
           />
+
+          
+          <Route
+            path="/customer/usage-consumption"
+            element={
+              <ProtectedRoute role="customer">
+                <ConsumptionPage />
+              </ProtectedRoute>
+          }
+          />
+
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

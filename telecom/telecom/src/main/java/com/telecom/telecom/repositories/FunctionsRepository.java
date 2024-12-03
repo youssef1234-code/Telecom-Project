@@ -1,10 +1,7 @@
 package com.telecom.telecom.repositories;
 
 import com.telecom.telecom.dtos.*;
-import com.telecom.telecom.dtos.projection.AccountPlanOnDateProjection;
-import com.telecom.telecom.dtos.projection.BenefitProjection;
-import com.telecom.telecom.dtos.projection.ExclusiveOfferProjection;
-import com.telecom.telecom.dtos.projection.PlanUsageSumProjection;
+import com.telecom.telecom.dtos.projection.*;
 import com.telecom.telecom.entities.CustomerAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -40,7 +37,7 @@ public interface FunctionsRepository extends JpaRepository<CustomerAccount, Long
     Boolean getMobileNo(@Param("mobile_num") String mobileNum);
 
     @Query(value = "SELECT * FROM dbo.Consumption(:Plan_name, :start_date, :end_date)", nativeQuery = true)
-    List<ConsumptionDto> getConsumption(@Param("Plan_name") String planName, @Param("start_date") LocalDate startDate, @Param("end_date") LocalDate endDate);
+    List<ConsumptionProjection> getConsumption(@Param("Plan_name") String planName, @Param("start_date") LocalDate startDate, @Param("end_date") LocalDate endDate);
 
     @Query(value = "SELECT * FROM dbo.Usage_Plan_CurrentMonth(:mobile_no)", nativeQuery = true)
     List<UsagePlanCurrentMonthDto> getUsagePlanCurrentMonth(@Param("mobile_no") String mobileNo);
