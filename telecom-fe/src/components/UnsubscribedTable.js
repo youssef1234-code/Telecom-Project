@@ -102,7 +102,7 @@ const UnsubscribedTable = () => {
         <TextField
           label="Mobile Number"
           variant="outlined"
-          value={filters.mobileNum}
+          value={localStorage.getItem("mobileNumber")}
           onChange={(e) => handleFilterChange("startDate", e.target.value)}
           fullWidth
           InputLabelProps={{
@@ -123,7 +123,7 @@ const UnsubscribedTable = () => {
       )}
 
       {/* Generic Table */}
-      <GenericTable data={data} columns={columns} rowIdField="sms" />
+      <GenericTable data={data} columns={columns} rowIdField="planID" />
     </Paper>
   );
 };
