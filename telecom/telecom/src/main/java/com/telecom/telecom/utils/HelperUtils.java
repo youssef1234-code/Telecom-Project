@@ -1,6 +1,7 @@
 package com.telecom.telecom.utils;
 
 import com.telecom.telecom.repositories.FunctionsRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +30,7 @@ public class HelperUtils {
         }
     }
 
+    @Transactional
     public Boolean validateMobileNumberAndNId(String mobileNumber, Integer nId) {
         Integer valid = functionsRepository.checkMobileAgainstNId(mobileNumber, nId);
         return !valid.equals(0);
