@@ -39,7 +39,9 @@ const StatusCell = ({ value }) => {
         textAlign: "center",
         fontSize: "0.9rem",
         fontWeight: "light",
-        minWidth: "80px",
+        minWidth: "60px",
+        maxWidth: "120px",
+
           }}
     >
       {value}

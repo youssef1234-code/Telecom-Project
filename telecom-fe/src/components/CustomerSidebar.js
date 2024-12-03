@@ -1,161 +1,145 @@
 import React, { useState, useContext } from "react";
-import { Sidebar } from "flowbite-react";
+import { Menu } from "antd";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AuthContext } from "../App";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import {
   ExitToApp,
-  AccountCircle,
-  QueryStats,
-  Payment,
-  Loyalty,
-  Sms,
-  Store,
   ListAlt,
-  MoneyOffCsred,
+  QueryStats,
+  Sms,
+  Loyalty,
   Receipt,
-  Cached,
   Redeem,
+  Payment,
+  MoneyOffCsred,
+  Store,
+  Cached,
 } from "@mui/icons-material";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+
+const { SubMenu, Item } = Menu;
 
 // Menu Items for Customer Pages
 const customerMenuItems = [
-  // Part 1
-  { title: "Service Plans", icon: ListAlt, path: "/customer/service-plans" },
-  {
-    title: "Usage Consumption",
-    icon: QueryStats,
-    path: "/customer/usage-consumption",
-  },
-  {
-    title: "Unsubscribed Plans",
-    icon: Sms,
-    path: "/customer/unsubscribed-plans",
-  },
-  {
-    title: "Active Plans Usage",
-    icon: QueryStats,
-    path: "/customer/active-plans-usage",
-  },
-  {
-    title: "Cashback Transactions",
-    icon: Loyalty,
-    path: "/customer/cashback-transactions",
-  },
-  // Part 2
-  { title: "Active Benefits", icon: Loyalty, path: "/customer/active-benefits" },
-  {
-    title: "Unresolved Tickets",
-    icon: Receipt,
-    path: "/customer/unresolved-tickets",
-  },
-  {
-    title: "Highest Value Voucher",
-    icon: Redeem,
-    path: "/customer/highest-voucher",
-  },
-  {
-    title: "Remaining Payment",
-    icon: Payment,
-    path: "/customer/remaining-payment",
-  },
-  {
-    title: "Extra Payment",
-    icon: Payment,
-    path: "/customer/extra-payment",
-  },
-  {
-    title: "Top Payments",
-    icon: MoneyOffCsred,
-    path: "/customer/top-payments",
-  },
-  // Part 3
-  { title: "All Shops", icon: Store, path: "/customer/all-shops" },
-  {
-    title: "Past Subscriptions",
-    icon: ListAlt,
-    path: "/customer/past-subscriptions",
-  },
-  {
-    title: "Renew Subscription",
-    icon: Cached,
-    path: "/customer/renew-subscription",
-  },
-  {
-    title: "Cashback Amount",
-    icon: Loyalty,
-    path: "/customer/cashback-amount",
-  },
-  {
-    title: "Recharge Balance",
-    icon: Payment,
-    path: "/customer/recharge-balance",
-  },
-  { title: "Redeem Voucher", icon: Redeem, path: "/customer/redeem-voucher" },
+  { title: "Service Plans", icon: <ListAlt style={{ fontSize: "24px" }} />, path: "/customer/service-plans" },
+  { title: "Usage Consumption", icon: <QueryStats style={{ fontSize: "24px" }} />, path: "/customer/usage-consumption" },
+  { title: "Unsubscribed Plans", icon: <Sms style={{ fontSize: "24px" }} />, path: "/customer/unsubscribed-plans" },
+  { title: "Active Plans Usage", icon: <QueryStats style={{ fontSize: "24px" }} />, path: "/customer/active-plans-usage" },
+  { title: "Cashback Transactions", icon: <Loyalty style={{ fontSize: "24px" }} />, path: "/customer/cashback-transactions" },
+  { title: "Active Benefits", icon: <Loyalty style={{ fontSize: "24px" }} />, path: "/customer/active-benefits" },
+  { title: "Unresolved Tickets", icon: <Receipt style={{ fontSize: "24px" }} />, path: "/customer/unresolved-tickets" },
+  { title: "Highest Value Voucher", icon: <Redeem style={{ fontSize: "24px" }} />, path: "/customer/highest-voucher" },
+  { title: "Remaining Payment", icon: <Payment style={{ fontSize: "24px" }} />, path: "/customer/remaining-payment" },
+  { title: "Extra Payment", icon: <Payment style={{ fontSize: "24px" }} />, path: "/customer/extra-payment" },
+  { title: "Top Payments", icon: <MoneyOffCsred style={{ fontSize: "24px" }} />, path: "/customer/top-payments" },
+  { title: "All Shops", icon: <Store style={{ fontSize: "24px" }} />, path: "/customer/all-shops" },
+  { title: "Past Subscriptions", icon: <ListAlt style={{ fontSize: "24px" }} />, path: "/customer/past-subscriptions" },
+  { title: "Renew Subscription", icon: <Cached style={{ fontSize: "24px" }} />, path: "/customer/renew-subscription" },
+  { title: "Cashback Amount", icon: <Loyalty style={{ fontSize: "24px" }} />, path: "/customer/cashback-amount" },
+  { title: "Recharge Balance", icon: <Payment style={{ fontSize: "24px" }} />, path: "/customer/recharge-balance" },
+  { title: "Redeem Voucher", icon: <Redeem style={{ fontSize: "24px" }} />, path: "/customer/redeem-voucher" },
 ];
 
 const CustomerSidebar = ({ children }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const location = useLocation(); // Hook to get the current path
+  const location = useLocation();
   const { signOut } = useContext(AuthContext);
-
-  const isActive = (path) => location.pathname === path; // Helper function to check active path
 
   const handleSignOut = () => {
     signOut();
-    window.location.href = "/customer"; // Redirect to customer base path
+    window.location.href = "/customer";
+  };
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
   };
 
   return (
     <Box sx={{ display: "flex" }}>
       {/* Sidebar */}
-      {isSidebarOpen && (
-        <Sidebar aria-label="Customer Sidebar" style={{ height: "100vh" }}>
-          <Sidebar.Logo
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "20px",
-              fontWeight: "bold",
-            }}
-          >
-            Customer Portal
-          </Sidebar.Logo>
-
-          <Sidebar.Items>
-            {/* Menu Items */}
-            <Sidebar.ItemGroup>
-              {customerMenuItems.map((item, index) => (
-                <Sidebar.Item
-                  key={index}
-                  as="a"
-                  href={item.path}
-                  icon={item.icon}
-                  className={
-                    isActive(item.path) ? "bg-gray-100 dark:bg-gray-500" : ""
-                  }
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: isSidebarOpen ? 256 : 80,
+          transition: "width 0.3s ease",
+          backgroundColor: "#001529",
+          color: "#fff",
+          height: "80vh",
+        }}
+      >
+        <Menu
+          mode="inline"
+          defaultSelectedKeys={[location.pathname]}
+          style={{
+            height: "100%",
+            paddingTop: "0px",
+          }}
+          inlineCollapsed={!isSidebarOpen}
+        >
+          <Menu.ItemGroup
+            title={
+              isSidebarOpen && (
+                <span
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                  }}
                 >
-                  {item.title}
-                </Sidebar.Item>
-              ))}
-            </Sidebar.ItemGroup>
+                  Customer Portal
+                </span>
+              )
+            }
+          >
+            {/* Collapse Button */}
+            <Item
+              key="collapse"
+              icon={isSidebarOpen ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
+              onClick={toggleSidebar}
+              style={{
+                height: "50px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {isSidebarOpen ? "Collapse Sidebar" : null}
+            </Item>
+          </Menu.ItemGroup>
 
-            {/* Sign Out */}
-            <Sidebar.ItemGroup>
-              <Sidebar.Item
-                as="button"
-                onClick={handleSignOut}
-                icon={ExitToApp}
-                className="text-red-600 hover:bg-red-100"
-                iconClassName="!text-red-600"
-              >
-                Sign Out
-              </Sidebar.Item>
-            </Sidebar.ItemGroup>
-          </Sidebar.Items>
-        </Sidebar>
-      )}
+          {/* Main Menu Items */}
+          {customerMenuItems.map((item) => (
+            <Item
+              key={item.path}
+              icon={item.icon}
+              style={{
+                height: "40px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <a href={item.path}>{isSidebarOpen ? item.title : null}</a>
+            </Item>
+          ))}
+
+          {/* Sign Out */}
+          <Menu.Item
+            key="signout"
+            icon={<ExitToApp />}
+            style={{
+              color: "red",
+              height: "50px",
+              display: "flex",
+              alignItems: "center",
+            }}
+            onClick={handleSignOut}
+          >
+            {isSidebarOpen ? "Sign Out" : null}
+          </Menu.Item>
+        </Menu>
+      </Box>
 
       {/* Main Content */}
       <Box
@@ -166,6 +150,7 @@ const CustomerSidebar = ({ children }) => {
           transition: "margin-left 0.3s ease",
           minHeight: "100vh",
           backgroundColor: "#fafafa",
+          color: "#000",
         }}
       >
         <Routes>
@@ -173,9 +158,7 @@ const CustomerSidebar = ({ children }) => {
             <Route
               key={index}
               path={item.path}
-              element={
-                <Typography variant="h4">{item.title} Page Placeholder</Typography>
-              }
+              element={<Typography variant="h4">{item.title} Page Placeholder</Typography>}
             />
           ))}
         </Routes>

@@ -1,8 +1,8 @@
-import React, { useState,useContext } from "react";
-import { Sidebar } from "flowbite-react";
+import React, { useState, useContext } from "react";
+import { Menu } from "antd";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AuthContext } from "../App";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, IconButton } from "@mui/material";
 import {
   ExitToApp,
   AccountCircle,
@@ -16,113 +16,172 @@ import {
   Subscriptions,
   DataUsage,
   LocalGroceryStore,
-  Paid
+  Paid,
 } from "@mui/icons-material";
-// Menu Items
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+
+const { SubMenu, Item } = Menu;
+
 const menuItems = [
-  { title: "Customer Accounts", icon: AccountCircle, path: "/admin/customers" },
-  { title: "Customer Profiles", icon: PeopleAlt, path: "/admin/profiles" },
-  { title: "Resolved Tickets", icon: Receipt, path: "/admin/tickets" },
-  { title: "Subscribed Plan Search", icon: Subscriptions, path: "/admin/subscribed-plan" },
-  { title: "Account Usage", icon: DataUsage, path: "/admin/account-usage" },
-  { title: "Remove Benefits", icon: Loyalty, path: "/admin/remove-benefits" },
-  { title: "SMS Offers", icon: Sms, path: "/admin/sms-offers" },
-  { title: "Wallets Details", icon: Wallet, path: "/admin/wallets" },
-  { title: "Payments", icon: Payment, path: "/admin/payments" },
-  { title: "Cashback Amount", icon: Wallet, path: "/admin/cashback-amount" },
-  { title: "Wallet Linking", icon: Wallet, path: "/admin/wallet-linking" },
-  { title: "Update Points", icon: Loyalty, path: "/admin/update-points" },
+  { title: "Customer Accounts", icon: <AccountCircle style={{ fontSize: "24px" }} />, path: "/admin/customers" },
+  { title: "Customer Profiles", icon: <PeopleAlt style={{ fontSize: "24px" }} />, path: "/admin/profiles" },
+  { title: "Resolved Tickets", icon: <Receipt style={{ fontSize: "24px" }} />, path: "/admin/tickets" },
+  { title: "Subscribed Plan Search", icon: <Subscriptions style={{ fontSize: "24px" }} />, path: "/admin/subscribed-plan" },
+  { title: "Account Usage", icon: <DataUsage style={{ fontSize: "24px" }} />, path: "/admin/account-usage" },
+  { title: "Remove Benefits", icon: <Loyalty style={{ fontSize: "24px" }} />, path: "/admin/remove-benefits" },
+  { title: "SMS Offers", icon: <Sms style={{ fontSize: "24px" }} />, path: "/admin/sms-offers" },
+  { title: "Wallets Details", icon: <Wallet style={{ fontSize: "24px" }} />, path: "/admin/wallets" },
+  { title: "Payments", icon: <Payment style={{ fontSize: "24px" }} />, path: "/admin/payments" },
+  { title: "Cashback Amount", icon: <Wallet style={{ fontSize: "24px" }} />, path: "/admin/cashback-amount" },
+  { title: "Wallet Linking", icon: <Wallet style={{ fontSize: "24px" }} />, path: "/admin/wallet-linking" },
+  { title: "Update Points", icon: <Loyalty style={{ fontSize: "24px" }} />, path: "/admin/update-points" },
 ];
+
 
 const SidebarLayout = ({ children }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation(); // Hook to get the current path
-
-  const isActive = (path) => location.pathname === path; // Helper function to check active path
   const { signOut } = useContext(AuthContext);
 
   const handleSignOut = () => {
     signOut();
-    window.location.href = "/";  // Redirect to the root
+    window.location.href = "/";
+  };
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
   };
 
   return (
     <Box sx={{ display: "flex" }}>
       {/* Sidebar */}
-      {isSidebarOpen && (
-        <Sidebar aria-label="Custom Themed Sidebar" style={{ height: "100vh" }}>
-          <Sidebar.Logo sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '20px', fontWeight: 'bold' }}>
-            Admin Portal
-          </Sidebar.Logo>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: isSidebarOpen ? 256 : 80,
+          transition: "width 0.3s ease",
+          backgroundColor: "#001529",
+          color: "#fff",
+          height: "100vh",
+        }}
+      >
+<Menu
+  mode="inline"
+  defaultSelectedKeys={[location.pathname]}
+  style={{ 
+    height: "100%",
+    paddingTop: "20px", // Add spacing at the top
+  }}
+  inlineCollapsed={!isSidebarOpen}
+>
+  <Menu.ItemGroup
+    title={
+      isSidebarOpen && (
+        <span
+          style={{
+            fontSize: "20px",
+            fontWeight: "bold",
+            textAlign: "center",
+          }}
+        >
+          Admin Portal
+        </span>
+      )
+    }
+  >
+    {/* Collapse Button */}
+    <Item
+      key="collapse"
+      icon={isSidebarOpen ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
+      onClick={toggleSidebar}
+      style={{ 
+        height: "50px", // Adjust height of the collapse button
+        display: "flex",
+        alignItems: "center", 
+        justifyContent: "center" 
+      }}
+    >
+      {isSidebarOpen ? "Collapse Sidebar" : null}
+    </Item>
 
-          <Sidebar.Items>
-            {/* Grouping items */}
-            <Sidebar.ItemGroup>
-              {/* Group 1: Stores */}
-              <Sidebar.Collapse icon={LocalGroceryStore} label="Stores">
-                <Sidebar.Item href="/admin/stores" icon={Store} className={isActive("/stores") ? "bg-gray-100 dark:bg-gray-500" : ""}>
-                  Physical Stores
-                </Sidebar.Item>
-                <Sidebar.Item href="/admin/eshops" icon={Store} className={isActive("/eshops") ? "bg-gray-100 dark:bg-gray-500" : ""}>
-                  E-Shops
-                </Sidebar.Item>
-              </Sidebar.Collapse>
+    {/* Submenus */}
+    <SubMenu
+      key="stores"
+      icon={<LocalGroceryStore />}
+      title={isSidebarOpen ? "Stores" : null}
+      style={{ marginBottom: "10px" }} // Add spacing between submenus
+    >
+      <Item key="/admin/stores" style={{ height: "50px" }}>
+        <a href="/admin/stores">Physical Stores</a>
+      </Item>
+      <Item key="/admin/eshops" style={{ height: "50px" }}>
+        <a href="/admin/eshops">E-Shops</a>
+      </Item>
+    </SubMenu>
 
-              {/* Group 2: Transactions */}
-              <Sidebar.Collapse icon={Paid} label="Transactions">
-                <Sidebar.Item href="/admin/cashback-transactions" icon={Wallet} className={isActive("/cashback-transactions") ? "bg-gray-100 dark:bg-gray-500" : ""}>
-                  Cashback Transactions
-                </Sidebar.Item>
-                <Sidebar.Item href="/admin/accepted-transactions" icon={Payment} className={isActive("/accepted-transactions") ? "bg-gray-100 dark:bg-gray-500" : ""}>
-                  Accepted Transactions
-                </Sidebar.Item>
-                <Sidebar.Item href="/admin/transaction-average" icon={Payment} className={isActive("/transaction-average") ? "bg-gray-100 dark:bg-gray-500" : ""}>
-                  Transaction Average
-                </Sidebar.Item>
-              </Sidebar.Collapse>
-            </Sidebar.ItemGroup>
+    <SubMenu
+      key="transactions"
+      icon={<Paid />}
+      title={isSidebarOpen ? "Transactions" : null}
+      style={{ marginBottom: "10px" }}
+    >
+      <Item key="/admin/cashback-transactions" style={{ height: "50px" }}>
+        <a href="/admin/cashback-transactions">Cashback Transactions</a>
+      </Item>
+      <Item key="/admin/accepted-transactions" style={{ height: "50px" }}>
+        <a href="/admin/accepted-transactions">Accepted Transactions</a>
+      </Item>
+      <Item key="/admin/transaction-average" style={{ height: "50px" }}>
+        <a href="/admin/transaction-average">Transaction Average</a>
+      </Item>
+    </SubMenu>
+  </Menu.ItemGroup>
 
-            {/* Other Items */}
-            <Sidebar.ItemGroup>
-              {menuItems.map((item, index) => (
-                <Sidebar.Item
-                  key={index}
-                  as="a"
-                  href={item.path}
-                  icon={item.icon}
-                  className={isActive(item.path) ? "bg-gray-100 dark:bg-gray-500" : ""}
-                >
-                  {item.title}
-                </Sidebar.Item>
-              ))}
-            </Sidebar.ItemGroup>
+  {/* Main Menu Items */}
+  {menuItems.map((item) => (
+    <Item 
+      key={item.path} 
+      icon={item.icon} 
+      style={{ 
+        height: "50px", // Increase height
+        display: "flex", 
+        alignItems: "center" 
+      }}
+    >
+      <a href={item.path}>{isSidebarOpen ? item.title : null}</a>
+    </Item>
+  ))}
 
-            {/* Sign Out */}
-            <Sidebar.ItemGroup>
-              <Sidebar.Item
-                as="button"
-                onClick={handleSignOut}
-                icon={ExitToApp}
-                className="text-red-600 hover:bg-red-100"
-                iconClassName="!text-red-600"
-              >
-                Sign Out
-              </Sidebar.Item>
-            </Sidebar.ItemGroup>
-          </Sidebar.Items>
-        </Sidebar>
-      )}
+  {/* Sign Out */}
+  <Menu.Item
+    key="signout"
+    icon={<ExitToApp />}
+    style={{ 
+      color: "red", 
+      height: "50px", // Adjust height for consistency
+      display: "flex", 
+      alignItems: "center" 
+    }}
+    onClick={handleSignOut}
+  >
+    {isSidebarOpen ? "Sign Out" : null}
+  </Menu.Item>
+</Menu>
+
+      </Box>
+
 
       {/* Main Content */}
-            <Box
+      <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3, // Padding inside the content
-          marginLeft: isSidebarOpen ? "0px" : "0px", // Adjusts when the sidebar is open
-          transition: "margin-left 0.3s ease", // Smooth transition for sidebar toggling
-          minHeight: "100vh", // Ensure it stretches to the full viewport height
-          backgroundColor: "#fafafa", // Optional: Matches the rest of the layout background
+          p: 3,
+          transition: "margin-left 0.3s ease",
+          minHeight: "100vh",
+          backgroundColor: "#fafafa",
+          color: "#000"
         }}
       >
         <Routes>
@@ -135,7 +194,7 @@ const SidebarLayout = ({ children }) => {
           ))}
         </Routes>
         {children}
-</Box>
+      </Box>
     </Box>
   );
 };
