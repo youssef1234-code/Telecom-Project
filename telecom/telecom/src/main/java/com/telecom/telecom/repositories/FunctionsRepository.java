@@ -60,5 +60,6 @@ public interface FunctionsRepository extends JpaRepository<CustomerAccount, Long
     @Query(value = "SELECT * FROM dbo.getBenefitByMobileNumAndPlanId(:mobile_num,:plan_id)",nativeQuery = true)
     List<BenefitProjection> getBenefitsByMobileAndPlanId(@Param("mobile_num") String mobileNum, @Param("plan_id") Integer planId);
 
-   
+    @Query(value = "SELECT * FROM dbo.CHECK_CUSTOMER_NID_MOBILE(:mobile_num,:nID)",nativeQuery = true)
+    Integer checkMobileAgainstNId(@Param("mobile_num") String mobileNum, @Param("nID") Integer nationalId);
 }
