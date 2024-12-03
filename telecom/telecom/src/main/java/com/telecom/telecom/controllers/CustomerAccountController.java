@@ -65,7 +65,7 @@ public class CustomerAccountController {
         
         if(Strings.isBlank(planName) || Strings.isBlank(startDate) || Strings.isBlank(endDate)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Plan Id, Start Date and End Date cannot be empty!"));
+                    .body(Map.of("message", "Plan Name, Start Date and End Date cannot be empty!"));
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
