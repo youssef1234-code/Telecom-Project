@@ -1,9 +1,8 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import CustomerSidebar from "../CustomerSidebar";
-import UnresolvedTicketsTable from "../UnresolvedTicketsTable";
-
-const UnresolvedTicketsPage = () => {
+import AllShopsTable from "../AllShopsTable";
+const AllShopsPage = () => {
   return (
     <CustomerSidebar>
       <Box
@@ -53,7 +52,7 @@ const UnresolvedTicketsPage = () => {
             <div
               style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
             >
-              <UnresolvedTicketsTable />
+              <AllShopsTable />
             </div>
           </Box>
         </Box>
@@ -62,4 +61,4 @@ const UnresolvedTicketsPage = () => {
   );
 };
 
-export default UnresolvedTicketsPage;
+export default AllShopsPage;

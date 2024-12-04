@@ -30,8 +30,7 @@ import WalletLinkingPage from "./components/pages/WalletLinkingPage";
 import UpdatePointsPage from "./components/pages/UpdatePointsPage";
 import MonthUsagePage from "./components/pages/MonthUsagePage";
 import CashbackPage from "./components/pages/CashbackPage";
-import UnresolvedTicketsPage from "./components/pages/UnresolvedTicketsPage";
-//import AllBenefitsPage from "./components/pages/AllBenefitsPage";
+import AllBenefitsPage from "./components/pages/AllBenefitsPage";
 
 // Create a Context for Authentication
 export const AuthContext = createContext();
@@ -277,10 +276,10 @@ function App() {
             }
           />
           <Route
-            path="/customer/unresolved-tickets"
+            path="/customer/all-shops"
             element={
               <ProtectedRoute role="customer">
-                <UnresolvedTicketsPage />
+                <CashbackPage />
               </ProtectedRoute>
             }
           />

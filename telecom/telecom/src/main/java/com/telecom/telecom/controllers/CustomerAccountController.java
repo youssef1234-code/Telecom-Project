@@ -184,7 +184,7 @@ public class CustomerAccountController {
         }
 
         String nId = requestParams.get("nId");
-
+        System.out.println(nId);
         Integer nIdInteger = HelperUtils.toInteger(nId);
         if(Objects.isNull(nIdInteger)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -201,12 +201,6 @@ public class CustomerAccountController {
         if(mobileNum.length()!=11) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Mobile Number must be 11 characters long!"));
-        }
-
-        if(!helperUtils.validateMobileNumberAndNId(mobileNum, nIdInteger))
-        {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number does not match National ID!"));
         }
 
         return ResponseEntity.ok(proceduresRepository.getTicketAccountCustomers(nIdInteger));
