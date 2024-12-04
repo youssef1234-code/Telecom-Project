@@ -46,26 +46,6 @@ const CashbackTable = () => {
     }
   };
 
-  const columns = [
-    {
-      field: "totalData",
-      headerName: "Total Data Used",
-      flex: 1,
-    },
-    {
-      field: "totalMins",
-      headerName: "Minutes Used",
-      type: "number",
-      flex: 2,
-    },
-    {
-      field: "totalSMS",
-      headerName: "SMS Used",
-      type: "number",
-      flex: 2,
-    },
-  ];
-
   return (
     <Paper
       style={{
