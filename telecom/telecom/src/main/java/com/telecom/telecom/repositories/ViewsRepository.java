@@ -37,5 +37,8 @@ public interface ViewsRepository extends JpaRepository<CustomerAccount, Long> {
     @Query(value = "SELECT * FROM dbo.Num_of_cashback", nativeQuery = true)
     List<NumOfCashbackProjection> getNumOfCashback();
 
+    @Query(value = "SELECT * FROM dbo.allShops", nativeQuery = true)
+    List<AllShopsProjection> getAllShops();
+
 
 }

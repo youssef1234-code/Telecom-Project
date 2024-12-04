@@ -321,8 +321,91 @@ public class CustomerAccountController {
 
     }
 
+    @Transactional
+    @GetMapping("/all-shops")
+    public ResponseEntity<?> getAllShops() {
+        return ResponseEntity.ok(viewsRepository.getAllShops());
+    }
+
+    @Transactional
+    @PostMapping("/last-5months-plans")
+    public ResponseEntity<?> getLast5MSubscribedPlans (@RequestBody Map<String, String> requestParams)
+    {
+        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum"))
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+
+        String mobileNum = requestParams.get("mobileNum");
+
+        if(Strings.isBlank(mobileNum)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        }
+
+        if(mobileNum.length()!=11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+
+        return ResponseEntity.ok(functionsRepository.getSubscribedPlans5Months(mobileNum));
+    }
+
+    @Transactional
+    @PostMapping("/renew-subscription")
+    public ResponseEntity<?> renewSubscription(@RequestBody Map<String, String> requestParams){
+        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum"))
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+
+        String mobileNum = requestParams.get("mobileNum");
+        Integer amount = requestParams.get;
 
 
+        if(amount ==0){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Amount cannot be empty!"));
+        }
+
+
+        if(Strings.isBlank(mobileNum)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        }
+
+        if(mobileNum.length()!=11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+
+        return ResponseEntity.ok(proceduresRepository.initiatePlanPayment(mobileNum,amount));
+    }
+
+    @Transactional
+    @PostMapping("/get-cashback-amount")
+    public ResponseEntity<?> getCashbackAmount(@RequestBody Map<String, String> requestParams)
+    {
+        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum"))
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Make sure to enter the required info!"));
+        }
+
+        String mobileNum = requestParams.get("mobileNum");
+
+        if(Strings.isBlank(mobileNum)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        }
+
+        if(mobileNum.length()!=11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+    }
 }
 
 
@@ -332,3 +415,5 @@ public class CustomerAccountController {
 
 
 */
+
+
