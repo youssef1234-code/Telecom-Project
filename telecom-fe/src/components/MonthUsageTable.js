@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Paper, TextField, Button, Alert } from "@mui/material";
 import GenericTable from "./GenericTable";
 
-const UnsubscribedTable = () => {
+const MonthUsageTable = () => {
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({ mobileNum: "" });
   const [error, setError] = useState("");
@@ -15,7 +15,7 @@ const UnsubscribedTable = () => {
     // Send the POST request with planId and startDate
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/customer/unsubscribed`,
+        `${process.env.REACT_APP_SERVER_URL}/api/customer/monthUsage`,
         {
           method: "POST",
           headers: {
@@ -24,7 +24,7 @@ const UnsubscribedTable = () => {
           body: JSON.stringify({
             mobileNum: localStorage.getItem("mobileNumber"),
           }),
-        } 
+        }
       );
 
       if (!response.ok) {
@@ -47,43 +47,20 @@ const UnsubscribedTable = () => {
 
   const columns = [
     {
-      field: "planName",
-      headerName: "Plan Name",
+      field: "totalData",
+      headerName: "Total Data Used",
       flex: 1,
     },
     {
-      field: "planID",
-      headerName: "Plan ID",
+      field: "totalMins",
+      headerName: "Minutes Used",
       type: "number",
       flex: 2,
     },
     {
-      field: "price",
-      headerName: "Price",
+      field: "totalSMS",
+      headerName: "SMS Used",
       type: "number",
-      flex: 2,
-    },
-    {
-      field: "smsoffered",
-      headerName: "SMS Offered",
-      type: "number",
-      flex: 2,
-    },
-    {
-      field: "minutesOffered",
-      headerName: "Minutes Offered",
-      type: "number",
-      flex: 2,
-    },
-    {
-      field: "dataOffered",
-      headerName: "Data Offered(MB)",
-      type: "number",
-      flex: 2,
-    },
-    {
-      field: "description",
-      headerName: "Description",
       flex: 2,
     },
   ];
@@ -123,9 +100,9 @@ const UnsubscribedTable = () => {
       )}
 
       {/* Generic Table */}
-      <GenericTable data={data} columns={columns} rowIdField="planID" />
+      <GenericTable data={data} columns={columns} rowIdField="totalData" />
     </Paper>
   );
 };
 
-export default UnsubscribedTable;
+export default MonthUsageTable;

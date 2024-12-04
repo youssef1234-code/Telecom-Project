@@ -118,7 +118,7 @@ public class CustomerAccountController {
     }
 
     @Transactional
-    @PostMapping("/monthUsage")
+    @PostMapping("/monthUsage") 
     public ResponseEntity<?> getMonthUsage(@RequestBody Map<String, String> requestParams)
     {
         if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum"))
