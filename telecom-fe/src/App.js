@@ -28,6 +28,7 @@ import ConsumptionPage from "./components/pages/ConsumptionPage";
 import UnsubscribedPage from "./components/pages/UnsubscribedPage";
 import WalletLinkingPage from "./components/pages/WalletLinkingPage";
 import UpdatePointsPage from "./components/pages/UpdatePointsPage";
+import MonthUsagePage from "./components/pages/MonthUsagePage";
 
 // Create a Context for Authentication
 export const AuthContext = createContext();
@@ -245,6 +246,14 @@ function App() {
             element={
               <ProtectedRoute role="admin">
                 <UpdatePointsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/month-usage"
+            element={
+              <ProtectedRoute role="admin">
+                <MonthUsagePage />
               </ProtectedRoute>
             }
           />
