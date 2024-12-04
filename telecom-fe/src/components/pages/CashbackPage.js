@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import CustomerSidebar from "../CustomerSidebar";
-import MonthUsageTable from "../MonthUsageTable";
+import CashbackTable from "../CashbackTable";
 
-const MonthUsagePage = () => {
+const CashbackPage = () => {
   return (
     <CustomerSidebar>
       <Box
@@ -53,7 +53,7 @@ const MonthUsagePage = () => {
             <div
               style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
             >
-              <MonthUsageTable />
+              <CashbackTable />
             </div>
           </Box>
         </Box>
@@ -62,4 +62,4 @@ const MonthUsagePage = () => {
   );
 };
 
-export default MonthUsagePage;
+export default CashbackPage;

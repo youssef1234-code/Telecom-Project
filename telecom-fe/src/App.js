@@ -29,6 +29,7 @@ import UnsubscribedPage from "./components/pages/UnsubscribedPage";
 import WalletLinkingPage from "./components/pages/WalletLinkingPage";
 import UpdatePointsPage from "./components/pages/UpdatePointsPage";
 import MonthUsagePage from "./components/pages/MonthUsagePage";
+import CashbackPage from "./components/pages/CashbackPage";
 
 // Create a Context for Authentication
 export const AuthContext = createContext();
@@ -250,10 +251,18 @@ function App() {
             }
           />
           <Route
-            path="/customer/month-usage"
+            path="/customer/active-plans-usage"
             element={
-              <ProtectedRoute role="admin">
+              <ProtectedRoute role="customer">
                 <MonthUsagePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/cashback-transactions"
+            element={
+              <ProtectedRoute role="customer">
+                <CashbackPage />
               </ProtectedRoute>
             }
           />
