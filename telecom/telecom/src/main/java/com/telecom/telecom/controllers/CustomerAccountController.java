@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -355,17 +356,26 @@ public class CustomerAccountController {
     @Transactional
     @PostMapping("/renew-subscription")
     public ResponseEntity<?> renewSubscription(@RequestBody Map<String, String> requestParams){
-        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum"))
+        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum") || !requestParams.containsKey("amount")|| !requestParams.containsKey("planID") || !requestParams.containsKey("paymentMethod"))
         {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Make sure to enter the required info!"));
         }
 
         String mobileNum = requestParams.get("mobileNum");
-        Integer amount = requestParams.get;
+        String amountb4 = requestParams.get("amount");
+        String planIDb4 = requestParams.get("planID");
+        String paymentMethod = requestParams.get("paymentMethod");
 
+        Integer amountb5 = HelperUtils.toInteger(amountb4);
+        if(Objects.isNull(amountb5)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Amount is not in Correct Format"));
+        }
+        BigDecimal amount = new BigDecimal(amountb5);
+        Integer planID = HelperUtils.toInteger(planIDb4);
 
-        if(amount ==0){
+        if(amountb5 == 0){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Amount cannot be empty!"));
         }
@@ -381,20 +391,31 @@ public class CustomerAccountController {
                     .body(Map.of("message", "Mobile Number must be 11 characters long!"));
         }
 
-        return ResponseEntity.ok(proceduresRepository.initiatePlanPayment(mobileNum,amount));
+        proceduresRepository.initiatePlanPayment(mobileNum,amount,paymentMethod,planID);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of("message", "Initiated Plan Successfully"));
     }
 
     @Transactional
     @PostMapping("/get-cashback-amount")
     public ResponseEntity<?> getCashbackAmount(@RequestBody Map<String, String> requestParams)
     {
-        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum"))
+        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum") || !requestParams.containsKey("planID") || !requestParams.containsKey("benefitID"))
         {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Make sure to enter the required info!"));
         }
 
         String mobileNum = requestParams.get("mobileNum");
+        String planIDb4 = requestParams.get("planID");
+        String benefitIDb4 = requestParams.get("benefitID");
+
+        Integer planID = HelperUtils.toInteger(planIDb4);
+        Integer benefitID = HelperUtils.toInteger(benefitIDb4);
+
+        /* Parse Zeby to Integer then to String and call String.substring()*/
+
+
 
         if(Strings.isBlank(mobileNum)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -405,6 +426,67 @@ public class CustomerAccountController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Mobile Number must be 11 characters long!"));
         }
+
+        proceduresRepository.paymentWalletCashback(mobileNum,planID,benefitID);
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(Map.of("message", "Cashback Updated successfully"));
+    }
+
+    @Transactional
+    @PostMapping("/balance-recharge")
+    public ResponseEntity<?> initiateBalancePayment(@RequestBody Map<String, String> requestParams)
+    {
+        ;if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum") || !requestParams.containsKey("amount") || !requestParams.containsKey("paymentMethod"))
+    {
+        ;return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("message", "Make sure to enter the required info!"));
+    }
+
+    ;String amountb4 = requestParams.get("amount")
+    ;String planID = requestParams.get("planID")
+    ;String paymentMethod = requestParams.get("paymentMethod")
+    ;String mobileNum = requestParams.get("mobileNum")
+
+
+    ;BigDecimal amount = new BigDecimal(Integer.parseInt(amountb4))
+    ;if(amount.equals(BigDecimal.ZERO)){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("message", "Amount cannot be empty!"))
+
+                ;
+    }
+        if(Strings.isBlank(mobileNum)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        }
+
+        if(mobileNum.length()!=11) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        }
+
+        proceduresRepository.initiateBalancePayment(mobileNum,amount,planID);
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(Map.of("message", "Balance Payed"));
+
+    }
+
+    @Transactional
+    @PostMapping("/redeem-voucher")
+    public ResponseEntity<?> redeemVoucherID(@RequestBody Map<String, String> requestParams)
+    {
+        ;if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum") || !requestParams.containsKey("voucherID"))
+    {
+        ;return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Map.of("message", "Make sure to enter the required info!"));
+    }
+    String mobileNum = requestParams.get("mobileNum");
+    String voucherIDb4 = requestParams.get("voucherID");
+    Integer voucherID = HelperUtils.toInteger(voucherIDb4);
+
+    proceduresRepository.redeemVoucherPoints(mobileNum, voucherID);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of("message", "Voucher Redeemed"));
     }
 }
 
