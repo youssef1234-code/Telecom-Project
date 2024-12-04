@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Paper, TextField, Button, Alert } from "@mui/material";
+import { Paper, TextField, Button, Alert, Typography } from "@mui/material";
 import GenericTable from "./GenericTable";
 
 const CashbackTable = () => {
