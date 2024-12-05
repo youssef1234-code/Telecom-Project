@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { Paper, TextField, Button, Alert, Typography } from "@mui/material";
-import GenericTable from "./GenericTable";
-
+import { Paper, TextField, Button, Alert, Typography, Box } from "@mui/material";
 const CashbackTable = () => {
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({ mobileNum: "", nationalId: "" });
@@ -12,7 +10,7 @@ const CashbackTable = () => {
   };
 
   const handleSubmit = async () => {
-    // Send the POST request with planId and startDate
+    // Validate input
     try {
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/api/customer/cashbacks`,
@@ -22,7 +20,7 @@ const CashbackTable = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            mobileNum: localStorage.getItem("mobileNumber"),
+            //mobileNum: filters.mobileNum,
             nId: filters.nationalId,
           }),
         }
@@ -30,16 +28,15 @@ const CashbackTable = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.log("error"+ errorData);
         setData("");
-        setError(errorData.message || "An error occurred. Please try again."); // Handle the error message from the backend
+        setError(errorData.message || "An error occurred. Please try again.");
         return;
       }
 
-      // Clear any previous error if request is successful
       setError("");
-
       const json = await response.json();
-      setData(json); // Set the data to be displayed in the table
+      setData(json);
     } catch (error) {
       setData("");
       setError("An error occurred while fetching data. Please try again.");
@@ -57,16 +54,25 @@ const CashbackTable = () => {
     >
       {/* Filters */}
       <div style={{ display: "flex", gap: "10px", marginBottom: 20 }}>
-        <TextField
+        {/* <TextField
           label="Mobile Number"
           variant="outlined"
-          value={localStorage.getItem("mobileNumber")}
-          onChange={(e) => handleFilterChange("startDate", e.target.value)}
+          value={localStorage.getItem("mobileNumber") || ""}
+          onChange={(e) =>
+            handleFilterChange("mobileNum", e.target.value)
+          }
           fullWidth
           InputLabelProps={{
             shrink: true,
           }}
-          disabled={true}
+          disabled={true} // Disable field to only show the stored value
+        /> */}
+        <TextField
+          label="National ID"
+          variant="outlined"
+          value={filters.nationalId}
+          onChange={(e) => handleFilterChange("nationalId", e.target.value)}
+          fullWidth
         />
         <Button variant="contained" color="primary" onClick={handleSubmit}>
           Fetch Data
@@ -80,9 +86,21 @@ const CashbackTable = () => {
         </Alert>
       )}
 
-      <Typography variant="h4" gutterBottom>
-        {data}
-      </Typography>
+      {/* Show data */}
+      {/* Generic Table */}
+      <Box
+      sx={{
+        flex: 1, // Fills available vertical space
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#fafafa",
+        padding: 2,
+      }}>
+        <Typography variant = "h4" gutterBottom>
+            {data}
+        </Typography>
+      </Box>
     </Paper>
   );
 };

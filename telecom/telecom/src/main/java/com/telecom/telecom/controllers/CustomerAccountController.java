@@ -147,8 +147,8 @@ public class CustomerAccountController {
     @PostMapping("/cashbacks")
     public ResponseEntity<?> getCashbacks(@RequestBody Map<String, String> requestParams)
     {
-
-        if(requestParams.isEmpty() || !requestParams.containsKey("nId") || !requestParams.containsKey("mobileNum"))
+        // || !requestParams.containsKey("mobileNum")
+        if(requestParams.isEmpty() || !requestParams.containsKey("nId"))
         {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(Map.of("message", "Make sure to enter the required info!"));
@@ -161,9 +161,8 @@ public class CustomerAccountController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Invalid National Id Format!"));
         }
-
-        return ResponseEntity.ok(functionsRepository.getCashbackWalletCustomer(nIdInteger));
-
+        Integer nCachBacks = functionsRepository.getCashbackWalletCustomer(nIdInteger);
+        return ResponseEntity.ok(nCachBacks == null ? 0 : nCachBacks);
     }
 
     @Transactional

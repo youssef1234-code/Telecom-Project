@@ -267,22 +267,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/customer/active-benefits"
-            element={
-              <ProtectedRoute role="customer">
-                <CashbackPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/customer/all-shops"
-            element={
-              <ProtectedRoute role="customer">
-                <CashbackPage />
-              </ProtectedRoute>
-            }
-          />
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

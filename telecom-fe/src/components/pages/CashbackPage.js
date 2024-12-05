@@ -25,7 +25,7 @@ const CashbackPage = () => {
             color: "#333",
           }}
         >
-          Consumptions
+          Cashback
         </Typography>
 
         {/* Main Content Area */}
