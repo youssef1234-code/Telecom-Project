@@ -63,6 +63,12 @@ const MonthUsageTable = () => {
       type: "number",
       flex: 2,
     },
+    {
+      field: "SequentialId",
+      headerName: "Id",
+      type: "number",
+      flex: 2,
+    }
   ];
 
   return (
@@ -100,7 +106,7 @@ const MonthUsageTable = () => {
       )}
 
       {/* Generic Table */}
-      <GenericTable data={data} columns={columns} rowIdField="totalData" />
+      <GenericTable data={data} columns={columns} rowIdField="SequentialId" />
     </Paper>
   );
 };

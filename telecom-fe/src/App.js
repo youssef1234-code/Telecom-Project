@@ -30,7 +30,7 @@ import WalletLinkingPage from "./components/pages/WalletLinkingPage";
 import UpdatePointsPage from "./components/pages/UpdatePointsPage";
 import MonthUsagePage from "./components/pages/MonthUsagePage";
 import CashbackPage from "./components/pages/CashbackPage";
-import AllBenefitsPage from "./components/pages/AllBenefitsPage";
+import CustomerServicePlansPage from "./components/pages/CustomerServicePlansPage";
 
 // Create a Context for Authentication
 export const AuthContext = createContext();
@@ -218,7 +218,7 @@ function App() {
           />
 
           <Route
-            path="/customer/usage-consumption"
+            path="/customer/active-plans-usage"
             element={
               <ProtectedRoute role="customer">
                 <ConsumptionPage />
@@ -252,7 +252,7 @@ function App() {
             }
           />
           <Route
-            path="/customer/active-plans-usage"
+            path="/customer/usage-consumption"
             element={
               <ProtectedRoute role="customer">
                 <MonthUsagePage />
@@ -264,6 +264,14 @@ function App() {
             element={
               <ProtectedRoute role="customer">
                 <CashbackPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/service-plans"
+            element={
+              <ProtectedRoute role="customer">
+                <CustomerServicePlansPage />
               </ProtectedRoute>
             }
           />

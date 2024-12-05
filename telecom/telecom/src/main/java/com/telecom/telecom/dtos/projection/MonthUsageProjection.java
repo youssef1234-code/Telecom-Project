@@ -1,7 +1,8 @@
 package com.telecom.telecom.dtos.projection;
 
 public interface MonthUsageProjection {
-    Integer getTotalData();
-    Integer getTotalMins();
-    Integer getTotalSMS();
+    Integer getDataConsumption();
+    Integer getMinutesUsed();
+    Integer getSmsSent();
+
 }

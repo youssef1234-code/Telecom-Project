@@ -1,14 +1,8 @@
 package com.telecom.telecom.controllers;
 
-import com.telecom.telecom.dtos.CustomerAccountDto;
-import com.telecom.telecom.entities.CustomerAccount;
-import com.telecom.telecom.entities.CustomerProfile;
 import com.telecom.telecom.mappers.DtoEntityMapper;
 import com.telecom.telecom.repositories.*;
 import com.telecom.telecom.utils.HelperUtils;
-
-import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
 
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -140,7 +133,7 @@ public class CustomerAccountController {
                     .body(Map.of("message", "Mobile Number must be 11 characters long!"));
         }
 
-        return ResponseEntity.ok(functionsRepository.getUsagePlanCurrentMonth(mobileNum));
+        return ResponseEntity.ok(HelperUtils.flattenUsageProjections(functionsRepository.getUsagePlanCurrentMonth(mobileNum)));
     }
 
     @Transactional

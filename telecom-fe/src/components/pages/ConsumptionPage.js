@@ -25,7 +25,7 @@ const ConsumptionPage = () => {
             color: "#333",
           }}
         >
-          Consumptions
+          Active Plans Usage
         </Typography>
 
         {/* Main Content Area */}

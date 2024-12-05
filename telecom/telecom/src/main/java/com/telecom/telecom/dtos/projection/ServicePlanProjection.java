@@ -2,7 +2,7 @@ package com.telecom.telecom.dtos.projection;
 
 public interface ServicePlanProjection {
 
-    public Integer getId();
+    public Integer getPlanID();
     public String getName();
     public Integer getPrice();
     public Integer getSmsOffered();
