@@ -45,7 +45,7 @@ const CustomerSignIn = () => {
         localStorage.setItem("role", data.role);
         localStorage.setItem("mobileNumber",mobileNo);
         setAuth({ token: data.token, role: data.role });
-        navigate("/customer/active-benefits");
+        navigate("/customer/service-plans");
       } else {
         const contentType = response.headers.get("Content-Type");
         if (contentType && contentType.includes("application/json")) {

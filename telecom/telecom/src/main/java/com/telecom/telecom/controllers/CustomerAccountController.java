@@ -166,24 +166,22 @@ public class CustomerAccountController {
 
 
     @Transactional
-    @PostMapping("/unresolved")
+    @PostMapping("/unresolved-tickets")
     public ResponseEntity<?> getUnresolvedTickets(@RequestBody Map<String, String> requestParams)
     {
-        if(requestParams.isEmpty() || !requestParams.containsKey("nId") || !requestParams.containsKey("planName") || !requestParams.containsKey("mobileNum"))
+        if(requestParams.isEmpty() || !requestParams.containsKey("nId") || !requestParams.containsKey("mobileNum"))
         {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(Map.of("message", "Make sure to enter the required info!"));
         }
 
         String nId = requestParams.get("nId");
-        System.out.println(nId);
         Integer nIdInteger = HelperUtils.toInteger(nId);
+        String mobileNum = requestParams.get("mobileNum");
         if(Objects.isNull(nIdInteger)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Invalid National Id Format!"));
         }
-
-        String mobileNum = requestParams.get("mobileNum");
 
         if(Strings.isBlank(mobileNum)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -195,8 +193,12 @@ public class CustomerAccountController {
                     .body(Map.of("message", "Mobile Number must be 11 characters long!"));
         }
 
-        return ResponseEntity.ok(proceduresRepository.getTicketAccountCustomers(nIdInteger));
+        Boolean isValid = helperUtils.validateMobileNumberAndNId(mobileNum, nIdInteger);
 
+        List<Integer> num = proceduresRepository.getTicketAccountCustomers(nIdInteger);
+        return isValid ? ResponseEntity.ok(num==null || num.isEmpty() ? 0 :num.get(0)) :
+                         ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("message", "MobileNumber and National Id are not for the logged in account!"));
     }
 
     @Transactional
@@ -220,8 +222,8 @@ public class CustomerAccountController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Mobile Number must be 11 characters long!"));
         }
-
-        return ResponseEntity.ok(proceduresRepository.getAccountHighestVoucher(mobileNum));
+        List<Integer> topVouchers = proceduresRepository.getAccountHighestVoucher(mobileNum);
+        return ResponseEntity.ok(topVouchers==null || topVouchers.isEmpty() ? -1 :topVouchers.get(0));
     }
 
 
@@ -248,6 +250,11 @@ public class CustomerAccountController {
         }
 
         String planName = requestParams.get("planName");
+
+        if(Strings.isBlank(planName)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Plan Name cannot be empty!"));
+        }
 
         return ResponseEntity.ok(functionsRepository.getRemainingPlanAmount(mobileNum, planName));
 
@@ -276,6 +283,11 @@ public class CustomerAccountController {
         }
 
         String planName = requestParams.get("planName");
+
+        if(Strings.isBlank(planName)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Plan Name cannot be empty!"));
+        }
 
         return ResponseEntity.ok(functionsRepository.getExtraPlanAmount(mobileNum, planName));
 

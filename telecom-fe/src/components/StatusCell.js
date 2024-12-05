@@ -32,6 +32,7 @@ const StatusCell = ({ value }) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        alignContent: "center",
         padding: "0 12px", // Space inside the badge
         margin: "10px 0px 0px 0px", // Space outside the badge
         height: "30px",

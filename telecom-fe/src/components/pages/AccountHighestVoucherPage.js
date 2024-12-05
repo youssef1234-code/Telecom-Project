@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import CustomerSidebar from "../CustomerSidebar";
-import ActiveBenefits from "../ActiveBenefits";
+import AccountHighestVoucherTable from "../AccountHighestVoucherTable";
 
-const ActiveBenefitsPage = () => {
+const AccountHighestVoucherPage = () => {
   return (
     <CustomerSidebar>
       <Box
@@ -25,7 +25,7 @@ const ActiveBenefitsPage = () => {
             color: "#333",
           }}
         >
-          Active Benefits
+          Highest Voucher ID
         </Typography>
 
         {/* Main Content Area */}
@@ -51,7 +51,7 @@ const ActiveBenefitsPage = () => {
             }}
           >
             <div style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-  <ActiveBenefits />
+  <AccountHighestVoucherTable />
 </div>
           </Box>
         </Box>
@@ -60,4 +60,4 @@ const ActiveBenefitsPage = () => {
   );
 };
 
-export default ActiveBenefitsPage;
+export default AccountHighestVoucherPage;

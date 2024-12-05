@@ -31,6 +31,10 @@ import UpdatePointsPage from "./components/pages/UpdatePointsPage";
 import MonthUsagePage from "./components/pages/MonthUsagePage";
 import CashbackPage from "./components/pages/CashbackPage";
 import CustomerServicePlansPage from "./components/pages/CustomerServicePlansPage";
+import UnresolvedTicketsPage from "./components/pages/UnresolvedTicketsPage";
+import AccountHighestVoucherPage from "./components/pages/AccountHighestVoucherPage";
+import RemainingPaymentPage from "./components/pages/RemainingPaymentPage";
+import ExtraPaymentPage from "./components/pages/ExtraPaymentPage";
 
 // Create a Context for Authentication
 export const AuthContext = createContext();
@@ -275,6 +279,41 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/customer/unresolved-tickets"
+            element={
+              <ProtectedRoute role="customer">
+                <UnresolvedTicketsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/highest-voucher"
+            element={
+              <ProtectedRoute role="customer">
+                <AccountHighestVoucherPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/customer/remaining-payment"
+            element={
+              <ProtectedRoute role="customer">
+                <RemainingPaymentPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/customer/extra-payment"
+            element={
+              <ProtectedRoute role="customer">
+                <ExtraPaymentPage />
+              </ProtectedRoute>
+            }
+          />
+
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

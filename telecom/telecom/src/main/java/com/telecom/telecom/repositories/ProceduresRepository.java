@@ -39,7 +39,7 @@ public interface ProceduresRepository extends JpaRepository<CustomerAccount, Lon
     void redeemVoucherPoints(@Param("mobile_num") String mobileNum, @Param("voucher_id") Integer voucherID);
 
     @Procedure(value = "Ticket_Account_Customer")
-    Integer getTicketAccountCustomers(@Param("NID") Integer nID);
+    List<Integer> getTicketAccountCustomers(@Param("NID") int nid);
 
     @Procedure(value = "Top_Successful_Payments")
     List<TopSuccessfulPaymentsProjection> topSuccessfulPayments(@Param("mobile_num") String mobileNum);

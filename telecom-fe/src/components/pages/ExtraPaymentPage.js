@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import CustomerSidebar from "../CustomerSidebar";
-import ActiveBenefits from "../ActiveBenefits";
+import ExtraPaymentTable from "../ExtraPaymentTable";
 
-const ActiveBenefitsPage = () => {
+const ExtraPaymentPage = () => {
   return (
     <CustomerSidebar>
       <Box
@@ -25,7 +25,7 @@ const ActiveBenefitsPage = () => {
             color: "#333",
           }}
         >
-          Active Benefits
+          Extra Payment
         </Typography>
 
         {/* Main Content Area */}
@@ -50,9 +50,11 @@ const ActiveBenefitsPage = () => {
               borderRadius: 2,
             }}
           >
-            <div style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-  <ActiveBenefits />
-</div>
+            <div
+              style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
+            >
+              <ExtraPaymentTable />
+            </div>
           </Box>
         </Box>
       </Box>
@@ -60,4 +62,4 @@ const ActiveBenefitsPage = () => {
   );
 };
 
-export default ActiveBenefitsPage;
+export default ExtraPaymentPage;
