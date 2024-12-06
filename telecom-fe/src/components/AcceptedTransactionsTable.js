@@ -5,13 +5,14 @@ const AcceptedTransactionTable = () => {
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({ mobileNum: ""});
   const [error, setError] = useState("");  // State to store error message
+  const [count, setCount] = useState(""); 
+  const [total, setTotal] = useState("");
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
-var count = null;
-var total = null;
+
 
   const handleSubmit = async () => {
     try {
@@ -36,9 +37,12 @@ var total = null;
       setError("");
       
       const json = await response.json();
-      setData(json);
-      count = data[0].paymentCount;
-      total = data[0].totalPoints;
+
+      if(json != null){
+      setCount(json.paymentCount || null);
+      setTotal(json.totalPoints || null);
+      } else throw error
+
     } catch (error) {
       setData("");
       setError("An error occurred while fetching data. Please try again.");

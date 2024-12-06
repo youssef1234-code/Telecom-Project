@@ -1,6 +1,7 @@
 package com.telecom.telecom.controllers;
 
 
+import com.telecom.telecom.dtos.projection.PaymentPointsProjection;
 import com.telecom.telecom.repositories.FunctionsRepository;
 import com.telecom.telecom.repositories.ProceduresRepository;
 import com.telecom.telecom.repositories.ViewsRepository;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -73,8 +75,8 @@ public class AdminComponent2Controller {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Mobile Number must be 11 characters long!"));
         }
-
-        return ResponseEntity.ok(proceduresRepository.getAccountPaymentPoints(mobileNum));
+        List<PaymentPointsProjection> list = proceduresRepository.getAccountPaymentPoints(mobileNum);
+        return ResponseEntity.ok(list == null || list.isEmpty() ? null : list.get(0) );
     }
 
     @Transactional
