@@ -1,6 +1,7 @@
 package com.telecom.telecom.repositories;
 
 import com.telecom.telecom.dtos.projection.*;
+import com.telecom.telecom.entities.Cashback;
 import com.telecom.telecom.entities.CustomerAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -41,8 +42,8 @@ public interface FunctionsRepository extends JpaRepository<CustomerAccount, Long
     @Query(value = "SELECT * FROM dbo.Usage_Plan_CurrentMonth(:mobile_no)", nativeQuery = true)
     List<MonthUsageProjection> getUsagePlanCurrentMonth(@Param("mobile_no") String mobileNo);
 
-    @Query(value = "SELECT amount FROM dbo.Cashback_Wallet_Customer(:nID)", nativeQuery = true)
-    Integer getCashbackWalletCustomer(@Param("nID") Integer nID);
+    @Query(value = "SELECT * FROM dbo.Cashback_Wallet_Customer(:nID)", nativeQuery = true)
+    List<CashBackWalletProjection> getCashbackWalletCustomer(@Param("nID") Integer nID);
 
     @Query(value = "SELECT dbo.Remaining_plan_amount(:mobile_no, :plan_name)", nativeQuery = true)
     Integer getRemainingPlanAmount(@Param("mobile_no") String mobileNo, @Param("plan_name") String planName);

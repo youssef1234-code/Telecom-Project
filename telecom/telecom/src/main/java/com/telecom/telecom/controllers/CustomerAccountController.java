@@ -1,5 +1,7 @@
 package com.telecom.telecom.controllers;
 
+import com.telecom.telecom.dtos.projection.CashBackWalletProjection;
+import com.telecom.telecom.entities.Cashback;
 import com.telecom.telecom.repositories.*;
 import com.telecom.telecom.utils.HelperUtils;
 
@@ -109,18 +111,32 @@ public class CustomerAccountController {
     @Transactional
     @PostMapping("/cashbacks")
     public ResponseEntity<?> getCashbacks(@RequestBody Map<String, String> requestParams) {
-        ResponseEntity<?> validation = validateParams(requestParams, "nId");
+        ResponseEntity<?> validation = validateParams(requestParams, "nId","mobileNum");
         if (validation != null) return validation;
 
         Integer nId = HelperUtils.toInteger(requestParams.get("nId"));
+        String mobileNum = requestParams.get("mobileNum");
         if (nId == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Invalid National ID format!"));
         }
 
-        Integer cashbacks = functionsRepository.getCashbackWalletCustomer(nId);
-        return ResponseEntity.ok(cashbacks == null ? 0 : cashbacks);
+        if (!helperUtils.validateMobileNumberAndNId(mobileNum, nId)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Mobile number and National ID mismatch!"));
+        }
+
+        List<CashBackWalletProjection> cashbacks = functionsRepository.getCashbackWalletCustomer(nId);
+        return ResponseEntity.ok(cashbacks);
     }
+
+    @Transactional
+    @GetMapping("/all-benefits")
+    public ResponseEntity<?> getAllBenefits() {
+        return ResponseEntity.ok(viewsRepository.getAllBenefits());
+    }
+
+
 
     @Transactional
     @PostMapping("/unresolved-tickets")

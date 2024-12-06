@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Paper, TextField, Button, Alert, Typography, Box } from "@mui/material";
+import { Paper, TextField, Button, Alert, Box } from "@mui/material";
+import GenericTable from "./GenericTable"; // Assuming GenericTable is a reusable table component
+
 const CashbackTable = () => {
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({ mobileNum: "", nationalId: "" });
@@ -20,7 +22,7 @@ const CashbackTable = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            //mobileNum: filters.mobileNum,
+            mobileNum: localStorage.getItem("mobileNumber"),
             nId: filters.nationalId,
           }),
         }
@@ -28,20 +30,27 @@ const CashbackTable = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.log("error"+ errorData);
-        setData("");
+        setData([]);
         setError(errorData.message || "An error occurred. Please try again.");
         return;
       }
 
       setError("");
       const json = await response.json();
-      setData(json);
+      setData(json); // Set the data to be displayed in the table
     } catch (error) {
-      setData("");
+      setData([]);
       setError("An error occurred while fetching data. Please try again.");
     }
   };
+
+  const columns = [
+    { field: "benefitID", headerName: "Benefit ID", flex: 1 },
+    { field: "amount", headerName: "Amount", type: "number", flex: 1 },
+    { field: "walletID", headerName: "Wallet ID", flex: 1 },
+    { field: "cashbackID", headerName: "Cashback ID", flex: 1 },
+    { field: "creditDate", headerName: "Credit Date", flex: 1 },
+  ];
 
   return (
     <Paper
@@ -86,21 +95,20 @@ const CashbackTable = () => {
         </Alert>
       )}
 
-      {/* Show data */}
-      {/* Generic Table */}
+      {/* Show data in table format */}
       <Box
-      sx={{
-        flex: 1, // Fills available vertical space
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#fafafa",
-        padding: 2,
-      }}>
-        <Typography variant = "h4" gutterBottom>
-            {data}
-        </Typography>
+        sx={{
+          flex: 1, // Fills available vertical space
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#fafafa",
+          padding: 2,
+        }}
+      >
       </Box>
+        {/* Generic Table */}
+        <GenericTable data={data} columns={columns} rowIdField="cashbackID" />
     </Paper>
   );
 };
