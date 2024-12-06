@@ -25,7 +25,7 @@ const DeleteBenefitsPage = () => {
             color: "#333",
           }}
         >
-          Payments
+          Remove Benefits
         </Typography>
 
         {/* Main Content Area */}
