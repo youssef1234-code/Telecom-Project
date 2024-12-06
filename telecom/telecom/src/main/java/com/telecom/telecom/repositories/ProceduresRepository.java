@@ -18,7 +18,7 @@ public interface ProceduresRepository extends JpaRepository<CustomerAccount, Lon
     List<Integer> getAccountHighestVoucher(@Param("mobile_num") String mobileNum);
 
     @Procedure(value = "Account_Payment_Points")
-    PaymentPointsProjection getAccountPaymentPoints(@Param("mobile_num") String mobileNum);
+    List<PaymentPointsProjection> getAccountPaymentPoints(@Param("mobile_num") String mobileNum);
 
     @Procedure(value = "Account_Plan")
     List<AccountPlanProjection> getAllAccountsPlans();

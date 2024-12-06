@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Paper, TextField, MenuItem, Select, InputLabel, FormControl, Button, Alert } from "@mui/material";
-import GenericTable from "./GenericTable";
+import { Paper, TextField, Box, MenuItem, Select, InputLabel, FormControl, Button, Alert, Typography } from "@mui/material";
 
 const AcceptedTransactionTable = () => {
   const [data, setData] = useState([]);
@@ -10,6 +9,9 @@ const AcceptedTransactionTable = () => {
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
+
+var count = null;
+var total = null;
 
   const handleSubmit = async () => {
     try {
@@ -35,20 +37,15 @@ const AcceptedTransactionTable = () => {
       
       const json = await response.json();
       setData(json);
+      count = data[0].paymentCount;
+      total = data[0].totalPoints;
     } catch (error) {
       setData("");
       setError("An error occurred while fetching data. Please try again.");
-    }
+    } 
   };
 
-  const columns = [
-    { field: "paymentID", headerName: "Payment ID", flex: 1 },
-    { field: "mobileNum", headerName: "Mobile Number", flex: 1 },
-    { field: "amount", headerName: "Amount", flex: 1 },
-    { field: "paymentMethod", headerName: "Payment Method", flex: 1 },
-    { field: "dateOfPayment", headerName: "Date of Payment", flex: 1 },
-    { field: "status", headerName: "Status", flex: 1 },
-  ];
+
 
   return (
     <Paper
@@ -83,8 +80,38 @@ const AcceptedTransactionTable = () => {
         </Alert>
       )}
 
-      {/* Generic Table */}
-      <GenericTable data={data} columns={columns} rowIdField="paymentID" />
+<div style={{ display: "flex", gap: "10px", marginBottom: 20 }}>
+      <Box
+      sx={{
+        flex: 1, 
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#fafafa",
+        padding: 2,
+      }}>
+        <Typography variant = "h3" gutterBottom>
+            Payment Count = {count}
+        </Typography>
+      </Box>
+
+      <Box
+      sx={{
+        flex: 1,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#fafafa",
+        padding: 2,
+      }}>
+        <Typography variant = "h3" gutterBottom>
+            Total Points = {total}
+        </Typography>
+      </Box>
+        
+      </div>
+
+      
     </Paper>
   );
 };

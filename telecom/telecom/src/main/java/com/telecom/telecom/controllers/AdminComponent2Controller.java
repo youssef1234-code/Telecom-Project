@@ -74,7 +74,7 @@ public class AdminComponent2Controller {
                     .body(Map.of("message", "Mobile Number must be 11 characters long!"));
         }
 
-        return ResponseEntity.ok(proceduresRepository.topSuccessfulPayments(mobileNum));
+        return ResponseEntity.ok(proceduresRepository.getAccountPaymentPoints(mobileNum));
     }
 
     @Transactional
