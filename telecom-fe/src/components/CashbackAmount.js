@@ -45,6 +45,7 @@ const CashbackAmount = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.log(errorData);
         setData("");
         setError(errorData.message || "An error occurred. Please try again."); // Handle the error message from the backend
         return;
@@ -54,13 +55,8 @@ const CashbackAmount = () => {
       setError("");
 
       const json = await response.json();
-      setData(json);
+      setData(json.message);
 
-      if (json.success) {
-        setData("Updated Succesfully.");
-      } else {
-        setData("Failed to Update.");
-      }
     } catch (error) {
       setData("");
       setError("An error occurred while fetching data. Please try again.");

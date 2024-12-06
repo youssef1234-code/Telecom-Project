@@ -4,14 +4,11 @@ import {
   TextField,
   MenuItem,
   Select,
-  InputLabel,
-  FormControl,
   Button,
+  FormControl,
+  InputLabel,
   Alert,
-  Typography,
-  Box,
 } from "@mui/material";
-import GenericTable from "./GenericTable";
 
 const RenewSubscriptions = () => {
   const [data, setData] = useState([]);
@@ -56,13 +53,7 @@ const RenewSubscriptions = () => {
       setError("");
 
       const json = await response.json();
-      setData(json);
-
-      if (json.success) {
-        setData("Renewed Succesfully.");
-      } else {
-        setData("Failed to Update.");
-      }
+      setData(json.message);
     } catch (error) {
       setData("");
       setError("An error occurred while fetching data. Please try again.");
@@ -100,13 +91,18 @@ const RenewSubscriptions = () => {
           onChange={(e) => handleFilterChange("planID", e.target.value)}
           fullWidth
         />
-        <TextField
-          label="Payment Method"
-          variant="outlined"
+      <FormControl fullWidth variant="outlined">
+        <InputLabel id="payment-method-label">Payment Method</InputLabel>
+        <Select
+          labelId="payment-method-label"
           value={filters.paymentMethod}
           onChange={(e) => handleFilterChange("paymentMethod", e.target.value)}
-          fullWidth
-        />
+          label="Payment Method"
+        >
+          <MenuItem value="cash">Cash</MenuItem>
+          <MenuItem value="credit">Credit</MenuItem>
+        </Select>
+      </FormControl>
 
         <Button variant="contained" color="primary" onClick={handleSubmit}>
           Update

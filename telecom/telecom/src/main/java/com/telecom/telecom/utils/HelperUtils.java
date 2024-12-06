@@ -4,8 +4,11 @@ import com.telecom.telecom.dtos.projection.MonthUsageProjection;
 import com.telecom.telecom.repositories.FunctionsRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -50,6 +53,23 @@ public class HelperUtils {
             return null;
         }
     }
+
+    public static BigDecimal toBigDecimal(String value) {
+        try {
+            return new BigDecimal(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    public static ResponseEntity<?> badRequest(String message) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", message));
+    }
+
+    public static ResponseEntity<?> success(String message) {
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", message));
+    }
+
 
     @Transactional
     public Boolean validateMobileNumberAndNId(String mobileNumber, Integer nId) {

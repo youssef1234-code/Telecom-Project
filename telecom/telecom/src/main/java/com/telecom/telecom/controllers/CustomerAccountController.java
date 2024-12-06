@@ -1,6 +1,5 @@
 package com.telecom.telecom.controllers;
 
-import com.telecom.telecom.mappers.DtoEntityMapper;
 import com.telecom.telecom.repositories.*;
 import com.telecom.telecom.utils.HelperUtils;
 
@@ -23,301 +22,182 @@ import java.util.*;
 @Controller
 @RequestMapping("/api/customer")
 public class CustomerAccountController {
-
-    @Autowired
-    CustomerAccountRepository customerAccountRepository;
-
-    @Autowired
-    CustomerProfileRepository customerProfileRepository;
-
-    @Autowired
-    DtoEntityMapper dtoEntityMapper;
-
     @Autowired
     private ViewsRepository viewsRepository;
-    
+
     @Autowired
     private FunctionsRepository functionsRepository;
-    
+
     @Autowired
     private ProceduresRepository proceduresRepository;
 
     @Autowired
     private HelperUtils helperUtils;
 
-    @GetMapping("/servicePlans")
-    public ResponseEntity<?> getAllServicePlans(){return ResponseEntity.ok(viewsRepository.getServicePlans());}
-
-    @Transactional
-    @PostMapping("/consumption")
-    public ResponseEntity<?> getPlanConsumption(@RequestBody Map<String, String> requestParams)
-    {
-
-        if(requestParams.isEmpty() || !requestParams.containsKey("startDate") || !requestParams.containsKey("planName") || !requestParams.containsKey("endDate")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Make sure to enter the required info!"));
+    private ResponseEntity<?> validateParams(Map<String, String> params, String... requiredKeys) {
+        for (String key : requiredKeys) {
+            if (!params.containsKey(key) || Strings.isBlank(params.get(key))) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("message", String.format("'%s' is required and cannot be empty!", key)));
+            }
         }
-        
-        String planName = requestParams.get("planName");
-        String startDate = requestParams.get("startDate");
-        String endDate = requestParams.get("endDate");
+        return null;
 
-        
-        if(Strings.isBlank(planName) || Strings.isBlank(startDate) || Strings.isBlank(endDate)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Plan Name, Start Date and End Date cannot be empty!"));
-        }
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate formattedstartDate = HelperUtils.toDateFormat(startDate, formatter);
-        LocalDate formattedendDate = HelperUtils.toDateFormat(endDate, formatter);
-
-        if(Objects.isNull(formattedstartDate)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Invalid Start Date Format!"));
-        }
-
-        if(Objects.isNull(formattedendDate)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Invalid End Date Format!"));
-        }
-
-        return ResponseEntity.ok(functionsRepository.getConsumption(planName, formattedstartDate, formattedendDate));
-        
     }
-    
-    @Transactional
-    @PostMapping("/unsubscribed")
-    public ResponseEntity<?> getUnsubscribedPlans(@RequestBody Map<String, String> requestParams)
-    {
-        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum"))
-        {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(Map.of("message", "Make sure to enter the required info!"));
-        }
 
-        String mobileNum = requestParams.get("mobileNum");
-
-        if(Strings.isBlank(mobileNum)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number cannot be empty!"));
-        }
-
-        if(mobileNum.length()!=11) {
+    private ResponseEntity<?> validateMobileNumber(String mobileNum) {
+        if (mobileNum == null || mobileNum.length() != 11) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Mobile Number must be 11 characters long!"));
         }
+        return null;
+    }
+
+
+    @GetMapping("/servicePlans")
+    public ResponseEntity<?> getAllServicePlans() {
+        return ResponseEntity.ok(viewsRepository.getServicePlans());
+    }
+
+    @Transactional
+    @PostMapping("/consumption")
+    public ResponseEntity<?> getPlanConsumption(@RequestBody Map<String, String> requestParams) {
+        ResponseEntity<?> validation = validateParams(requestParams, "startDate", "endDate", "planName");
+        if (validation != null) return validation;
+
+        String startDate = requestParams.get("startDate");
+        String endDate = requestParams.get("endDate");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate formattedStartDate = HelperUtils.toDateFormat(startDate, formatter);
+        LocalDate formattedEndDate = HelperUtils.toDateFormat(endDate, formatter);
+
+        if (formattedStartDate == null || formattedEndDate == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Invalid date format! Use 'yyyy-MM-dd'."));
+        }
+
+        return ResponseEntity.ok(functionsRepository.getConsumption(requestParams.get("planName"), formattedStartDate, formattedEndDate));
+    }
+
+    @Transactional
+    @PostMapping("/unsubscribed")
+    public ResponseEntity<?> getUnsubscribedPlans(@RequestBody Map<String, String> requestParams) {
+        ResponseEntity<?> validation = validateParams(requestParams, "mobileNum");
+        if (validation != null) return validation;
+
+        String mobileNum = requestParams.get("mobileNum");
+        validation = validateMobileNumber(mobileNum);
+        if (validation != null) return validation;
 
         return ResponseEntity.ok(proceduresRepository.unsubscribedPlans(mobileNum));
     }
 
     @Transactional
-    @PostMapping("/monthUsage") 
-    public ResponseEntity<?> getMonthUsage(@RequestBody Map<String, String> requestParams)
-    {
-        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum"))
-        {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(Map.of("message", "Make sure to enter the required info!"));
-        }
+    @PostMapping("/monthUsage")
+    public ResponseEntity<?> getMonthUsage(@RequestBody Map<String, String> requestParams) {
+        ResponseEntity<?> validation = validateParams(requestParams, "mobileNum");
+        if (validation != null) return validation;
 
         String mobileNum = requestParams.get("mobileNum");
+        validation = validateMobileNumber(mobileNum);
+        if (validation != null) return validation;
 
-        if(Strings.isBlank(mobileNum)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number cannot be empty!"));
-        }
-
-        if(mobileNum.length()!=11) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
-        }
-
-        return ResponseEntity.ok(HelperUtils.flattenUsageProjections(functionsRepository.getUsagePlanCurrentMonth(mobileNum)));
+        return ResponseEntity.ok(helperUtils.flattenUsageProjections(functionsRepository.getUsagePlanCurrentMonth(mobileNum)));
     }
 
     @Transactional
     @PostMapping("/cashbacks")
-    public ResponseEntity<?> getCashbacks(@RequestBody Map<String, String> requestParams)
-    {
-        // || !requestParams.containsKey("mobileNum")
-        if(requestParams.isEmpty() || !requestParams.containsKey("nId"))
-        {
+    public ResponseEntity<?> getCashbacks(@RequestBody Map<String, String> requestParams) {
+        ResponseEntity<?> validation = validateParams(requestParams, "nId");
+        if (validation != null) return validation;
+
+        Integer nId = HelperUtils.toInteger(requestParams.get("nId"));
+        if (nId == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(Map.of("message", "Make sure to enter the required info!"));
+                    .body(Map.of("message", "Invalid National ID format!"));
         }
 
-        String nId = requestParams.get("nId");
-
-        Integer nIdInteger = HelperUtils.toInteger(nId);
-        if(Objects.isNull(nIdInteger)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Invalid National Id Format!"));
-        }
-        Integer nCachBacks = functionsRepository.getCashbackWalletCustomer(nIdInteger);
-        return ResponseEntity.ok(nCachBacks == null ? 0 : nCachBacks);
+        Integer cashbacks = functionsRepository.getCashbackWalletCustomer(nId);
+        return ResponseEntity.ok(cashbacks == null ? 0 : cashbacks);
     }
-
-    @Transactional
-    @GetMapping("/all-benefits")
-    public ResponseEntity<?> getAllBenefits() {
-        return ResponseEntity.ok(viewsRepository.getAllBenefits());
-    }
-
 
     @Transactional
     @PostMapping("/unresolved-tickets")
-    public ResponseEntity<?> getUnresolvedTickets(@RequestBody Map<String, String> requestParams)
-    {
-        if(requestParams.isEmpty() || !requestParams.containsKey("nId") || !requestParams.containsKey("mobileNum"))
-        {
+    public ResponseEntity<?> getUnresolvedTickets(@RequestBody Map<String, String> requestParams) {
+        ResponseEntity<?> validation = validateParams(requestParams, "nId", "mobileNum");
+        if (validation != null) return validation;
+
+        Integer nId = HelperUtils.toInteger(requestParams.get("nId"));
+        if (nId == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(Map.of("message", "Make sure to enter the required info!"));
+                    .body(Map.of("message", "Invalid National ID format!"));
         }
 
-        String nId = requestParams.get("nId");
-        Integer nIdInteger = HelperUtils.toInteger(nId);
         String mobileNum = requestParams.get("mobileNum");
-        if(Objects.isNull(nIdInteger)){
+        validation = validateMobileNumber(mobileNum);
+        if (validation != null) return validation;
+
+        if (!helperUtils.validateMobileNumberAndNId(mobileNum, nId)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Invalid National Id Format!"));
+                    .body(Map.of("message", "Mobile number and National ID mismatch!"));
         }
 
-        if(Strings.isBlank(mobileNum)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number cannot be empty!"));
-        }
-
-        if(mobileNum.length()!=11) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
-        }
-
-        Boolean isValid = helperUtils.validateMobileNumberAndNId(mobileNum, nIdInteger);
-
-        List<Integer> num = proceduresRepository.getTicketAccountCustomers(nIdInteger);
-        return isValid ? ResponseEntity.ok(num==null || num.isEmpty() ? 0 :num.get(0)) :
-                         ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("message", "MobileNumber and National Id are not for the logged in account!"));
+        List<Integer> tickets = proceduresRepository.getTicketAccountCustomers(nId);
+        return ResponseEntity.ok(tickets == null || tickets.isEmpty() ? 0 : tickets.get(0));
     }
 
     @Transactional
     @PostMapping("/highest-voucher-value")
-    public ResponseEntity<?> getHighestVoucherValue(@RequestBody Map<String, String> requestParams)
-    {
-        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum"))
-        {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(Map.of("message", "Make sure to enter the required info!"));
-        }
+    public ResponseEntity<?> getHighestVoucherValue(@RequestBody Map<String, String> requestParams) {
+        ResponseEntity<?> validation = validateParams(requestParams, "mobileNum");
+        if (validation != null) return validation;
 
         String mobileNum = requestParams.get("mobileNum");
+        validation = validateMobileNumber(mobileNum);
+        if (validation != null) return validation;
 
-        if(Strings.isBlank(mobileNum)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number cannot be empty!"));
-        }
-
-        if(mobileNum.length()!=11) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
-        }
         List<Integer> topVouchers = proceduresRepository.getAccountHighestVoucher(mobileNum);
-        return ResponseEntity.ok(topVouchers==null || topVouchers.isEmpty() ? -1 :topVouchers.get(0));
+        return ResponseEntity.ok(topVouchers == null || topVouchers.isEmpty() ? -1 : topVouchers.get(0));
     }
-
 
     @Transactional
     @PostMapping("/remaining-plan-amount")
-    public ResponseEntity<?> getRemainingPlanAmount(@RequestBody Map<String, String> requestParams)
-    {
-        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum") || !requestParams.containsKey("planName") )
-        {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(Map.of("message", "Make sure to enter the required info!"));
-        }
+    public ResponseEntity<?> getRemainingPlanAmount(@RequestBody Map<String, String> requestParams) {
+        ResponseEntity<?> validation = validateParams(requestParams, "mobileNum", "planName");
+        if (validation != null) return validation;
 
         String mobileNum = requestParams.get("mobileNum");
+        validation = validateMobileNumber(mobileNum);
+        if (validation != null) return validation;
 
-        if(Strings.isBlank(mobileNum)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number cannot be empty!"));
-        }
-
-        if(mobileNum.length()!=11) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
-        }
-
-        String planName = requestParams.get("planName");
-
-        if(Strings.isBlank(planName)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Plan Name cannot be empty!"));
-        }
-
-        return ResponseEntity.ok(functionsRepository.getRemainingPlanAmount(mobileNum, planName));
-
+        return ResponseEntity.ok(functionsRepository.getRemainingPlanAmount(mobileNum, requestParams.get("planName")));
     }
 
     @Transactional
     @PostMapping("/extra-plan-amount")
-    public ResponseEntity<?> getExtraPlanAmount(@RequestBody Map<String, String> requestParams)
-    {
-        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum") || !requestParams.containsKey("planName") )
-        {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(Map.of("message", "Make sure to enter the required info!"));
-        }
+    public ResponseEntity<?> getExtraPlanAmount(@RequestBody Map<String, String> requestParams) {
+        ResponseEntity<?> validation = validateParams(requestParams, "mobileNum", "planName");
+        if (validation != null) return validation;
 
         String mobileNum = requestParams.get("mobileNum");
+        validation = validateMobileNumber(mobileNum);
+        if (validation != null) return validation;
 
-        if(Strings.isBlank(mobileNum)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number cannot be empty!"));
-        }
-
-        if(mobileNum.length()!=11) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
-        }
-
-        String planName = requestParams.get("planName");
-
-        if(Strings.isBlank(planName)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Plan Name cannot be empty!"));
-        }
-
-        return ResponseEntity.ok(functionsRepository.getExtraPlanAmount(mobileNum, planName));
-
+        return ResponseEntity.ok(functionsRepository.getExtraPlanAmount(mobileNum, requestParams.get("planName")));
     }
 
     @Transactional
     @PostMapping("/top-successful-payments")
-    public ResponseEntity<?> getTopSuccessfulPayments(@RequestBody Map<String, String> requestParams)
-    {
-        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum"))
-        {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(Map.of("message", "Make sure to enter the required info!"));
-        }
+    public ResponseEntity<?> getTopSuccessfulPayments(@RequestBody Map<String, String> requestParams) {
+        ResponseEntity<?> validation = validateParams(requestParams, "mobileNum");
+        if (validation != null) return validation;
 
         String mobileNum = requestParams.get("mobileNum");
-
-        if(Strings.isBlank(mobileNum)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number cannot be empty!"));
-        }
-
-        if(mobileNum.length()!=11) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
-        }
-
+        validation = validateMobileNumber(mobileNum);
+        if (validation != null) return validation;
 
         return ResponseEntity.ok(proceduresRepository.topSuccessfulPayments(mobileNum));
-
     }
 
     @Transactional
@@ -328,172 +208,107 @@ public class CustomerAccountController {
 
     @Transactional
     @PostMapping("/last-5months-plans")
-    public ResponseEntity<?> getLast5MSubscribedPlans (@RequestBody Map<String, String> requestParams)
-    {
-        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum"))
-        {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Make sure to enter the required info!"));
-        }
+    public ResponseEntity<?> getLast5MSubscribedPlans(@RequestBody Map<String, String> requestParams) {
+        ResponseEntity<?> validation = validateParams(requestParams, "mobileNum");
+        if (validation != null) return validation;
 
         String mobileNum = requestParams.get("mobileNum");
-
-        if(Strings.isBlank(mobileNum)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number cannot be empty!"));
-        }
-
-        if(mobileNum.length()!=11) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
-        }
+        validation = validateMobileNumber(mobileNum);
+        if (validation != null) return validation;
 
         return ResponseEntity.ok(functionsRepository.getSubscribedPlans5Months(mobileNum));
     }
 
     @Transactional
     @PostMapping("/renew-subscription")
-    public ResponseEntity<?> renewSubscription(@RequestBody Map<String, String> requestParams){
-        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum") || !requestParams.containsKey("amount")|| !requestParams.containsKey("planID") || !requestParams.containsKey("paymentMethod"))
-        {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Make sure to enter the required info!"));
-        }
+    public ResponseEntity<?> renewSubscription(@RequestBody Map<String, String> requestParams) {
+        ResponseEntity<?> validation = validateParams(requestParams, "mobileNum", "amount", "planID", "paymentMethod");
+        if (validation != null) return validation;
 
         String mobileNum = requestParams.get("mobileNum");
-        String amountb4 = requestParams.get("amount");
-        String planIDb4 = requestParams.get("planID");
         String paymentMethod = requestParams.get("paymentMethod");
-
-        Integer amountb5 = HelperUtils.toInteger(amountb4);
-        if(Objects.isNull(amountb5)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Amount is not in Correct Format"));
-        }
-        BigDecimal amount = new BigDecimal(amountb5);
-        Integer planID = HelperUtils.toInteger(planIDb4);
-
-        if(amountb5 == 0){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Amount cannot be empty!"));
+        BigDecimal amount = HelperUtils.toBigDecimal(requestParams.get("amount"));
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            return HelperUtils.badRequest("Amount must be a positive number!");
         }
 
-
-        if(Strings.isBlank(mobileNum)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        Integer planID = HelperUtils.toInteger(requestParams.get("planID"));
+        if (planID == null) {
+            return HelperUtils.badRequest("Plan ID must be a valid number!");
         }
 
-        if(mobileNum.length()!=11) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
-        }
+        ResponseEntity<?> res = validateMobileNumber(mobileNum);
+        if (res != null) return res;
 
-        proceduresRepository.initiatePlanPayment(mobileNum,amount,paymentMethod,planID);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(Map.of("message", "Initiated Plan Successfully"));
+        proceduresRepository.initiatePlanPayment(mobileNum, amount, paymentMethod, planID);
+        return HelperUtils.success("Initiated Plan Payment Successfully");
     }
 
     @Transactional
     @PostMapping("/get-cashback-amount")
-    public ResponseEntity<?> getCashbackAmount(@RequestBody Map<String, String> requestParams)
-    {
-        if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum") || !requestParams.containsKey("planID") || !requestParams.containsKey("benefitID"))
-        {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Make sure to enter the required info!"));
-        }
+    public ResponseEntity<?> getCashbackAmount(@RequestBody Map<String, String> requestParams) {
+        ResponseEntity<?> validation = validateParams(requestParams, "mobileNum", "planID", "benefitID");
+        if (validation != null) return validation;
 
         String mobileNum = requestParams.get("mobileNum");
-        String planIDb4 = requestParams.get("planID");
-        String benefitIDb4 = requestParams.get("benefitID");
-
-        Integer planID = HelperUtils.toInteger(planIDb4);
-        Integer benefitID = HelperUtils.toInteger(benefitIDb4);
-
-        /* Parse Zeby to Integer then to String and call String.substring()*/
-
-
-
-        if(Strings.isBlank(mobileNum)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        Integer planID = HelperUtils.toInteger(requestParams.get("planID"));
+        Integer benefitID = HelperUtils.toInteger(requestParams.get("benefitID"));
+        if (planID == null || benefitID == null) {
+            return HelperUtils.badRequest("Plan ID and Benefit ID must be valid numbers!");
         }
 
-        if(mobileNum.length()!=11) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
-        }
+        ResponseEntity<?> res = validateMobileNumber(mobileNum);
+        if (res != null) return res;
 
-        proceduresRepository.paymentWalletCashback(mobileNum,planID,benefitID);
-        return ResponseEntity.status(HttpStatus.OK)
-            .body(Map.of("message", "Cashback Updated successfully"));
+        proceduresRepository.paymentWalletCashback(mobileNum, planID, benefitID);
+        return HelperUtils.success("Cashback Updated Successfully");
     }
 
     @Transactional
     @PostMapping("/balance-recharge")
-    public ResponseEntity<?> initiateBalancePayment(@RequestBody Map<String, String> requestParams)
-    {
-        ;if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum") || !requestParams.containsKey("amount") || !requestParams.containsKey("paymentMethod"))
-    {
-        ;return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("message", "Make sure to enter the required info!"));
-    }
+    public ResponseEntity<?> initiateBalancePayment(@RequestBody Map<String, String> requestParams) {
+        ResponseEntity<?> validation = validateParams(requestParams, "mobileNum", "amount", "paymentMethod");
+        if (validation != null) return validation;
 
-    ;String amountb4 = requestParams.get("amount")
-    ;String planID = requestParams.get("planID")
-    ;String paymentMethod = requestParams.get("paymentMethod")
-    ;String mobileNum = requestParams.get("mobileNum")
-
-
-    ;BigDecimal amount = new BigDecimal(Integer.parseInt(amountb4))
-    ;if(amount.equals(BigDecimal.ZERO)){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("message", "Amount cannot be empty!"))
-
-                ;
-    }
-        if(Strings.isBlank(mobileNum)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number cannot be empty!"));
+        String mobileNum = requestParams.get("mobileNum");
+        String paymentMethod = requestParams.get("paymentMethod");
+        BigDecimal amount = HelperUtils.toBigDecimal(requestParams.get("amount"));
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            return HelperUtils.badRequest("Amount must be greater than zero!");
         }
 
-        if(mobileNum.length()!=11) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Mobile Number must be 11 characters long!"));
+        ResponseEntity<?> res = validateMobileNumber(mobileNum);
+        if (res != null) return res;
+
+        try {
+            proceduresRepository.initiateBalancePayment(mobileNum, amount, paymentMethod);
+            return HelperUtils.success("Balance Successfully Recharged!");
+        } catch (Exception e) {
+            return HelperUtils.badRequest("An error occurred while processing the payment!");
         }
-
-        proceduresRepository.initiateBalancePayment(mobileNum,amount,planID);
-        return ResponseEntity.status(HttpStatus.OK)
-            .body(Map.of("message", "Balance Payed"));
-
     }
 
     @Transactional
     @PostMapping("/redeem-voucher")
-    public ResponseEntity<?> redeemVoucherID(@RequestBody Map<String, String> requestParams)
-    {
-        ;if(requestParams.isEmpty() || !requestParams.containsKey("mobileNum") || !requestParams.containsKey("voucherID"))
-    {
-        ;return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(Map.of("message", "Make sure to enter the required info!"));
-    }
-    String mobileNum = requestParams.get("mobileNum");
-    String voucherIDb4 = requestParams.get("voucherID");
-    Integer voucherID = HelperUtils.toInteger(voucherIDb4);
+    public ResponseEntity<?> redeemVoucherID(@RequestBody Map<String, String> requestParams) {
+        ResponseEntity<?> validation = validateParams(requestParams, "mobileNum", "voucherId");
+        if (validation != null) return validation;
 
-    proceduresRepository.redeemVoucherPoints(mobileNum, voucherID);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(Map.of("message", "Voucher Redeemed"));
+        String mobileNum = requestParams.get("mobileNum");
+        Integer voucherID = HelperUtils.toInteger(requestParams.get("voucherId"));
+        if (voucherID == null) {
+            return HelperUtils.badRequest("Voucher ID must be a valid number!");
+        }
+        ResponseEntity<?> eres = validateMobileNumber(mobileNum);
+        if (eres != null) return eres;
+
+        List<Integer> res = proceduresRepository.redeemVoucherPoints(mobileNum, voucherID);
+        if (res.isEmpty()) return HelperUtils.badRequest("Voucher Redeem Failed");
+        if (res.get(0) != 1) return HelperUtils.badRequest("Not Enough Points for Redeem");
+
+        return HelperUtils.success("Voucher Redeemed Successfully");
     }
+
+
 }
-
-
-/* //TODO: 
-- crosscheck mobile num with nId 
-
-
-
-*/
-
 

@@ -28,7 +28,7 @@ const RedeemVoucher = () => {
   const handleSubmit = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/customer/get-cashback-amount`,
+        `${process.env.REACT_APP_SERVER_URL}/api/customer/redeem-voucher`,
         {
           method: "POST",
           headers: {
@@ -52,13 +52,8 @@ const RedeemVoucher = () => {
       setError("");
 
       const json = await response.json();
-      setData(json);
-
-      if (json.success) {
-        setData("Redeemed Succesfully.");
-      } else {
-        setData("Failed to Update.");
-      }
+      setData(json.message);
+      
     } catch (error) {
       setData("");
       setError("An error occurred while fetching data. Please try again.");

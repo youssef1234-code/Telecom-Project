@@ -25,7 +25,7 @@ const RedeemVoucherPage = () => {
             color: "#333",
           }}
         >
-          Update Cashback
+          Redeem Voucher
         </Typography>
 
         {/* Main Content Area */}

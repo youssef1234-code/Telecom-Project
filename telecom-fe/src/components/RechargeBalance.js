@@ -54,13 +54,7 @@ const RechargeBalance = () => {
       setError("");
 
       const json = await response.json();
-      setData(json);
-
-      if (json.success) {
-        setData("Recharged Succesfully.");
-      } else {
-        setData("Failed to Update.");
-      }
+      setData(json.message);
     } catch (error) {
       setData("");
       setError("An error occurred while fetching data. Please try again.");
@@ -91,14 +85,18 @@ const RechargeBalance = () => {
           onChange={(e) => handleFilterChange("amount", e.target.value)}
           fullWidth
         />
-        <TextField
-          label="Payment Method"
-          variant="outlined"
-          value={filters.paymentMethod}
-          onChange={(e) => handleFilterChange("paymentMethod", e.target.value)}
-          fullWidth
-        />
-
+        <FormControl fullWidth variant="outlined">
+          <InputLabel id="payment-method-label">Payment Method</InputLabel>
+          <Select
+            labelId="payment-method-label"
+            value={filters.paymentMethod}
+            onChange={(e) => handleFilterChange("paymentMethod", e.target.value)}
+            label="Payment Method"
+          >
+            <MenuItem value="cash">Cash</MenuItem>
+            <MenuItem value="credit">Credit</MenuItem>
+          </Select>
+        </FormControl>
         <Button variant="contained" color="primary" onClick={handleSubmit}>
           Update
         </Button>

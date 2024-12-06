@@ -1,6 +1,5 @@
 package com.telecom.telecom.repositories;
 
-import com.telecom.telecom.dtos.*;
 import com.telecom.telecom.dtos.projection.*;
 import com.telecom.telecom.entities.CustomerAccount;
 import org.springframework.data.jpa.repository.JpaRepository;

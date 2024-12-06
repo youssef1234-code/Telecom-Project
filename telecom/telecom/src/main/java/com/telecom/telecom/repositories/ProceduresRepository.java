@@ -35,8 +35,8 @@ public interface ProceduresRepository extends JpaRepository<CustomerAccount, Lon
     @Procedure(value = "Payment_wallet_cashback")
     void paymentWalletCashback(@Param("mobile_num") String mobileNum, @Param("plan_id") Integer planID , @Param("benefit_id") Integer benefitID);
 
-    @Procedure(value = "Redeem_voucher_points") // Contains print statement PRINT 'no enough points to redeem voucher'
-    void redeemVoucherPoints(@Param("mobile_num") String mobileNum, @Param("voucher_id") Integer voucherID);
+    @Procedure(value = "Redeem_voucher_points")
+    List<Integer> redeemVoucherPoints(@Param("mobile_num") String mobileNum, @Param("voucher_id") Integer voucherID);
 
     @Procedure(value = "Ticket_Account_Customer")
     List<Integer> getTicketAccountCustomers(@Param("NID") int nid);
@@ -49,11 +49,4 @@ public interface ProceduresRepository extends JpaRepository<CustomerAccount, Lon
 
     @Procedure(value = "Unsubscribed_Plans")
     List<UnsubscribedPlansProjection> unsubscribedPlans(@Param("mobile_num") String mobileNum);
-
-
-
-
-
-
-
 }
