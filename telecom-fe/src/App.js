@@ -35,6 +35,13 @@ import UnresolvedTicketsPage from "./components/pages/UnresolvedTicketsPage";
 import AccountHighestVoucherPage from "./components/pages/AccountHighestVoucherPage";
 import RemainingPaymentPage from "./components/pages/RemainingPaymentPage";
 import ExtraPaymentPage from "./components/pages/ExtraPaymentPage";
+import TopPaymentsPage from "./components/pages/TopPaymentsPage";
+import AllShopsPage from "./components/pages/AllShopsPage";
+import PastSubscriptionsPage from "./components/pages/PastSubscriptionsPage";
+import RenewSubscriptionsPage from "./components/pages/RenewSubscriptionsPage";
+import CashbackAmountPage from "./components/pages/CashbackAmountPage";
+import RechargeBalancePage from "./components/pages/RechargeBalancePage";
+import RedeemVoucherPage from "./components/pages/RedeemVoucherPage";
 
 // Create a Context for Authentication
 export const AuthContext = createContext();
@@ -103,7 +110,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/subscribed-plan"
             element={
@@ -112,7 +118,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/account-usage"
             element={
@@ -121,7 +126,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/sms-offers"
             element={
@@ -130,7 +134,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/payments"
             element={
@@ -139,7 +142,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/remove-benefits"
             element={
@@ -148,7 +150,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/wallets"
             element={
@@ -157,7 +158,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/eshops"
             element={
@@ -166,7 +166,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/payments"
             element={
@@ -175,7 +174,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/customer/active-benefits"
             element={
@@ -184,7 +182,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/cashback-transactions"
             element={
@@ -193,7 +190,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/accepted-transactions"
             element={
@@ -202,7 +198,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/cashback-amount"
             element={
@@ -211,7 +206,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/transaction-average"
             element={
@@ -220,7 +214,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/customer/active-plans-usage"
             element={
@@ -229,7 +222,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/customer/unsubscribed-plans"
             element={
@@ -238,7 +230,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/admin/wallet-linking"
             element={
@@ -295,7 +286,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/customer/remaining-payment"
             element={
@@ -304,7 +294,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/customer/extra-payment"
             element={
@@ -313,7 +302,64 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/customer/top-payments"
+            element={
+              <ProtectedRoute role="customer">
+                <TopPaymentsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/all-shops"
+            element={
+              <ProtectedRoute role="customer">
+                <AllShopsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/past-subscriptions"
+            element={
+              <ProtectedRoute role="customer">
+                <PastSubscriptionsPage />
+              </ProtectedRoute>
+            }
+          />
 
+          <Route
+            path="/customer/renew-subscription"
+            element={
+              <ProtectedRoute role="customer">
+                <RenewSubscriptionsPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/customer/cashback-amount"
+            element={
+              <ProtectedRoute role="customer">
+                <CashbackAmountPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/recharge-balance"
+            element={
+              <ProtectedRoute role="customer">
+                <RechargeBalancePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/redeem-voucher"
+            element={
+              <ProtectedRoute role="customer">
+                <RedeemVoucherPage />
+              </ProtectedRoute>
+            }
+          />
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

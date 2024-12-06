@@ -1,8 +1,9 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import CustomerSidebar from "../CustomerSidebar";
-import AllShopsTable from "../AllShopsTable";
-const AllShopsPage = () => {
+import RenewSubscriptions from "../RenewSubscriptions";
+
+const RenewSubscriptionsPage = () => {
   return (
     <CustomerSidebar>
       <Box
@@ -24,7 +25,7 @@ const AllShopsPage = () => {
             color: "#333",
           }}
         >
-          All Shops
+          Renew Subscription
         </Typography>
 
         {/* Main Content Area */}
@@ -52,7 +53,7 @@ const AllShopsPage = () => {
             <div
               style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
             >
-              <AllShopsTable />
+              <RenewSubscriptions />
             </div>
           </Box>
         </Box>
@@ -61,4 +62,4 @@ const AllShopsPage = () => {
   );
 };
 
-export default AllShopsPage;
+export default RenewSubscriptionsPage;

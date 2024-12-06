@@ -8,11 +8,9 @@ import {
   FormControl,
 } from "@mui/material";
 import GenericTable from "./GenericTable";
-import StatusCell from "./StatusCell";
 
 const AllShopsTable = () => {
   const [data, setData] = useState([]);
-  const [filters, setFilters] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,9 +23,6 @@ const AllShopsTable = () => {
     fetchData();
   }, []);
 
-  const handleFilterChange = (key, value) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-  };
   /* 
   const filteredData = data.filter((item) => {
     return (
@@ -41,9 +36,9 @@ const AllShopsTable = () => {
   }); */
 
   const columns = [
-    { field: "ShopID", headerName: "Shop ID", flex: 1 },
-    { field: "Name", headerName: "Name", flex: 1 },
-    { field: "Category", headerName: "Category", flex: 2 },
+    { field: "shopID", headerName: "Shop ID", flex: 1 },
+    { field: "name", headerName: "Name", flex: 1 },
+    { field: "category", headerName: "Category", flex: 2 },
   ];
 
   return (
@@ -55,40 +50,8 @@ const AllShopsTable = () => {
         boxSizing: "border-box",
       }}
     >
-      {/* Filters */}
-      {
-        <div style={{ display: "flex", gap: "10px", marginBottom: 20 }}>
-          <TextField
-            label="Search by Issue Description"
-            variant="outlined"
-            onChange={(e) => handleFilterChange("search", e.target.value)}
-            fullWidth
-          />
-          <FormControl variant="outlined" fullWidth>
-            <InputLabel>Ticket ID</InputLabel>
-            <Select
-              value={filters.ticketId}
-              onChange={(e) => handleFilterChange("ticketId", e.target.value)}
-            >
-              <MenuItem value="">All</MenuItem>
-              {data.map((item) => (
-                <MenuItem key={item.ticketId} value={item.ticketId}>
-                  {item.ticketId}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TextField
-            label="Search by Mobile No"
-            variant="outlined"
-            onChange={(e) => handleFilterChange("mobileNo", e.target.value)}
-            fullWidth
-          />
-        </div>
-      }
-
       {/* Generic Table */}
-      <GenericTable data={data} columns={columns} rowIdField="benefitId" />
+      <GenericTable data={data} columns={columns} rowIdField="shopID" />
     </Paper>
   );
 };
