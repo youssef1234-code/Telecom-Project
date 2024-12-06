@@ -59,4 +59,8 @@ public interface FunctionsRepository extends JpaRepository<CustomerAccount, Long
 
     @Query(value = "SELECT dbo.CHECK_CUSTOMER_NID_MOBILE(:mobile_num,:nID)",nativeQuery = true)
     Integer checkMobileAgainstNId(@Param("mobile_num") String mobileNum, @Param("nID") Integer nationalId);
+
+    @Query(value = "SELECT walletID from Wallet w WHERE w.mobileNo =:mobileNum ",nativeQuery = true)
+    Integer getWalletIdFromMobile(@Param("mobileNum") String mobileNum);
+
 }

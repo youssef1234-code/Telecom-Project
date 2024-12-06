@@ -2,19 +2,15 @@ import React, { useState } from "react";
 import {
   Paper,
   TextField,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
   Button,
+  Box,
   Alert,
   Typography,
-  Box,
 } from "@mui/material";
-import GenericTable from "./GenericTable";
 
 const CashbackAmount = () => {
   const [data, setData] = useState([]);
+  const [cashback, setCashback] = useState(null); // State to store cashback amount
   const [filters, setFilters] = useState({
     mobileNum: "",
     benefitID: "",
@@ -29,7 +25,7 @@ const CashbackAmount = () => {
   const handleSubmit = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/customer/get-cashback-amount`,
+        `${process.env.REACT_APP_SERVER_URL}/api/customer/update-cashback`,
         {
           method: "POST",
           headers: {
@@ -45,21 +41,51 @@ const CashbackAmount = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.log(errorData);
         setData("");
-        setError(errorData.message || "An error occurred. Please try again."); // Handle the error message from the backend
+        setError(errorData.message || "An error occurred. Please try again.");
         return;
       }
 
-      // Clear any previous error if request is successful
-      setError("");
-
+      setError(""); // Clear error if request is successful
       const json = await response.json();
       setData(json.message);
 
     } catch (error) {
       setData("");
       setError("An error occurred while fetching data. Please try again.");
+    }
+  };
+
+  const handleGetCashback = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/customer/get-cashback-amount`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            mobileNum: filters.mobileNum,
+            planID: filters.planID,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setCashback(null); // Reset cashback if there's an error
+        setError(errorData.message || "Failed to fetch cashback amount.");
+        return;
+      }
+
+      setError(""); // Clear error if request is successful
+      const json = await response.json();
+      setCashback(json || 0); // Handle null response by defaulting to 0
+
+    } catch (error) {
+      setCashback(null);
+      setError("An error occurred while fetching cashback amount.");
     }
   };
 
@@ -98,9 +124,11 @@ const CashbackAmount = () => {
         <Button variant="contained" color="primary" onClick={handleSubmit}>
           Update
         </Button>
+        <Button variant="contained" color="secondary" onClick={handleGetCashback}>
+          Get
+        </Button>
       </div>
 
-      {/* Show error alert if any */}
       {error && (
         <Alert severity="error" style={{ marginBottom: "20px" }}>
           {error}
@@ -115,6 +143,20 @@ const CashbackAmount = () => {
           {data}
         </Alert>
       )}
+
+      <Box
+      sx={{
+        flex: 1, // Fills available vertical space
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#fafafa",
+        padding: 2,
+      }}>
+        <Typography variant = "h4" gutterBottom>
+        Cashback Amount: {cashback !== null ? cashback : "No Cashback Found"}
+        </Typography>
+      </Box>
     </Paper>
   );
 };

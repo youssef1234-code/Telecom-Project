@@ -25,7 +25,7 @@ const CashbackAmountPage = () => {
             color: "#333",
           }}
         >
-          Wallet Cashback
+          Wallet Cashback Amount
         </Typography>
 
         {/* Main Content Area */}

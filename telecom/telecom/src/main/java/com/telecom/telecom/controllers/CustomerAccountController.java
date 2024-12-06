@@ -1,7 +1,6 @@
 package com.telecom.telecom.controllers;
 
 import com.telecom.telecom.dtos.projection.CashBackWalletProjection;
-import com.telecom.telecom.entities.Cashback;
 import com.telecom.telecom.repositories.*;
 import com.telecom.telecom.utils.HelperUtils;
 
@@ -261,7 +260,7 @@ public class CustomerAccountController {
     }
 
     @Transactional
-    @PostMapping("/get-cashback-amount")
+    @PostMapping("/update-cashback")
     public ResponseEntity<?> getCashbackAmount(@RequestBody Map<String, String> requestParams) {
         ResponseEntity<?> validation = validateParams(requestParams, "mobileNum", "planID", "benefitID");
         if (validation != null) return validation;
@@ -279,6 +278,32 @@ public class CustomerAccountController {
         proceduresRepository.paymentWalletCashback(mobileNum, planID, benefitID);
         return HelperUtils.success("Cashback Updated Successfully");
     }
+
+    @Transactional
+    @PostMapping("/get-cashback-amount")
+    public ResponseEntity<?> getCashbackNum(@RequestBody Map<String, String> requestParams) {
+        ResponseEntity<?> validation = validateParams(requestParams, "mobileNum", "planID");
+        if (validation != null) return validation;
+
+        String mobileNum = requestParams.get("mobileNum");
+        Integer planId = HelperUtils.toInteger(requestParams.get("planID"));
+        if (planId == null) {
+            return HelperUtils.badRequest("Plan ID must be valid numbers!");
+        }
+
+        ResponseEntity<?> res = validateMobileNumber(mobileNum);
+        if (res != null) return res;
+
+        Integer walletId = functionsRepository.getWalletIdFromMobile(mobileNum);
+
+        if(walletId == null){
+            return HelperUtils.badRequest("No wallet is linked to mobile!");
+        }
+
+        Integer cashbackAmt = functionsRepository.getWalletCashbackAmount(walletId, planId);
+        return ResponseEntity.ok(cashbackAmt);
+    }
+
 
     @Transactional
     @PostMapping("/balance-recharge")
